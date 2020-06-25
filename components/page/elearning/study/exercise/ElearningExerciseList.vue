@@ -7,7 +7,7 @@
         />
       </div>
     </ol>
-    <p class="row e-exercise-note">* Dấu sao là bài tập bắt buộc</p>
+    <p class="row e-exercise-note">Các bài tập có đánh dấu * là các bài tập<span style="font-weight: bold; margin-left: 4px">bắt buộc</span></p>
   </div>
 </template>
 

@@ -36,10 +36,25 @@
     }
 }
 
-.page-title {
-    background: #f9f9f9;
-    //box-shadow: 0px 1px 0px #E0E0E0;
-    padding: 1.5rem 2rem;
-    font-size: 1.8rem;
-    color: #333;
-}
+.input-limit {
+    position: relative;
+    input {
+      border: 1px solid #e0e0e0;
+      border-radius: 2px;
+      height: 4rem;
+      width: 100%;
+      padding: 0 5rem 0 1.5rem;
+    }
+    .limit {
+      background: $color-primary;
+      padding: 0 1rem;
+      color: #fff;
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 4rem;
+      width: 4rem;
+      line-height: 4rem;
+      text-align: center;
+    }
+  }

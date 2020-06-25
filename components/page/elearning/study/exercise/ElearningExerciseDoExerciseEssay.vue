@@ -13,10 +13,10 @@
           />
         </div>
         <div class="d-flex justify-content-end align-items-center">
-          <a href class="d-flex text-decoration-none mr-3">
+          <!-- <a href class="d-flex text-decoration-none mr-3">
             <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
             câu hỏi</a
-          >
+          > -->
           <IconFormatListNumbered24px
             class="ext-decoration-none text-clickable"
             @click.prevent="handleShowListQuestion"
