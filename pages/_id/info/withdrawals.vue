@@ -92,7 +92,7 @@
                   </template>
                   <template v-slot:cell(amount)="{row}">
                     <td>
-                      {{ row.amount | numeralFormat("0,0.00") }} đ
+                      {{ row.amount | numeralFormat("0,0") }} đ
                     </td>
                   </template>
                 </app-table>
