@@ -47,7 +47,7 @@ export default {
           text: "Tiến độ học tập"
         },
         {
-          name: "avg",
+          name: "medium_score",
           text: "Điểm trung bình"
         },
         {
