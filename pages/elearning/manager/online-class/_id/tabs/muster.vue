@@ -5,7 +5,7 @@
        <div class="filter-form__item top" @click="openModal = true">
         <app-button color="info" class="filter-form__item__btn" square :size="'sm'">
           <IconPlusCircle class="mr-2 fill-white"/>
-          <span class="color-white">Mời thêm học sinh</span>
+          <span class="color-white">Gủi thông báo lịch học</span>
         </app-button>
       </div>
     </div>

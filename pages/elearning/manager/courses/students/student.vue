@@ -16,7 +16,7 @@
                   @click="handleShowModalInvite"
                 >
                   <IconPlusCircle class="fill-white mr-2 icon" />
-                  <span class="color-white">Gủi thông báo lịch học</span>
+                  <span class="color-white">Mời thêm học sinh</span>
                 </app-button>
               </div>
 
