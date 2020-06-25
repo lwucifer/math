@@ -64,7 +64,7 @@
     
       <template v-slot:cell(created_at)="{row}">
         <td>
-          {{ get(row, 'timestamp', '') | getDateTimeHH_MM_A_DD_MM_YY }}
+          {{ get(row, 'timestamp', '') | getDateTimeHH_MM_D_M_Y }}
         </td>
       </template>
     </app-table>
