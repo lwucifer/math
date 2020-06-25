@@ -7,20 +7,23 @@
                 <div v-if="pageLoading">
                     <VclList/>
                 </div>
-                <div v-else class="notify-item-school" v-for="(item,index) in get(this,'announcementsList.content',[])" :key="index" @click="showDetailNotify(item.id)">
-                    <div class="circle-background">
-                        <IconEmail24px class="fill-primary"/>
+                <div v-else>
+                    <div class="notify-item-school" v-for="(item,index) in get(this,'announcementsList.content',[])" :key="index" @click="showDetailNotify(item.id)">
+                        <div class="circle-background">
+                            <IconEmail24px class="fill-primary"/>
+                        </div>
+                        <div>
+                            <p class="title-notify">{{ get(item,'title','') }}</p>
+                            <p v-html="get(item,'short_desc','')"></p>
+                            <p class="text-sub">{{ get(item,'updated','') | moment('DD/MM/YYYY')}}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="title-notify">{{ get(item,'title','') }}</p>
-                        <p v-html="get(item,'short_desc','')"></p>
-                        <p class="text-sub">{{ get(item,'updated','') | moment('DD/MM/YYYY')}}</p>
-                    </div>
+                    <app-pagination
+                        :pagination="filterPagination"
+                        @pagechange="pagechange"
+                        class="mt-5"
+                    />
                 </div>
-                <app-pagination
-                    :pagination="filterPagination"
-                    class="mt-5"
-                />
             </div>
             <SchoolNotifyDetail v-else/>
         </div>
