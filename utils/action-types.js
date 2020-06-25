@@ -261,6 +261,7 @@ export const TEACHING_OLCLASSES = {
     LIST: "teachingOlclassesList",
     ADD: "teachingOlclassesAdd",
     EDIT: "teachingOlclassesEdit",
+    INFO: "teachingOlclassesInfo",
     DELETE: "teachingOlclassesDelete",
     BLOCK: "teachingOlclassesBlock",
     UNBLOCK: "teachingOlclassesUnBlock",

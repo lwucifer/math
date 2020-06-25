@@ -53,12 +53,25 @@
                 >
                   <IconCalendarMonth class="icon fill-opacity-1" />Tháng này
                 </a>
-                <app-dropdown class="timetable-nav__dropdown" position="bottomRight">
+                <app-dropdown
+                  class="timetable-nav__dropdown"
+                  position="bottomRight"
+                  @visible-change="toggleDropdownDate"
+                >
                   <a slot="activator" href class="timetable-nav__more" @click.prevent>
                     <IconMoreHoriz class="icon fill-opacity-1" />
                   </a>
 
-                  <div class="timetable-nav__dropdown-content">Chọn thời gian khác</div>
+                  <div class="timetable-nav__dropdown-content">
+                    <button
+                      v-if="!showRangeDatePicker"
+                      @click="() => { showRangeDatePicker = true }"
+                    >Chọn thời gian khác</button>
+                    <app-range-picker-panel
+                      v-if="showRangeDatePicker"
+                      @change="selectRangeDate"
+                    />
+                  </div>
                 </app-dropdown>
               </div>
             </nav>
@@ -108,6 +121,12 @@
               từ:
               <span class="text-primary mr-2">{{firstDayMonth}}</span> đến:
               <span class="text-primary">{{lastDayMonth}}</span>
+            </div>
+            <div class="timetable-range-status" v-if="checkTimeTableRange">
+              <span class="mr-2">Khoảng thời gian:</span>
+              từ:
+              <span class="text-primary mr-2">{{queryFromTo.from | moment('D MMMM, YYYY')}}</span> đến:
+              <span class="text-primary">{{queryFromTo.to | moment('D MMMM, YYYY')}}</span>
             </div>
 
             <ul class="timetable-list" v-if="checkDataTable">
@@ -191,6 +210,7 @@ export default {
       checkTimeTable: true,
       checkTimeTableMonth: false,
       checkTimeTableWeek: false,
+      checkTimeTableRange: false,
       firstDayWeek: moment()
         .startOf("week")
         .format("D MMMM, YYYY"),
@@ -207,7 +227,8 @@ export default {
         from: null,
         to: null
       },
-      paginationPage: 1
+      paginationPage: 1,
+      showRangeDatePicker: false
     };
   },
   computed: {
@@ -332,6 +353,7 @@ export default {
       this.checkTimeTable = true;
       this.checkTimeTableMonth = false;
       this.checkTimeTableWeek = false;
+      this.checkTimeTableRange = false;
       this.calendar = moment();
       this.todayDate = moment().format("D MMMM, YYYY");
       this.queryFromTo.from = getDateTimeFrom(moment());
@@ -342,6 +364,7 @@ export default {
       this.checkTimeTableWeek = true;
       this.checkTimeTableMonth = false;
       this.checkTimeTable = false;
+      this.checkTimeTableRange = false;
       this.queryFromTo.from = getDateTimeFrom(moment().startOf("week"));
       this.queryFromTo.to = getDateTimeTo(moment().endOf("week"));
       this.getTimeTableList({ params: this.queryFromTo });
@@ -350,9 +373,21 @@ export default {
       this.checkTimeTableMonth = true;
       this.checkTimeTableWeek = false;
       this.checkTimeTable = false;
+      this.checkTimeTableRange = false;
       this.queryFromTo.from = getDateTimeFrom(moment().startOf("month"));
       this.queryFromTo.to = getDateTimeTo(moment().endOf("month"));
       this.getTimeTableList({ params: this.queryFromTo });
+    },
+    selectRangeDate(data) {
+      this.checkTimeTableRange = true;
+      this.checkTimeTableMonth = false;
+      this.checkTimeTableWeek = false;
+      this.checkTimeTable = false;
+      if (data) {
+        this.queryFromTo.from = getDateTimeFrom(data[0]);
+        this.queryFromTo.to = data[1] ? getDateTimeTo(data[1]) : getDateTimeTo(data[0]);
+        this.getTimeTableList({ params: this.queryFromTo });
+      }
     },
     changeDateToday(value) {
       this.checkTimeTable = false;
@@ -366,6 +401,11 @@ export default {
     },
     changePage({ number }) {
       this.paginationPage = number + 1;
+    },
+    toggleDropdownDate(data) {
+      if (!data) {
+        this.showRangeDatePicker = false
+      }
     }
   }
 };

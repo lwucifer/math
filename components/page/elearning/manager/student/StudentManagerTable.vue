@@ -12,7 +12,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/manager/courses/students/${row.student_id}?elearning_id=${filterElearningId}`"
+            :to="`/elearning/manager/courses/students/${row.student_id}?elearning_id=${filterElearningId}&user_id=${row.user_id}`"
           >
             <IconArrow height="13" />
           </n-link>
