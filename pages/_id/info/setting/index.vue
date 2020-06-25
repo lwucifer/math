@@ -88,7 +88,9 @@ export default {
 
   async mounted() {
     const tab = getParamQuery("tab");
-    this.tab = tab;
+    if (tab) {
+      this.tab = tab;
+    }
     this.loading = true;
     await this.$store.dispatch(`setting/getSetting`);
     const options = {
@@ -118,16 +120,16 @@ export default {
       redirectWithParams({ tab: key });
     },
     getCurrentContent() {
-      const tab = get(this, '$route.query.tab', false)
-      if (tab && ['payment', 'notify'].includes(tab)) {
-        this.tab = tab
+      const tab = get(this, "$route.query.tab", false);
+      if (tab && ["payment", "notify"].includes(tab)) {
+        this.tab = tab;
       }
     },
     get,
   },
   created() {
-    this.getCurrentContent()
-  }
+    this.getCurrentContent();
+  },
 };
 </script>
 
