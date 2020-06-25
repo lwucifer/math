@@ -5,67 +5,70 @@
     </div>
     <div class="cc-box" v-else>
       <div
-        class="cc-box__head"
         :class="{
           'add-border-bottom': get(exam, 'questions', []).length > 0,
         }"
       >
-        <div class="cc-box__head-left">
-          <div class="ce-item__left d-flex align-items-center">
-            <h2 class="cc-box__title heading-6">
-              Bài {{ index + 1 }}:
-              {{ examName }}
-            </h2>
+        <div class="cc-box__head">
+          <div class="cc-box__head-left">
+            <div class="ce-item__left d-flex align-items-center">
+              <h2 class="cc-box__title heading-6">
+                Bài {{ index + 1 }}:
+                {{ examName }}
+              </h2>
+              <button
+                class="cc-box__btn cc-box__btn-edit-hover mr-3"
+                @click="handleEditExam"
+              >
+                <IconEditAlt class="icon d-block subheading fill-primary" />
+              </button>
+              <button
+                class="cc-box__btn cc-box__btn-edit-hover"
+                @click="handleDeleteExam"
+              >
+                <IconTrashAlt
+                  class="d-block subheading fill-secondary"
+                  width="20px"
+                  height="20px"
+                />
+              </button>
+            </div>
+          </div>
+
+          <div class="cc-box__head-right">
+            <p class="mr-5" v-if="get(exam, 'coefficient', '')">
+              Hệ số: {{ get(exam, "coefficient", "") }}
+            </p>
+            <p class="mr-5" v-else>Trọng số: {{ get(exam, "weight", "") }}%</p>
             <button
-              class="cc-box__btn cc-box__btn-edit-hover mr-3"
-              @click="handleEditExam"
+              @click.prevent="toggleFormAdd"
+              class="text-primary d-flex align-items-center"
             >
-              <IconEditAlt class="icon d-block subheading fill-primary" />
+              <IconPlus2 class="mr-3 fill-primary" />
+              <span class="font-weight-semi-bold">Thêm câu hỏi</span>
             </button>
+
             <button
-              class="cc-box__btn cc-box__btn-edit-hover"
-              @click="handleDeleteExam"
+              class="cc-box__btn cc-box__btn-collapse"
+              @click="isShowExercise = !isShowExercise"
             >
-              <IconTrashAlt
-                class="d-block subheading fill-secondary"
+              <IconAngleDown
                 width="20px"
                 height="20px"
+                class="icon fill-primary"
+                v-if="!isShowExercise"
+              />
+              <IconAngleUp
+                width="20px"
+                height="20px"
+                class="icon fill-primary"
+                v-else
               />
             </button>
           </div>
         </div>
 
-        <div class="cc-box__head-right">
-          <p class="mr-5" v-if="get(exam, 'coefficient', '')">
-            Hệ số: {{ get(exam, "coefficient", "") }}
-          </p>
-          <p class="mr-5" v-else>Trọng số: {{ get(exam, "weight", "") }}%</p>
-          <button
-            @click.prevent="toggleFormAdd"
-            class="text-primary d-flex align-items-center"
-          >
-            <IconPlus2 class="mr-3 fill-primary" />
-            <span class="font-weight-semi-bold">Thêm câu hỏi</span>
-          </button>
-
-          <button
-            class="cc-box__btn cc-box__btn-collapse"
-            @click="isShowExercise = !isShowExercise"
-          >
-            <IconAngleDown
-              width="20px"
-              height="20px"
-              class="icon fill-primary"
-              v-if="!isShowExercise"
-            />
-            <IconAngleUp
-              width="20px"
-              height="20px"
-              class="icon fill-primary"
-              v-else
-            />
-          </button>
-        </div>
+        <ExamInfo :exam="exam" />
       </div>
 
       <app-error
@@ -127,6 +130,7 @@ import EditExamName from "~/components/page/course/create/exams/EditExamName";
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import { mapState } from "vuex";
 import UpdateExam from "~/components/page/course/create/exams/UpdateExam";
+import ExamInfo from "~/components/page/course/create/exams/ExamInfo";
 
 export default {
   components: {
@@ -144,6 +148,7 @@ export default {
     IconAngleUp,
     IconPlus2,
     UpdateExam,
+    ExamInfo,
   },
 
   props: {

@@ -1,8 +1,8 @@
 <template>
-  <div class="exercise" v-if="get(exercise, 'required', false)">
-    <div class="exercise-title">
-      <span class="exercise-title-span">Chi tiết </span>
-      <button class="exercise-title-button" @click="show = !show">
+  <div class="exam" v-if="get(exam, 'required', false)">
+    <div class="exam-title">
+      <span class="exam-title-span">Chi tiết </span>
+      <button class="exam-title-button" @click="show = !show">
         <svg
           width="8"
           height="6"
@@ -35,44 +35,9 @@
         </svg>
       </button>
     </div>
-    <div class="exercise-content" v-show="show">
-      <div class="exercise-content-1" style="margin-right: 3rem">
-        <div class="exercise-item mb-1">
-          <span class="mr-3"
-            ><svg
-              width="5"
-              height="5"
-              viewBox="0 0 5 5"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              class="vertical-middle"
-            >
-              <circle cx="2.5" cy="2.5" r="2.5" fill="#E0E0E0" />
-            </svg>
-          </span>
-          <span
-            >Bài tập bắt buộc:
-            {{ get(exercise, "required", false) ? "Có" : "Không" }}</span
-          >
-        </div>
-        <div class="exercise-item">
-          <span class="mr-3"
-            ><svg
-              width="5"
-              height="5"
-              viewBox="0 0 5 5"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              class="vertical-middle"
-            >
-              <circle cx="2.5" cy="2.5" r="2.5" fill="#E0E0E0" />
-            </svg>
-          </span>
-          <span>Điểm đạt: {{ get(exercise, "pass_score", 0) }}/10</span>
-        </div>
-      </div>
-      <div class="exercise-content-1" style="margin-right: 3rem">
-        <div class="exercise-item mb-1">
+    <div class="exam-content" v-show="show">
+      <div class="exam-content-1" style="margin-right: 3rem">
+        <div class="exam-item mb-1">
           <span class="mr-3"
             ><svg
               width="5"
@@ -88,11 +53,11 @@
           <span
             >Loại bài tập:
             {{
-              get(exercise, "type", "") === "ESSAY" ? "Tự luận" : "Trắc nghiệm"
+              get(exam, "type", "") === "ESSAY" ? "Tự luận" : "Trắc nghiệm"
             }}</span
           >
         </div>
-        <div class="exercise-item">
+        <div class="exam-item">
           <span class="mr-3"
             ><svg
               width="5"
@@ -105,13 +70,58 @@
               <circle cx="2.5" cy="2.5" r="2.5" fill="#E0E0E0" />
             </svg>
           </span>
-          <span
-            >Số lần làm bài tối đa: {{ get(exercise, "reworks", 0) }} lần</span
-          >
+          <span>Cách tính điểm: {{ type_score }}</span>
         </div>
       </div>
-      <div class="exercise-content-1">
-        <div class="exercise-item mb-1">
+      <div class="exam-content-1" style="margin-right: 3rem">
+        <div class="exam-item mb-1">
+          <span class="mr-3"
+            ><svg
+              width="5"
+              height="5"
+              viewBox="0 0 5 5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="vertical-middle"
+            >
+              <circle cx="2.5" cy="2.5" r="2.5" fill="#E0E0E0" />
+            </svg>
+          </span>
+          <span>Thời gian làm bài: {{ get(exam, "duration", "") }} phút</span>
+        </div>
+        <div class="exam-item">
+          <span class="mr-3"
+            ><svg
+              width="5"
+              height="5"
+              viewBox="0 0 5 5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="vertical-middle"
+            >
+              <circle cx="2.5" cy="2.5" r="2.5" fill="#E0E0E0" />
+            </svg>
+          </span>
+          <span>Điểm đạt: {{ get(exam, "pass_score", 0) }}/10</span>
+        </div>
+      </div>
+      <div class="exam-content-1">
+        <div class="exam-item mb-1">
+          <span class="mr-3"
+            ><svg
+              width="5"
+              height="5"
+              viewBox="0 0 5 5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="vertical-middle"
+            >
+              <circle cx="2.5" cy="2.5" r="2.5" fill="#E0E0E0" />
+            </svg>
+          </span>
+          <span>Số lần làm bài tối đa: {{ get(exam, "reworks", 0) }} lần</span>
+        </div>
+        <div class="exam-item">
           <span class="mr-3"
             ><svg
               width="5"
@@ -125,9 +135,18 @@
             </svg>
           </span>
           <span
-            >Thời gian làm bài:
-            {{ get(exercise, "duration", 0) }} phút</span
+            >Cài đặt thời gian: {{ show_setting_time ? "Có" : "Không" }}</span
           >
+          <div class="setting-time" v-if="show_setting_time">
+            <div class="setting-title">
+              <span>Mở đề</span>:
+              {{ open_time }}
+            </div>
+            <div class="setting-title">
+              <span>Đóng đề</span>:
+              {{ close_time }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -137,10 +156,35 @@
 
 <script>
 import { get } from "lodash";
+import { getLocalDateTime } from "~/utils/moment";
 
 export default {
   props: {
-    exercise: {},
+    exam: {},
+  },
+
+  computed: {
+    show_setting_time() {
+      return (
+        get(this, "exam.open_time", "") && get(this, "exam.close_time", "")
+      );
+    },
+    open_time() {
+      return getLocalDateTime(get(this, "exam.open_time", "")).format(
+        "DD/MM/YYYY - HH:mm"
+      );
+    },
+    close_time() {
+      return getLocalDateTime(get(this, "exam.close_time", "")).format(
+        "DD/MM/YYYY - HH:mm"
+      );
+    },
+    type_score() {
+      if (get(this, "exam.coefficient", false)) {
+        return `Hệ số ${get(this, "exam.coefficient", "")}`;
+      }
+      return `Trọng số ${get(this, "exam.weight", "")}%`;
+    },
   },
 
   data() {
@@ -151,34 +195,44 @@ export default {
 
   methods: {
     get,
+    getLocalDateTime,
   },
 };
 </script>
 
 <style scoped>
-.exercise {
+.exam {
   padding: 0 2rem;
   font-size: 12px;
   padding-bottom: 1rem;
   margin-top: -1rem;
 }
-.exercise .exercise-title {
+.exam .exam-title {
   display: flex;
 }
-.exercise .exercise-title .exercise-title-span {
+.exam .exam-title .exam-title-span {
   font-style: normal;
   font-weight: normal;
   line-height: 24px;
   color: #656565;
 }
-.exercise .exercise-title .exercise-title-button {
+.exam .exam-title .exam-title-button {
   margin-left: 1rem;
 }
-.exercise .exercise-content {
+.exam .exam-content {
   display: flex;
   padding: 0 2rem;
 }
-/* .exercise .exercise-content .exercise-content-1 {
+/* .exam .exam-content .exam-content-1 {
   width: 185px;
 } */
+.exam .setting-time {
+  padding: 0.4rem 4rem 0rem;
+  line-height: 1.5rem;
+}
+.exam .setting-time .setting-title span {
+  width: 54px;
+  display: inline-block;
+  font-size: 11px;
+}
 </style>
