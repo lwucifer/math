@@ -25,17 +25,13 @@
                     </div>
                     
                     <div v-if="tab=='intro'">
-                        <div class="mt-2">
-                            <img  class="w-100" src="~assets/images/tmp/img-intro.png" alt="">
+                        <div class="mt-2 mb-4">
+                            <img  class="w-100" :src="get(this,'organization.cover') ? get(this,'organization.cover') : '~assets/images/tmp/img-intro.png'" alt="">
                         </div>
 
                         <div class="intro-text__content">
-                            <div class="intro-text-school">20 Năm một chặng đường</div>
-                            <p class="mb-4">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros.</p> 
-
-                            <p class="mb-4">Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p> 
-
-                            <p class="mb-4">Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.</p>
+                            <div class="intro-text-school mt-4">{{get(this,'organization.title')}}</div>
+                            <div class="mb-4" v-html="get(this,'organization.content')"></div>
                         </div>
                     </div>
                     <div v-else-if="tab=='diagram'">
@@ -54,15 +50,25 @@
 <script>
 import SchoolIntroSideMenu from "~/components/page/school/Introduce/SchoolIntroSideMenu"
 import SchoolIntrolSystem from "~/components/page/school/Introduce/SchoolIntrolSystem"
+import { get } from "lodash"
 export default {
     components:{
         SchoolIntroSideMenu,
         SchoolIntrolSystem
     },
+    props:{
+        organization:{
+            type: Object,
+            default: ()=>{}
+        }
+    },
     data(){
         return{
             tab:'intro'
         }
+    },
+    methods:{
+        get
     }
 }
 </script>
