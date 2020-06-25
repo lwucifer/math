@@ -322,10 +322,9 @@ export default {
 
   methods: {
     handleCheckPayload() {
-      let check = true;
-      check = this.handleCheckName();
-      check = this.handleCheckContent();
-      return check;
+      const name = this.handleCheckName();
+      const content = this.handleCheckContent();
+      return name && content;
     },
 
     handleCheckName() {

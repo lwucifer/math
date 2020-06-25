@@ -115,7 +115,10 @@ export default {
         if (get(res, "data.success", false)) {
           this.$toasted.success("Thành công");
           this.$emit("close");
-          this.$store.dispatch("setting/getAccountBanks");
+          this.$emit('editSuccess')
+          this.$store.dispatch("setting/getAccountBanks", {
+            params: { status: 'ACTIVE'} 
+          });
           return;
         }
         this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));

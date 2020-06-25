@@ -63,6 +63,7 @@ import NotifyItem from "~/components/page/profile/setting/tabs/NotifyItem";
 import PaymentList from "~/components/page/profile/setting/tabs/PaymentList";
 import { mapState } from "vuex";
 import { get } from "lodash";
+import { useEffect } from "~/utils/common";
 
 export default {
 
@@ -147,21 +148,41 @@ export default {
   },
 
   async mounted() {
-    this.loading = true;
+    // this.loading = true;
+    // this.loading = false;
+    this.loading = true
     await this.$store.dispatch(`setting/getSetting`);
-    const options = {
-      params: { token: "true" },
-    };
-    await this.$store.dispatch(`setting/getBanks`, options);
-    await this.$store.dispatch(`setting/getAccountBanks`);
-    this.loading = false;
+    useEffect(this, this.handleSetpayload.bind(this), ["setting"]);
+    this.loading = false
   },
 
   computed: {
-    
+    ...mapState("setting", {
+      setting: "setting",
+    }),
   },
 
   methods: {
+    handleSetpayload() {
+      this.payload.comment_notify = get(this, "setting.comment_notify", "PUSH");
+      this.payload.friend_notify = get(this, "setting.friend_notify", "PUSH");
+      this.payload.homework_notify = get(
+        this,
+        "setting.homework_notify",
+        "PUSH"
+      );
+      this.payload.id = get(this, "setting.id", "");
+      this.payload.other_notify = get(this, "setting.other_notify", "PUSH");
+      this.payload.point_notify = get(this, "setting.point_notify", "PUSH");
+      this.payload.schedule_notify = get(
+        this,
+        "setting.schedule_notify",
+        "PUSH"
+      );
+      this.payload.tag_notify = get(this, "setting.tag_notify", "PUSH");
+      this.payload.teacher_notify = get(this, "setting.teacher_notify", "PUSH");
+      this.payload.user_id = get(this, "setting.user_id", "");
+    },
     get,
   },
 };

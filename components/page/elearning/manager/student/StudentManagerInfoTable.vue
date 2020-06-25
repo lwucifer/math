@@ -25,11 +25,11 @@
         <td style="width:25%">
           <span v-if="row.point < 0" class="text-warning">Chưa chấm điểm</span>
           <span
-            v-else-if="row.point > 6"
+            v-else-if="row.point > 4"
             class="text-primary"
           >{{ get(row, 'point', '') }}/{{row.max_score}}</span>
           <span
-            v-else-if="row.point < 6"
+            v-else-if="row.point < 5"
             class="text-secondary"
           >{{ get(row, 'point', '') }}/{{row.max_score}}</span>
         </td>

@@ -297,12 +297,11 @@ export default {
     get,
 
     handleCheckPayload() {
-      let check = true;
-      check = this.handleCheckPrivacy();
-      check = this.handleCheckCommentAllow();
-      check = this.handleCheckPrice();
-      check = this.handleCheckEndDate();
-      return check;
+      const privacy = this.handleCheckPrivacy();
+      const comment_allow = this.handleCheckCommentAllow();
+      const price = this.handleCheckPrice();
+      const end_date = this.handleCheckEndDate();
+      return privacy && comment_allow && price && end_date;
     },
 
     handleCheckPrice() {

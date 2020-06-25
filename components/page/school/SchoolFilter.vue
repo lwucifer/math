@@ -159,7 +159,7 @@
         isShowFilter: false,
         sorts: [
           { name: 'Có nhiều học sinh nhất', value: 'MOST_STUDENT'},
-          { name: 'Có nhiều giáo viên nhất', value: 'MOST_TEACHER '}
+          { name: 'Có nhiều giáo viên nhất', value: 'MOST_TEACHER'}
         ],
         allOpt: { name: 'Tất cả', value: null }
       };
