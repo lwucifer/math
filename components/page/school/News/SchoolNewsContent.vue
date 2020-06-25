@@ -8,21 +8,23 @@
                     <div v-if="pageLoading">
                         <VclList/>
                     </div>
-                    <div class="row news-item-school" v-else v-for="(item,index) in list" :key="index" @click="showDetailNews(item)">
-                        <div class="col-md-4">
-                            <img :height="131" class="w-100" :src="get(item,'thumb','')">
+                    <div v-else>
+                        <div class="row news-item-school" v-for="(item,index) in list" :key="index" @click="showDetailNews(item)">
+                            <div class="col-md-4">
+                                <img :height="131" class="w-100" :src="get(item,'thumb','')">
+                            </div>
+                            <div class="col-md-8">
+                                <p class="title-notify">{{get(item,"title","")}}</p>
+                                <p class="text-sub my-2">{{get(item,"updated","") | moment("DD/MM/YYYY")}}</p>
+                                <p v-html="get(item,'short_desc','')"></p>
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <p class="title-notify">{{get(item,"title","")}}</p>
-                            <p class="text-sub my-2">{{get(item,"updated","") | moment("DD/MM/YYYY")}}</p>
-                            <p v-html="get(item,'short_desc','')"></p>
-                        </div>
+                        <app-pagination
+                            :pagination="filterPagination"
+                            @pagechange="pagechange"
+                            class="mt-5"
+                        />
                     </div>
-                    <app-pagination
-                        :pagination="filterPagination"
-                        @pagechange="pagechange"
-                        class="mt-5"
-                    />
                 </div>
             </div>
             <div class="col-md-4">
