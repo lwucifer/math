@@ -166,18 +166,22 @@ export default {
   computed: {
     show_setting_time() {
       return (
-        get(this, "exam.open_time", "") && get(this, "exam.close_time", "")
+        get(this, "exam.open_time", "") || get(this, "exam.close_time", "")
       );
     },
     open_time() {
-      return getLocalDateTime(get(this, "exam.open_time", "")).format(
-        "DD/MM/YYYY - HH:mm"
-      );
+      return get(this, "exam.open_time", "")
+        ? getLocalDateTime(get(this, "exam.open_time", "")).format(
+            "DD/MM/YYYY - HH:mm"
+          )
+        : "Không quy định";
     },
     close_time() {
-      return getLocalDateTime(get(this, "exam.close_time", "")).format(
-        "DD/MM/YYYY - HH:mm"
-      );
+      return get(this, "exam.close_time", "")
+        ? getLocalDateTime(get(this, "exam.close_time", "")).format(
+            "DD/MM/YYYY - HH:mm"
+          )
+        : "Không quy định";
     },
     type_score() {
       if (get(this, "exam.coefficient", false)) {
