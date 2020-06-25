@@ -68,7 +68,7 @@ const actions = {
         options
       );
       if (result.success) {
-        commit(schoolNewsOther, result.data);
+        commit("setNewsOtherList", result.data);
       }
     } catch (error) {
       console.log("SCHOOL_NEWSOTHER.error", error);
@@ -89,7 +89,7 @@ const mutations = {
     state.schoolNewsest = _data;
   },
   setNewsOtherList(state, _data) {
-    state.schoolNewsest = _data;
+    state.schoolNewsOther = _data;
   }
 };
 

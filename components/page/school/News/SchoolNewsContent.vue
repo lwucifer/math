@@ -4,8 +4,11 @@
             <div class="col-md-8">
                 <SchoolNewsDetail v-if="isDetail"/>
                 <div v-else>
-                    <div class="intro-text-school-menu-side">Tin tức mới</div>
-                    <div class="row news-item-school" v-for="(item,index) in list" :key="index" @click="showDetailNews(item.news_id)">
+                    <div class="intro-text-school-menu-side">{{titleNews}}</div>
+                    <div v-if="pageLoading">
+                        <VclList/>
+                    </div>
+                    <div class="row news-item-school" v-else v-for="(item,index) in list" :key="index" @click="showDetailNews(item)">
                         <div class="col-md-4">
                             <img :height="131" class="w-100" :src="get(item,'thumb','')">
                         </div>
@@ -34,6 +37,7 @@
 <script>
 import SchoolNewsMenuSide from "~/components/page/school/News/SchoolNewsMenuSide";
 import SchoolNewsDetail from "~/components/page/school/News/SchoolNewsDetail"
+import { VclList} from "vue-content-loading";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -43,7 +47,8 @@ import { getParamQuery } from "~/utils/common"
 export default {
     components:{
         SchoolNewsMenuSide,
-        SchoolNewsDetail
+        SchoolNewsDetail,
+        VclList
     },
     data(){
         return{
@@ -63,7 +68,9 @@ export default {
                 size:10,
                 page:null
 
-            }
+            },
+            titleNews:'Tin tức mới',
+            pageLoading:true
          }
     },
     
@@ -72,6 +79,9 @@ export default {
             handler:function(){
                 this.list = get(this,"newsList.content",[])
             }
+        },
+        '$route.query'(){
+            this.checkParamsID()
         }
     },
     computed:{
@@ -87,44 +97,45 @@ export default {
         }
     },
     methods:{
-        showDetailNews(newsID){
-            this.isDetail= true;
-            this.$router.push({query: { tab: 'news',news_id: newsID}})
+        showDetailNews(item){
+            //this.isDetail= true;
+            this.$router.push({query: { tab: 'news',news_id: item.id}})
         },
         async fetchNewsList(){
     
             const data = this.params;
-            console.log('params',data)
             await this.$store.dispatch(
             `elearning/school/school-news/${actionTypes.SCHOOL_NEWS.LIST}`,
                 data
             );
+            this.pageLoading = false;
 
         },
-        checkDetail(){
-            const news_id = getParamQuery('id');
-            if(news_id){
-                this.isDetail= true;
-            }else{
-                this.isDetail= false;
-            }
-        },
-        changeCategory(cID){
-            this.params.category_id = cID;
+        changeCategory(item){
+            this.$router.push({query: { tab: 'news'}})
+            this.params.category_id = item.id;
+            this.titleNews = item.name;
             this.params.size = 10;
             this.params.page = 1;
             this.fetchNewsList();
         },
         pagechange(val){
             this.params.page = val.number + 1;
-            console.log(this.params.page)
             this.fetchNewsList();
+        },
+        checkParamsID(){
+            const news_id = this.$route.query.news_id
+            if(news_id){
+                this.isDetail = true
+            }else{
+                this.isDetail = false
+            }
         },
         get
     },
     async created(){
         await this.fetchNewsList();
-        this.checkDetail()
+        this.checkParamsID()
     }
 }
 </script>

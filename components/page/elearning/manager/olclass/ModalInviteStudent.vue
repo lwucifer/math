@@ -4,14 +4,13 @@
     :width="600"
     :component-class="{ 'invite-student-modal': true }"
     :footer="false"
-    title="Mời thêm học sinh"
+    title="Gửi Email thông báo lịch học"
     @close="close(false)"
   >
     <div slot="content">
       <div>
         <p>
-          Gửi lời mời tham gia
-          <b>{{title}}</b> của bạn tới học sinh trong trường THCS Nguyễn Trãi
+          Gửi thông báo lịch học của <b>{{title}}</b> tới học sinh của bạn.
         </p>
         <div class="mt-4 d-flex-center">
           <strong class="pr-4">Chọn lớp</strong>
@@ -45,7 +44,7 @@
       </div>
       <div class="text-center mt-4">
         <app-button color="white" class="mr-4 pl-5 pr-5" square @click="close(false)">Hủy</app-button>
-        <app-button square @click="hanldeInvate" class="pl-5 pr-5">Mời</app-button>
+        <app-button square @click="hanldeInvate" class="pl-5 pr-5">Gửi</app-button>
       </div>
     </div>
   </app-modal>

@@ -24,7 +24,7 @@
 
       <template v-slot:cell(deadline)="{row}">
         <td>
-          <span v-if="get(row, 'submission_time', false)">{{ get(row, 'submission_time') | getDateBirthday }}</span>
+          <span v-if="get(row, 'deadline', false)">{{ get(row, 'deadline') | getDateBirthday }}</span>
           <span v-else>-</span>
         </td>
       </template>

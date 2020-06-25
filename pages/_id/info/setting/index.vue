@@ -117,8 +117,17 @@ export default {
       this.tab = key;
       redirectWithParams({ tab: key });
     },
+    getCurrentContent() {
+      const tab = get(this, '$route.query.tab', false)
+      if (tab && ['payment', 'notify'].includes(tab)) {
+        this.tab = tab
+      }
+    },
     get,
   },
+  created() {
+    this.getCurrentContent()
+  }
 };
 </script>
 

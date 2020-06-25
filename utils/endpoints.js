@@ -53,8 +53,8 @@ export const NOTIFICATION_UNREAD = `chat/social/api/notification/unRead`;
 /**
  * NOTIFICATION
  */
-export const NOTIFICATIONS_HEADER = `/notification/notification`;
-export const COUNT_NOTIFICATIONS_HEADER = `/notification/notification/countNotification`;
+export const NOTIFICATIONS_HEADER = `/notification/notifications`;
+export const COUNT_NOTIFICATIONS_HEADER = `/notification/notifications/counting`;
 
 /**
  * ELEARNING

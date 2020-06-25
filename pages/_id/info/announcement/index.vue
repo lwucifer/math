@@ -60,6 +60,7 @@
             <client-only>
               <infinite-loading @infinite="infiniteHandler">
                 <template slot="no-more">Không còn tin nhắn nào.</template>
+                <template slot="no-results">Không còn tin nhắn nào.</template>
               </infinite-loading>
             </client-only>
           </template>
