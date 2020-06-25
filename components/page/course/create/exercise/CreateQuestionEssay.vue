@@ -113,7 +113,6 @@ export default {
   },
 
   data() {
-    console.log(this.exercise);
     return {
       showModalConfirm: false,
       confirmLoading: false,
