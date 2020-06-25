@@ -433,6 +433,11 @@ export const SCHOOL_ELEARNING = {
     LIST: "schoolElearning",
 };
 
+
+export const SCHOOL_ORGANIZATION = {
+    LIST: "schoolOrganization",
+};
+
 export const SCHOOL_PROFESSIONAL = {
     LIST: "schoolProfessionalList",
     ADD: "schoolProfessionalAdd",
