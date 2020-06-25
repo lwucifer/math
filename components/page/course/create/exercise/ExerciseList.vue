@@ -9,71 +9,75 @@
     </div>
     <div class="cc-box" v-else>
       <div
-        class="cc-box__head"
         :class="{
           'add-border-bottom': get(exercise, 'questions', []).length > 0,
         }"
       >
-        <div class="cc-box__head-left">
-          <div class="ce-item__left d-flex align-items-center">
-            <div class="mr-3">
-              <h2 class="cc-box__title heading-6">
-                Bài {{ index + 1 }}:
-                {{
-                  get(exercise, "title", "").length > 40
-                    ? get(exercise, "title", "").slice(0, 40) + "..."
-                    : get(exercise, "title", "")
-                }}
-              </h2>
+        <div class="cc-box__head">
+          <div class="cc-box__head-left">
+            <div class="ce-item__left d-flex align-items-center">
+              <div class="mr-3">
+                <h2 class="cc-box__title heading-6">
+                  Bài {{ index + 1 }}:
+                  {{
+                    get(exercise, "title", "").length > 40
+                      ? get(exercise, "title", "").slice(0, 40) + "..."
+                      : get(exercise, "title", "")
+                  }}
+                </h2>
+              </div>
+              <button
+                class="cc-box__btn mr-3 cc-box__btn-edit-hover"
+                @click="handleEditExercise"
+              >
+                <IconEditAlt class="icon d-block subheading fill-primary" />
+              </button>
+              <button
+                class="cc-box__btn cc-box__btn-edit-hover"
+                @click="handleDeleteExercise"
+              >
+                <IconTrashAlt
+                  class="d-block subheading fill-secondary"
+                  width="20px"
+                  height="20px"
+                />
+              </button>
             </div>
+          </div>
+
+          <div class="cc-box__head-right">
+            <!-- <p class="mr-5">Trọng số: 30%</p> -->
             <button
-              class="cc-box__btn cc-box__btn-edit-hover mr-3"
-              @click="handleEditExercise"
+              @click.prevent="toggleFormAdd"
+              class="text-primary d-flex align-items-center"
             >
-              <IconEditAlt class="icon d-block subheading fill-primary" />
+              <IconPlus2 class="mr-3 fill-primary" />
+              <span class="font-weight-semi-bold">Thêm câu hỏi</span>
             </button>
+
             <button
-              class="cc-box__btn cc-box__btn-edit-hover"
-              @click="handleDeleteExercise"
+              class="cc-box__btn cc-box__btn-collapse"
+              @click="isShowExercise = !isShowExercise"
             >
-              <IconTrashAlt
-                class="d-block subheading fill-secondary"
+              <IconAngleDown
                 width="20px"
                 height="20px"
+                class="icon fill-primary"
+                v-if="!isShowExercise"
+              />
+              <IconAngleUp
+                width="20px"
+                height="20px"
+                class="icon fill-primary"
+                v-else
               />
             </button>
           </div>
         </div>
 
-        <div class="cc-box__head-right">
-          <!-- <p class="mr-5">Trọng số: 30%</p> -->
-          <button
-            @click.prevent="toggleFormAdd"
-            class="text-primary d-flex align-items-center"
-          >
-            <IconPlus2 class="mr-3 fill-primary" />
-            <span class="font-weight-semi-bold">Thêm câu hỏi</span>
-          </button>
-
-          <button
-            class="cc-box__btn cc-box__btn-collapse"
-            @click="isShowExercise = !isShowExercise"
-          >
-            <IconAngleDown
-              width="20px"
-              height="20px"
-              class="icon fill-primary"
-              v-if="!isShowExercise"
-            />
-            <IconAngleUp
-              width="20px"
-              height="20px"
-              class="icon fill-primary"
-              v-else
-            />
-          </button>
-        </div>
+        <ExerciseInfo :exercise="exercise" />
       </div>
+
       <app-error
         class="ml-4 mb-2"
         v-if="get(exercise, 'status', '') == 0"
@@ -135,6 +139,8 @@ import UpdateExercise from "~/components/page/course/create/exercise/UpdateExerc
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import IconDown from "~/assets/svg/icons/down.svg?inline";
+import ExerciseInfo from "~/components/page/course/create/exercise/ExerciseInfo";
 
 export default {
   components: {
@@ -152,6 +158,8 @@ export default {
     IconAngleUp,
     IconPlus2,
     UpdateExercise,
+    IconDown,
+    ExerciseInfo,
   },
 
   props: {
