@@ -1,96 +1,79 @@
 <template>
-  <div
-    class="school-side menu-side"
-    v-sticky
-    sticky-offset="{ top: 88 }"
-    :sticy-z-index="9"
-  >
+  <div class="school-side menu-side" v-sticky sticky-offset="{ top: 88 }" :sticy-z-index="9">
     <!--
     <aside-menu :selected-item="active" :items="menuItems"></aside-menu>
     -->
-    <div 
-      class="aside-menu__item" 
+    <div
+      class="aside-menu__item"
       :class="active == 1 ? 'active' : ''"
       v-if="checkMenuGuard(MENU.ACCOUNT_INFO)"
     >
       <n-link class="link-gray" :to="'/'+token.id+'/info'">
         <span>
-          <IconAccountCircle24px class="icon"/>
+          <IconAccountCircle24px class="icon" />
         </span>
-        <span>
-          Thông tin tài khoản
-        </span>
+        <span>Thông tin tài khoản</span>
       </n-link>
     </div>
-    <div 
-      class="aside-menu__item" 
+    <div
+      class="aside-menu__item"
       :class="active == 3 ? 'active' : ''"
       v-if="checkMenuGuard(MENU.REVENUE)"
     >
       <n-link class="link-gray" :to="'/'+token.id+'/info/revenues'">
         <span>
-          <IconMonetizationOn24px class="icon"/>
+          <IconMonetizationOn24px class="icon" />
         </span>
-        <span>
-          Thống kê doanh thu
-        </span>
+        <span>Thống kê doanh thu</span>
       </n-link>
     </div>
-    <div 
-      class="aside-menu__item" 
+    <div
+      class="aside-menu__item"
       :class="active == 4 ? 'active' : ''"
       v-if="checkMenuGuard(MENU.TRANSACTION)"
     >
       <n-link class="link-gray" :to="'/'+token.id+'/info/transactions'">
         <span>
-          <IconAttachMoney24px class="icon"/>
+          <IconAttachMoney24px class="icon" />
         </span>
-        <span>
-          Lịch sử giao dịch
-        </span>
+        <span>Lịch sử giao dịch</span>
       </n-link>
     </div>
-    <div 
-      class="aside-menu__item" 
+    <div
+      class="aside-menu__item"
       :class="active == 5 ? 'active' : ''"
       v-if="checkMenuGuard(MENU.NOTIFICATION)"
     >
       <n-link class="link-gray" :to="'/'+token.id+'/info/announcement'">
         <span>
-          <IconNotifications24px class="icon"/>
+          <IconNotifications24px class="icon" />
         </span>
-        <span>
-          Thông báo
-        </span>
+        <span>Thông báo</span>
       </n-link>
     </div>
-    <div 
-      class="aside-menu__item" 
+    <div
+      class="aside-menu__item"
       :class="active == 6 ? 'active' : ''"
       v-if="checkMenuGuard(MENU.SETTINGS)"
     >
       <n-link class="link-gray" :to="'/'+token.id+'/info/setting'">
         <span>
-          <IconSettings24px class="icon"/>
+          <IconSettings24px class="icon" />
         </span>
-        <span>
-          Cài đặt chung
-        </span>
+        <span>Cài đặt chung</span>
       </n-link>
     </div>
-    <div 
-      class="aside-menu__item" 
+    <div
+      class="aside-menu__item"
       :class="active == 7 ? 'active' : ''"
       v-if="checkMenuGuard(MENU.SUPPORT)"
     >
-      <n-link class="link-gray" :to="'/'+token.id+'/info/support'">
+      <a class="link-gray" href="https://hotro.schoolly.vn/hc/vi-vn/requests/new" target="_blank">
         <span>
-          <IconHeadsetMic24px class="icon"/>
+          <IconHeadsetMic24px class="icon" />
         </span>
-        <span>
-          Trợ giúp
-        </span>
-      </n-link>
+        <span>Trợ giúp</span>
+      </a>
     </div>
   </div>
 </template>
@@ -130,9 +113,7 @@ export default {
   },
   computed: {
     ...mapState("account", { profile: "profileList" }),
-    ...mapState("auth", [
-      "token",
-    ]),
+    ...mapState("auth", ["token"]),
     userRoles() {
       return this.get(this, "profile.role.authority", false) || [];
     }
@@ -222,7 +203,6 @@ export default {
     checkMenuGuard(_menuActive) {
       let isValidMenu = true;
       switch (_menuActive) {
-
         case this.MENU.ACCOUNT_INFO:
           isValidMenu = isCommonElementIn2Array(this.userRoles, [
             USER_ROLES.ROLE_USER,
