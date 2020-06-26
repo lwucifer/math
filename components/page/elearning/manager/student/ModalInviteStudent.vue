@@ -70,7 +70,7 @@ import result from "../../../../../store/elearning/teaching/result";
 
 const STORE_TEACHING_OLCLASS = "elearning/teaching/olclass";
 const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
-const STORE_SCHOOL_STUDENT = "elearning/school/school-student";
+const STORE_SCHOOL_STUDENT = "elearning/teaching/students";
 const STORE_TEACHING_INVITES = "elearning/teaching/invites";
 
 export default {
@@ -162,12 +162,12 @@ export default {
         };
         try {
           await this.$store.dispatch(
-            `${STORE_SCHOOL_STUDENT}/${actionTypes.SCHOOL_STUDENTS.LIST}`,
+            `${STORE_SCHOOL_STUDENT}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
             params
           );
           this.studentList = this.get(
             this.stateSchoolStudents,
-            "data.content",
+            "content",
             []
           );
         } catch (e) {
@@ -231,7 +231,7 @@ export default {
       stateSchoolClasses: "schoolClasses"
     }),
     ...mapState(STORE_SCHOOL_STUDENT, {
-      stateSchoolStudents: "schoolStudents"
+      stateSchoolStudents: "studentPrivates"
     })
   },
 
