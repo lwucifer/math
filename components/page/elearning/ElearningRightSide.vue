@@ -166,6 +166,7 @@
       @close-modal="handleCloseModal"
     />
     <ElearningRequestCode
+      :info="info"
       :showRequestCode="showRequestCode"
       @handleCancel="handleCancelRequestCode"
       @handleSubmit="handleSubmitCode"
