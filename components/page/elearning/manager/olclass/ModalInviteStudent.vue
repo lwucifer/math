@@ -57,8 +57,8 @@ import * as actionTypes from "~/utils/action-types";
 import { useEffect, getParamQuery } from "~/utils/common";
 
 const STORE_TEACHING_OLCLASS = "elearning/teaching/olclass";
-const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
-const STORE_SCHOOL_STUDENT = "elearning/school/school-student";
+const STORE_CLASSES = "elearning/teaching/classes";
+const STORE_STUDENT = "elearning/teaching/students";
 
 export default {
   components: {},
@@ -125,14 +125,10 @@ export default {
       };
       try {
         await this.$store.dispatch(
-          `${STORE_SCHOOL_STUDENT}/${actionTypes.SCHOOL_STUDENTS.LIST}`,
+          `${STORE_STUDENT}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
           params
         );
-        this.studentList = this.get(
-          this.stateSchoolStudents,
-          "data.content",
-          []
-        );
+        this.studentList = this.get(this.stateStudents,"content",[]);
       } catch (e) {
       } finally {
       }
@@ -165,10 +161,13 @@ export default {
 
     async getSchoolClasses() {
       try {
+        let params = {
+          size: 9999
+        };
         await this.$store.dispatch(
-          `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
+          `${STORE_CLASSES}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`, params
         );
-        let lessonList = this.get(this.stateSchoolClasses, "data.content", []);
+        let lessonList = this.get(this.stateClasses, "content", []);
         let list = [];
         lessonList.forEach(element => {
           list.push({
@@ -186,11 +185,11 @@ export default {
   },
 
   computed: {
-    ...mapState(STORE_SCHOOL_CLASSES, {
-      stateSchoolClasses: "schoolClasses"
+    ...mapState(STORE_CLASSES, {
+      stateClasses: "teachingClasses"
     }),
-    ...mapState(STORE_SCHOOL_STUDENT, {
-      stateSchoolStudents: "schoolStudents"
+    ...mapState(STORE_STUDENT, {
+      stateStudents: "studentPrivates"
     })
   },
 
