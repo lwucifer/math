@@ -1,6 +1,6 @@
 <template>
   <div class="es-scorm-mode">
-    <iframe class="es-scorm-mode__iframe" :src="activeLink"></iframe>
+    <iframe class="es-scorm-mode__iframe" :src="scormItemActive"></iframe>
 
     <nav
       class="es-scorm-mode__menu"
@@ -17,7 +17,7 @@
       <ul class="es-scorm-mode__menu-list">
         <li v-for="(item, index) in scormItems" :key="index">
           <a
-            @click="setLink(item, index)"
+            @click="setElearningStudyScormItemActive(item)"
             :class="{ active: index == activeIndex }"
             >Bài học {{ index + 1 }}</a
           >
@@ -32,7 +32,7 @@
 
 <script>
 import IconViewAgenda from "~/assets/svg/v2-icons/view_agenda_24px.svg?inline";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   components: {
@@ -48,10 +48,14 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/study/study", ["scormItems"])
+    ...mapState("elearning/study/study", ["scormItems", "scormItemActive"])
   },
 
   methods: {
+    ...mapMutations("eleanring/study/study", [
+      "setElearningStudyScormItemActive",
+    ]),
+
     setLink(_link, _idx) {
       this.activeLink = _link;
       this.activeIndex = _idx;

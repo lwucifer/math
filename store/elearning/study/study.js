@@ -12,6 +12,7 @@ const state = () => ({
   expand: false,
   fullscreen: false,
   scormItems: [],
+  scormItemActive: "",
 });
 
 /**
@@ -75,9 +76,14 @@ const mutations = {
   },
 
   [mutationTypes.ELEARNING_STUDY.SET_SCORM_ITEMS](state, _items) {
-    // console.log("[SET_SCORM_ITEMS]", _items);
     state.scormItems = _items;
+  },
+
+  [mutationTypes.ELEARNING_STUDY.SET_SCORM_ITEM_ACTIVE](state, _data) {
+    console.log("[SET_SCORM_ITEM_ACTIVE]", _data);
+    state.scormItemActive = _data;
   }
+
 };
 
 export default {

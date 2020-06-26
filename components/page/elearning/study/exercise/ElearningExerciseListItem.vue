@@ -14,7 +14,7 @@
       color="secondary"
       size="sm"
       :pointer="false"
-      >Qúa hạn làm {{ exerciseTextTransform }}</app-button
+      >Quá hạn làm {{ exerciseTextTransform }}</app-button
     >
 
     <app-button
