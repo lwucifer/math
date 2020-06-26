@@ -2,51 +2,35 @@
   <div class="container">
       <div class="row wrap-notify-school">
         <div class="col-md-8">
-            <div v-if="!isDeital">
-                <div class="intro-text-school-menu-side">Thông báo chung</div>
-                <div class="notify-item-school" v-for="(item,index) in 5" :key="index" @click="showDetailNotify">
-                    <div class="circle-background">
-                        <IconEmail24px class="fill-primary"/>
-                    </div>
-                    <div>
-                        <p class="title-notify">Lịch trả bằng tốt nghiệp năm học 2018- 2019</p>
-                        <p>Nhà trường thông báo lịch trả bằng năm học 2018- 2019. (Từ ngày 15/08/2018 đến 31/5/2019</p>
-                        <p class="text-sub">01/06/2020</p>
-                    </div>
+            <div v-if="!isDetail">
+                <div class="intro-text-school-menu-side">{{titleAnnouncement}}</div>
+                <div v-if="pageLoading">
+                    <VclList/>
                 </div>
-                <app-pagination
-                    :pagination="pagination"
-                    class="mt-5"
-                />
-            </div>
-            <div v-else>
-                <div class="d-flex">
-                    <div class="circle-background mr-3">
-                        <IconEmail24px class="fill-primary"/>
+                <div v-else>
+                    <div class="notify-item-school" v-for="(item,index) in get(this,'announcementsList.content',[])" :key="index" @click="showDetailNotify(item.id)">
+                        <div class="circle-background">
+                            <IconEmail24px class="fill-primary"/>
+                        </div>
+                        <div>
+                            <p class="title-notify">{{ get(item,'title','') }}</p>
+                            <p v-html="get(item,'short_desc','')"></p>
+                            <p class="text-sub">{{ get(item,'updated','') | moment('DD/MM/YYYY')}}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="title-notify">Về việc dạy học và việc thu chi tài chính của Nhà trường trong thời gian dịch Covid-19.</p>
-                        <p class="text-sub mt-3">01/06/2020</p>
-                    </div>
-                </div>
-                <div class="my-5">
-                    <strong>Tệp đính kèm: <a href="">TKB.pdf</a></strong>
-                </div>
-                <div>
-                    Content
-                </div>
-                <div class="notify-other">
-                    <div class="intro-text-school-menu-side" style="font-size: 16px;">Thông báo khác</div>
-                    <div class="d-flex align-items-center mb-4" v-for="(item,index) in 5" :key="index">
-                        <IconEllipse2 class="mr-3"/>
-                        <span class="">Lịch trả bằng tốt nghiệp năm học 2018- 2019</span>
-                        <span class="ml-auto text-sub">06.09.2018</span>
-                    </div>
+                    <app-pagination
+                        :pagination="filterPagination"
+                        @pagechange="pagechange"
+                        class="mt-5"
+                    />
                 </div>
             </div>
+            <SchoolNotifyDetail v-else/>
         </div>
         <div class="col-md-4">
-            <SchoolMenuSideNotify/>
+            <SchoolMenuSideNotify
+                @changeCategory="changeCategory"
+            />
         </div>
     </div>
   </div>
@@ -56,15 +40,24 @@
 import SchoolMenuSideNotify from "~/components/page/school/Notify/SchoolMenuSideNotify"
 import IconEmail24px from '~/assets/svg/v2-icons/email_24px.svg?inline';
 import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
+import SchoolNotifyDetail from "~/components/page/school/Notify/SchoolNotifyDetail"
+
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import {moment} from "moment";
+import { VclList} from "vue-content-loading";
 export default {
     components:{
         SchoolMenuSideNotify,
         IconEmail24px,
-        IconEllipse2
+        IconEllipse2,
+        SchoolNotifyDetail,
+        VclList
     },
     data(){
         return{
-            isDeital:false,
+            isDetail:false,
             pagination:{
                 total_pages: 2,
                 size: 10,
@@ -72,13 +65,73 @@ export default {
                 first: 1,
                 last: 0,
                 number: 1
-            }
+            },
+            params:{
+                organization_id : this.$route.params.id,
+                category_id:4,
+                size:10,
+                page:null
+
+            },
+            titleAnnouncement:'Thông báo chung',
+            pageLoading: true
         }
     },
-    methods:{
-        showDetailNotify(){
-            this.isDeital = true;
+    watch:{
+        '$route.query'(){
+            this.checkParamsID()
         }
+    },
+    computed:{
+        ...mapState("elearning/school/school-announcement", { announcementsList: "announcements" }),
+        filterPagination(){
+            this.pagination.total_pages = get(this,'announcementsList.total_pages','');
+            this.pagination.size = get(this,'announcementsList.size','');
+            this.pagination.total_elements = get(this,'announcementsList.total_elements','');
+            this.pagination.first =  get(this,'announcementsList.first',0);
+            this.pagination.last =  get(this,'announcementsList.last',0);
+            this.pagination.number =  get(this,'announcementsList.number','');
+            return this.pagination
+        }
+    },
+    created(){
+        this.fetchNotifyList();
+        this.checkParamsID();
+    },
+    methods:{
+        showDetailNotify(id){
+            this.$router.push({query: { tab: 'notify',announcement_id : id}})
+        },
+        async fetchNotifyList(){
+            const data = this.params;
+            await this.$store.dispatch(
+            `elearning/school/school-announcement/${actionTypes.SCHOOL_INFO.ANNOUNCEMENT}`,
+                data
+            );
+            this.pageLoading = false;
+
+        },
+        changeCategory(val){
+            this.$router.push({query: { tab: 'notify'}})
+            this.params.category_id = val.id;
+            this.titleAnnouncement = val.name;
+            this.params.size = 10;
+            this.params.page = 1;
+            this.fetchNotifyList();
+        },
+        pagechange(val){
+            this.params.page = val.number + 1;
+            this.fetchNotifyList();
+        },
+        checkParamsID(){
+            const announcement_id = this.$route.query.announcement_id
+            if(announcement_id){
+                this.isDetail = true
+            }else{
+                this.isDetail = false
+            }
+        },
+        get
     }
 }
 </script>

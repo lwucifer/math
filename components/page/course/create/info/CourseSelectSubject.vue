@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="cgi-form-group d-flex justify-content-start align-items-center"
-  >
+  <div class="cgi-form-group d-flex justify-content-start align-items-center">
     <h2 class="cgi-form-title heading-6 mr-4">Môn học</h2>
     <app-select
       class="cc-select"
@@ -28,7 +26,7 @@ import { useEffect } from "~/utils/common";
 
 export default {
   components: {
-    IconAngleDown,
+    IconAngleDown
   },
 
   mounted() {
@@ -37,45 +35,45 @@ export default {
     );
     useEffect(this, this.handleChangeSubjects.bind(this), [
       "subjects",
-      "defaultValue",
+      "defaultValue"
     ]);
   },
 
   props: {
-    defaultValue: "",
+    defaultValue: ""
   },
 
   data() {
     return {
-      subject: {},
+      subject: {}
     };
   },
 
   computed: {
     ...mapState("elearning/public/public-subject", {
-      subjects: "subjects",
+      subjects: "subjects"
     }),
 
     subjectsOpt() {
-      return this.subjects.map((item) => ({
+      return this.subjects.map(item => ({
         ...item,
         value: item.id,
-        text: item.name,
+        text: item.name
       }));
-    },
+    }
   },
 
   methods: {
     handleChangeSubjects() {
       const subject = this.subjects.filter(
-        (subject) => subject.id == this.defaultValue
+        subject => subject.id == this.defaultValue
       )[0];
       if (subject) this.subject = subject;
     },
     get,
     handleChangeSubject(subject) {
       this.$emit("handleChangeSubject", subject);
-    },
-  },
+    }
+  }
 };
 </script>

@@ -2,15 +2,15 @@
   <div class="container mb-6">
     <div v-if="!pageLoading">
       <!-- <breadcrumb /> -->
-
       <SchoolSummary :school="school"/>
       <ListScrollTo 
         @changeTab="changeTab"
         :tab="tab"
       />
       <div v-if="tab=='index'">
-        <IntroSchool/>
-
+        <IntroSchool
+          :organization="organization"
+        />
         <div class="highlight" id="lesson">
           <ElearningHomeBox class="mb-0">
             <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
@@ -57,7 +57,7 @@
         <SchoolNews/>
         <SchoolLink/>
       </div>
-      <SchoolIntroduceContent v-else-if="tab=='intro'"/>
+      <SchoolIntroduceContent :organization="get(this,'organization',{})" v-else-if="tab=='intro'"/>
       <SchoolCoursesContent v-else-if="tab=='courses'"/>
       <SchoolNotifyContent v-else-if="tab=='notify'"/>
       <SchoolNewsContent v-else-if="tab=='news'"/>
@@ -152,7 +152,7 @@ export default {
           }
         }
       );
-    
+      
     return await Promise.all([
       getNewestLecture(),
       getNewestCourse()
@@ -162,12 +162,13 @@ export default {
   data() {
     return {
       pageLoading: true,
-      tab:'index'
+      tab:'index',
+      oraganization:{}
     };
   },
   computed: {
     ...mapState("elearning/school/school-info", { school: "schoolInfo" }),
-
+    ...mapState("elearning/school/school-organization", { organization: "schoolOrganization" }),
     ...mapState("elearning/public/public-newest", [
       "newestLecture",
       "newestCourse"
@@ -178,7 +179,8 @@ export default {
     this.pageLoading = false;
   },
   created(){
-    this.checkTab()
+    this.checkTab(),
+    this.fetchOrganization()
   },
   methods: {
     get,
@@ -193,7 +195,16 @@ export default {
       }else{
         this.tab = "index"
       }
-    }
+    },
+    async fetchOrganization(){
+      const id = this.$route.params.id
+      const data = {id: id};
+      console.log(data)
+      const rs = this.$store.dispatch(
+        `elearning/school/school-organization/${actionTypes.SCHOOL_ORGANIZATION.LIST}`,
+         data
+      );
+    },
   }
 };
 </script>

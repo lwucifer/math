@@ -17,8 +17,7 @@
         <n-link
           :to="`/elearning/${elearning && elearning.elearning_id}`"
           :title="elearning.name"
-          >{{ elearning && elearning.name }}</n-link
-        >
+        >{{ elearning && elearning.name }}</n-link>
       </h3>
       <div class="d-flex align-items-center my-3">
         <n-link
@@ -36,11 +35,13 @@
             "
             :size="20"
           />
-          <span class="ml-2">{{
+          <span class="ml-2">
+            {{
             elearning && elearning.teacher.name
-              ? elearning && elearning.teacher.name
-              : "Nguyễn Văn C"
-          }}</span>
+            ? elearning && elearning.teacher.name
+            : "Nguyễn Văn C"
+            }}
+          </span>
         </n-link>
         <!--<app-avatar-->
         <!--:src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"-->
@@ -62,9 +63,7 @@
         <div class="d-flex py-3 finish-lesson">
           <span>
             Đã hoàn thành
-            <strong class="text-primary"
-              >{{ elearning && elearning.progress }}%</strong
-            >
+            <strong class="text-primary">{{ elearning && elearning.progress }}%</strong>
           </span>
 
           <div class="ml-auto">
@@ -102,7 +101,7 @@
                         </li>
 
                         <li @click.prevent="shareSchool(elearning)">
-                          <IconSchooly class="icon fill-white" />Chia sẻ qua
+                          <IconLogo width="13" height="13" />Chia sẻ qua
                           Schoolly
                         </li>
                       </ul>
@@ -114,7 +113,9 @@
                   v-if="elearning && !elearning.is_favourite && tab !== 5"
                   @click.prevent="handleFavourite(elearning.elearning_id)"
                 >
-                  <n-link to> <IconCardsHeart class="icon" />Yêu thích </n-link>
+                  <n-link to>
+                    <IconCardsHeart class="icon" />Yêu thích
+                  </n-link>
                 </li>
 
                 <li
@@ -130,14 +131,18 @@
                   v-if="elearning && !elearning.is_archive"
                   @click.prevent="handleArchive(elearning.elearning_id)"
                 >
-                  <n-link to> <IconArchive class="icon" />Lưu trữ </n-link>
+                  <n-link to>
+                    <IconArchive class="icon" />Lưu trữ
+                  </n-link>
                 </li>
 
                 <li
                   v-else-if="elearning.is_archive && tab === 5"
                   @click.prevent="handleDeleteArchive(elearning.elearning_id)"
                 >
-                  <n-link to> <IconUnArchive class="icon" />Bỏ lưu trữ </n-link>
+                  <n-link to>
+                    <IconUnArchive class="icon" />Bỏ lưu trữ
+                  </n-link>
                 </li>
               </ul>
             </app-dropdown>
@@ -149,9 +154,12 @@
             Điểm trung bình:
             <span
               v-if="isPoint"
-              class="heading-5 text-primary font-weight-semi-bold"
-              >8.5</span
+              class="heading-6 text-primary font-weight-semi-bold"
             >
+              {{
+              (get(elearning, "medium_score.apply", 0) == true) ? numeral(get(elearning, "medium_score.score", 0)).format("0,0.0") : 'Không áp dụng'
+              }}
+            </span>
             <span v-else>Chưa tổng kết</span>
           </p>
 
@@ -167,9 +175,11 @@
               <template #popover>
                 <p class="font-weight-semi-bold mb-2">Điểm chi tiết</p>
 
-                <p class="mb-2" v-for="(srore, index) in scores" :key="index">
+                <p class="mb-2" v-for="(score, index) in scores" :key="index">
                   {{ get(score, "name", "") }}:
-                  <span class="text-primary">{{ get(score, "score", 0) }}</span>
+                  <span
+                    class="text-primary"
+                  >{{ get(score, "score", 0) }}</span>
                 </p>
               </template>
             </v-popover>
@@ -283,7 +293,7 @@
             >Mua ngay</app-button
           >
         </div>
-      </div> -->
+      </div>-->
     </div>
   </div>
   <ElearningItem2 v-else :elearning="elearning">
@@ -301,9 +311,10 @@ import IconShare24px from "~/assets/svg/v2-icons/share_24px.svg?inline";
 import IconUnArchive from "~/assets/svg/v2-icons/un-archive.svg?inline";
 import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import IconFacebook from "~/assets/svg/design-icons/facebook.svg?inline";
-import IconSchooly from "~/assets/svg/icons/schooly.svg?inline";
+import IconLogo from "~/assets/svg/icons/logo.svg?inline";
 import IconQuestionCircle from "~/assets/svg/design-icons/question-circle.svg?inline";
 import { get } from "lodash";
+import numeral from "numeral";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import ElearningItem2 from "~/components/page/elearning/mycourses/ElearningItem2";
@@ -317,10 +328,10 @@ export default {
     IconUnArchive,
     IconArchive,
     IconFacebook,
-    IconSchooly,
+    IconLogo,
     IconQuestionCircle,
     ElearningItem2,
-    MenuDropDown,
+    MenuDropDown
   },
   data() {
     return {
@@ -331,41 +342,43 @@ export default {
       avatar: "",
       teacher: {
         avatar: "",
-        name: "",
+        name: ""
       },
       progress: null,
       is_favourite: false,
       isPoint: true,
       isLearning: true,
       isFree: true,
-      scores: [],
+      scores: []
     };
   },
   props: {
     elearning: {
-      default: null,
+      default: null
     },
     tab: {
-      default: 1,
-    },
+      default: 1
+    }
   },
   computed: {
     ...mapState("elearning/study/study-student", {
-      elearningStudyStudent: "elearningStudyStudent",
-    }),
+      elearningStudyStudent: "elearningStudyStudent"
+    })
   },
   methods: {
+    get,
+    numeral,
     async handleShowDetailExams() {
       const params = {
-        elearning_id: get(this, "elearning.elearning_id", ""),
+        elearning_id: get(this, "elearning.elearning_id", "")
       };
       const { data } = await this.$axios({
         url: "/elearning/study/elearning/score",
         method: "get",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        params,
+        params
       });
       this.scores = get(data, "data.scores", []);
     },
@@ -407,7 +420,7 @@ export default {
       // } else {
       //   this.$toasted.error(doAdd.message);
       // }
-    },
+    }
   },
   created() {
     // console.log("[props] elearning", this.elearning);
@@ -417,7 +430,7 @@ export default {
     // this.teacher.avatar = get(this, "elearning.teacher.avatar.low", "");
     // this.teacher.name = get(this, "elearning.teacher.name", "");
     // this.progress = get(this, "elearning.progress", "");
-  },
+  }
 };
 </script>
 

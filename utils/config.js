@@ -11,7 +11,7 @@ export const FIREBASE_TOKEN = "firebase_token";
 
 export const RESPONSE_SUCCESS = true;
 
-export const FETCH_SIZE = 9;
+export const FETCH_SIZE = 50;
 export const SOCIAL = "SOCIAL";
 export const ELEARNING = "ELEARNING";
 

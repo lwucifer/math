@@ -2,7 +2,10 @@
   <div class="">
     <!--form-->
     <div v-if="showAddPayment">
-      <AddBank @cancel="showAddPayment = !showAddPayment" />
+      <AddBank
+        @cancel="showAddPayment = !showAddPayment"
+        @addSuccess="addBankDone"
+      />
       <hr class="mb-4" />
     </div>
 
@@ -10,10 +13,10 @@
     <div class="row mb-4 mt-3" v-if="!showAddPayment">
       <div class="col-md-9">
         <h6 class="mb-3">DANH SÁCH TÀI KHOẢN NHẬN TIỀN</h6>
-        <div>
-          <span class="text-primary d-flex">
+        <div v-if="notifyMsg">
+          <span class="d-flex" :class="msgCls">
             <IconCheck class="icon subheading" />
-            Bạn vừa thêm 1 tài khoản
+            {{ notifyMsg }}
           </span>
         </div>
       </div>
@@ -33,18 +36,18 @@
       <div class="col-md-6" v-for="(bank, index) in accountBanks" :key="index">
         <AccountPaymentItem
           :bank="bank"
-          @handleRefreshAccountBank="handleRefresh"
+          @handleRefreshAccountBank="refreshDel"
           @handleEditBank="handleEditBank"
         />
       </div>
     </div>
-    <p>
+     <!-- <p>
       <i style="font-size: 1.3rem;"
         >Để nhận tiền từ việc bán bài giảng/khóa học của bạn, vui lòng cập nhật
         tài khoản ngâng hàng của bạn</i
       >
     </p>
-    <EditBank @close="closeModal" v-if="bank" :bank="bank" />
+    <EditBank v-if="bank" @close="closeModal"  :bank="bank" @editSuccess="editBankDone" /> -->
   </div>
 </template>
 
@@ -74,7 +77,12 @@ export default {
     return {
       showAddPayment: false,
       opts: [],
-      bank: null
+      bank: null,
+      notifyMsg: null,
+      notifyType: null,
+      params: {
+        status: "ACTIVE",
+      },
     };
   },
   watch: {
@@ -90,6 +98,15 @@ export default {
       banks: "banks",
       accountBanks: "accountBanks",
     }),
+    msgCls() {
+      const colorCls = {
+        'text-primary': this.notifyType == 'success',
+        'text-error': this.notifyType == 'error'
+      }
+      return {
+        ...colorCls
+      }
+    }
   },
   methods: {
     handleEditBank(bank) {
@@ -99,14 +116,48 @@ export default {
       this.$store.dispatch(`bank/${actionTypes.PUBLIC_BANK.LIST}`);
     },
     fetchAccountBank() {
-      this.$store.dispatch(`bank/${actionTypes.ACCOUNT_BANKS.LIST}`);
+      const payload = {
+        params: this.params,
+      };
+      this.$store.dispatch(
+        `bank/${actionTypes.ACCOUNT_BANKS.LIST}`,
+        payload
+      );
     },
     handleRefresh() {
       this.fetchAccountBank();
     },
+    refreshDel() {
+      this.handleRefresh()
+      this.notifyMsg = 'Bạn vừa xóa 1 tài khoản'
+      this.notifyType = 'success'
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.notifyMsg = null
+        }, 3000)
+      })
+    },
     closeModal() {
       this.bank = null;
     },
+    addBankDone() {
+      this.notifyMsg = 'Bạn vừa thêm 1 tài khoản'
+      this.notifyType = 'success'
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.notifyMsg = null
+        }, 3000)
+      })
+    },
+    editBankDone() {
+      this.notifyMsg = 'Chỉnh sửa thành công'
+      this.notifyType = 'success'
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.notifyMsg = null
+        }, 3000)
+      })
+    }
   },
   // created() {
   //   this.fecthPublicBank();

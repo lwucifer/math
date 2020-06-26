@@ -23,7 +23,8 @@ export default {
       default: "default" // default | xs | sm | lg | css value
     },
     src: {
-      type: String
+      type: String,
+      default: ""
     },
     srcSet: {
       type: String

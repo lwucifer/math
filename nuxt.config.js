@@ -29,6 +29,7 @@ module.exports = {
   },
 
   env: {
+    BASE_ORIGIN_LOCATION: process.env.BASE_ORIGIN_LOCATION,
     SOCKET_URI: process.env.SOCKET_URI,
     PAYMENT_REQ_URL: process.env.PAYMENT_REQ_URL,
     PAYMENT_RETURN_URL: process.env.PAYMENT_RETURN_URL,

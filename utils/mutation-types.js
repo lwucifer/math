@@ -23,6 +23,11 @@ export const PUBLIC = {
     SET_BANK_LIST: "setBankList",
 };
 
+export const PUBLIC_CATEGORY = {
+    SET_CATEGORY_LIST: "setPublicCategoryList",
+};
+
+
 export const SOCIAL = {
     SET_FEEDS: "setSocialFeeds",
     UPDATE_FEEDS: "updateSocialFeeds",
@@ -383,6 +388,10 @@ export const SCHOOL_TEACHERS = {
     SET_SCHOOL_TEACHERS_ADD: "setSchoolTeachersAdd",
     SET_SCHOOL_TEACHERS_EDIT: "setSchoolTeachersEdit",
     SET_SCHOOL_TEACHERS_DELETE: "setSchoolTeachersDelete",
+};
+
+export const SCHOOL_ORGANIZATION = {
+    SET_SCHOOL_ORGANIZATION: "setSchoolOrganization",
 };
 
 export const ELEARNING_STUDY = {

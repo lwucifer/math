@@ -3,7 +3,7 @@
     title="Thông tin chuyển khoản"
   >
     <template v-slot:content>
-      <div class="form--normal">
+      <div class="form--normal form--do-withdrawl">
         <div class="row">
           <div class="col-md-3"><label for="" class="form--normal__title">Chọn ngân hàng</label></div>
           <div class="col-md-9">
@@ -35,6 +35,7 @@
               disabled
               v-model="branch"
               @input="handleChangedBranch"
+              class="bg-white"
             />
           </div>
           <div class="col-md-3"><label for="" class="form--normal__title">Tên chủ tài khoản</label></div>
@@ -77,8 +78,8 @@
               </template>
             </app-input>
             <div class="form--normal__note mb-3 d-flex justify-content-between">
-              <span><i>Rút tối thiểu:</i> <i>{{ minAmount | numeralFormat("0,0.00") }}</i>{{ CURRENCY }}</span>
-              <span>Số dư: <span>{{ balance | numeralFormat("0,0.00") }}</span>{{ CURRENCY }}</span>
+              <span><i>Rút tối thiểu:</i> <i>{{ minAmount | numeralFormat("0,0") }}</i>{{ CURRENCY }}</span>
+              <span>Số dư: <span>{{ balance | numeralFormat("0,0") }}</span>{{ CURRENCY }}</span>
             </div>
           </div>
           
@@ -191,4 +192,11 @@
 </script>
 
 <style lang="scss">
+  .form--do-withdrawl {
+    .app-input.disabled {
+      input {
+        background-color: #fff;
+      }
+    }
+  }
 </style>

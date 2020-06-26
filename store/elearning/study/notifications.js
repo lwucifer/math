@@ -35,7 +35,7 @@ const actions = {
                 actionTypes.HEADER_NOTIFICATIONS.LIST
             ](payload);
             if (result.data) {
-                console.log('HEADER_NOTIFICATIONS.LIST', result.data)
+                // console.log('HEADER_NOTIFICATIONS.LIST', result.data)
                 if (payload.service_type == ELEARNING) {
                     commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_ELEARNING_LIST, result.data);
                 }
@@ -57,7 +57,7 @@ const actions = {
                 actionTypes.HEADER_NOTIFICATIONS.LIST
             ](payload);
             if (result.data) {
-                console.log('HEADER_NOTIFICATIONS.LIST', result.data)
+                // console.log('HEADER_NOTIFICATIONS.LIST', result.data)
                 if (payload.service_type == ELEARNING) {
                     commit(mutationTypes.HEADER_NOTI.SET_NOTIFICATIONS_ELEARNING_LIST,
                         uniqWith(state.notiElearning.concat(result.data), (a, b) => a.id === b.id)
@@ -113,7 +113,7 @@ const actions = {
         try {
             const result = await new Notifications(this.$axios)[
                 actionTypes.HEADER_NOTIFICATIONS.CHECK_IS_READ_NOTIFICATION
-            ](payload);
+            ](payload.notification_id, payload.body);
             return result;
         } catch (err) {
             console.log("[Notifications] PUT.err", err);
@@ -125,8 +125,9 @@ const actions = {
     async [actionTypes.HEADER_NOTIFICATIONS.DELETE]({ commit }, options) {
         try {
             const result = await new Notifications(this.$axios)[
-                actionTypes.BASE.DELETE_PAYLOAD
-            ](options);
+                actionTypes.HEADER_NOTIFICATIONS.DELETE
+            ](options.notification_id, options.body);
+            console.log("[HEADER_NOTIFICATIONS.DELETE]", result);
             return result;
         } catch (error) {
             console.log("[Notifications] delete.error", error);

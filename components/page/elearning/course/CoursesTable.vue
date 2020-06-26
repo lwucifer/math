@@ -143,7 +143,7 @@
           <span
             v-if="!row.pricefree && row.price.original_price > 0"
             class="color-blue"
-          >{{row.price.original_price | numeralFormat("0,0.00")}}đ</span>
+          >{{row.price.original_price | numeralFormat("0,0")}}đ</span>
         </td>
       </template>
       <template v-slot:cell(publish_date)="{ row }">

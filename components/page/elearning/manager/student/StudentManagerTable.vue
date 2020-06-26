@@ -12,7 +12,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/manager/courses/students/${row.student_id}?elearning_id=${filterElearningId}`"
+            :to="`/elearning/manager/courses/students/${row.student_id}?elearning_id=${filterElearningId}&user_id=${row.user_id}`"
           >
             <IconArrow height="13" />
           </n-link>
@@ -37,7 +37,12 @@
       </template>
 
       <template v-slot:cell(name)="{row}">
-        <td style="width:30%">{{ get(row, 'student_name', '') }}</td>
+        <td style="width:30%">
+          <div class="student_name">
+           {{ get(row, 'student_name', '') }}
+           <IconLock2 class="fill-red" width="14" height="14" v-if="row.banned" />
+          </div>
+        </td>
       </template>
       <template v-slot:cell(class)="{row}">
         <td style="width:10%">{{ get(row, 'class_name', '') }}</td>
@@ -76,6 +81,8 @@ import RateStatus from "~/components/page/elearning/manager/exam/RateStatus";
 import { ELEARNING_TYPES } from "~/utils/constants";
 import IconClear24px from "~/assets/svg/v2-icons/clear_24px.svg?inline";
 import IconCheckGreen from "~/assets/svg/v2-icons/check_green.svg?inline";
+import IconLock2 from "~/assets/svg/icons/lock2.svg?inline";
+
 import { mapState, mapActions } from "vuex";
 const STORE_TEACHING_ACCEPT = "elearning/teaching/accept";
 const STORE_TEACHING_REQUEST = "elearning/teaching/request";
@@ -84,6 +91,7 @@ export default {
     IconArrow,
     IconClear24px,
     IconCheckGreen,
+    IconLock2,
     RateStatus
   },
 
@@ -181,5 +189,13 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.student_name {
+  display: inline-block;
+  position: relative;
+  .fill-red {
+    position: absolute;
+    left: calc(100% + 5px);
+  }
+}
 </style>

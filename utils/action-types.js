@@ -230,6 +230,10 @@ export const ELEARNING_PUBLIC_NEWEST = {
     LIST_COURSE: "elearningPublicNewestCourse",
 };
 
+export const PUBLIC_CATEGORY = {
+    LIST: "publicCategoryList",
+};
+
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
     LIST: "elearningPublicHighlightTeachers",
 };
@@ -257,6 +261,7 @@ export const TEACHING_OLCLASSES = {
     LIST: "teachingOlclassesList",
     ADD: "teachingOlclassesAdd",
     EDIT: "teachingOlclassesEdit",
+    INFO: "teachingOlclassesInfo",
     DELETE: "teachingOlclassesDelete",
     BLOCK: "teachingOlclassesBlock",
     UNBLOCK: "teachingOlclassesUnBlock",
@@ -428,6 +433,11 @@ export const SCHOOL_ELEARNING = {
     LIST: "schoolElearning",
 };
 
+
+export const SCHOOL_ORGANIZATION = {
+    LIST: "schoolOrganization",
+};
+
 export const SCHOOL_PROFESSIONAL = {
     LIST: "schoolProfessionalList",
     ADD: "schoolProfessionalAdd",
@@ -493,6 +503,7 @@ export const ELEARNING_STUDY_EXERCISE = {
     LIST_QUESTION_START: "elearningSudyExerciseQuestionListStart",
     LIST_QUESTION: "elearningSudyExerciseQuestionList",
     LIST_ELEARNING_EXERCISE: "elearningSudyElearningExerciseList",
+    LIST_ELEARNING_EXERCISE_2: "elearningSudyElearningExerciseList2",
     LIST_RESULT: "elearningSudyExerciseResultList",
     LIST_SUBMISTION: "elearningSudyExerciseSubmissionList",
     ADD_SUBMISTION: "elearningSudyExerciseSubmissionAdd",

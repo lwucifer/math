@@ -243,17 +243,15 @@ export default {
 
   methods: {
     handleCheckPayload() {
-      let check = true;
-
-      check = this.handleCheckName();
-      check = this.handleCheckDescription();
-      check = this.handleCheckBenefit();
-      check = this.handleCheckSubject();
-      check = this.handleCheckLevel();
-      check = this.handleCheckType();
-      check = this.handleCheckAvatar();
-
-      return check;
+      return (
+        this.handleCheckName() &&
+        this.handleCheckDescription() &&
+        this.handleCheckBenefit() &&
+        this.handleCheckSubject() &&
+        this.handleCheckLevel() &&
+        this.handleCheckType() &&
+        this.handleCheckAvatar()
+      );
     },
 
     handleCheckAvatar() {
