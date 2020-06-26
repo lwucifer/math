@@ -3,6 +3,7 @@
     <mark-section
       :student-name="get(this, 'detail.name', '')"
       :student-ava="get(this, 'detail.avatar.low', '')"
+      :class-name="get(this, 'detail.class_name', '')"
       :is-pass="isPass"
       :result="result"
       :result-desc="resultDesc"
