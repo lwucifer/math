@@ -69,7 +69,7 @@ import { useEffect, getParamQuery } from "~/utils/common";
 import result from "../../../../../store/elearning/teaching/result";
 
 const STORE_TEACHING_OLCLASS = "elearning/teaching/olclass";
-const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
+const STORE_SCHOOL_CLASSES = "elearning/teaching/classes";
 const STORE_SCHOOL_STUDENT = "elearning/teaching/students";
 const STORE_TEACHING_INVITES = "elearning/teaching/invites";
 
@@ -203,10 +203,13 @@ export default {
 
     async getSchoolClasses() {
       try {
+        let params = {
+          size: 9999
+        };
         await this.$store.dispatch(
-          `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
+          `${STORE_SCHOOL_CLASSES}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`, params
         );
-        let lessonList = this.get(this.stateSchoolClasses, "data.content", []);
+        let lessonList = this.get(this.stateSchoolClasses, "content", []);
         let list = [];
         lessonList.forEach(element => {
           list.push({
@@ -219,16 +222,13 @@ export default {
       } finally {
       }
     },
-    closeNotify() {
-      this.notify.showNotify = false;
-    },
 
     get
   },
 
   computed: {
     ...mapState(STORE_SCHOOL_CLASSES, {
-      stateSchoolClasses: "schoolClasses"
+      stateSchoolClasses: "teachingClasses"
     }),
     ...mapState(STORE_SCHOOL_STUDENT, {
       stateSchoolStudents: "studentPrivates"
@@ -242,11 +242,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import "~/assets/scss/components/elearning/olclass/invite-student.scss";
+
 .invite-student-modal .app-modal-content {
   padding: 2rem 1.5rem;
 }
-</style>
-
-<style lang="scss">
-@import "~/assets/scss/components/elearning/olclass/invite-student.scss";
 </style>
