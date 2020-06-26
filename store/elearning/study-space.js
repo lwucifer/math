@@ -38,9 +38,7 @@ const actions = {
       }
 
       if (!options.params.completed) {
-        const payload = { ...options };
-        payload.is_archive = false;
-        const result = await new StudyStudent(this.$axios)["list"](payload);
+        const result = await new StudyStudent(this.$axios)["list"](options);
         if (get(result, "success", false)) {
           const data = get(result, "data", null);
           commit("unfinished_lecture", data);
