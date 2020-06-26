@@ -165,7 +165,7 @@ export default {
     //   `account/${actionTypes.ACCOUNT_PROFILE.LIST}`
     // );
     // const dataProfile = dataUser && dataUser.data ? dataUser.data : {};
-    const schoolId = store.getters["auth/organizationId"];
+    const schoolId = store.getters["auth/organizationId"] || null;
     const dataYear = await store.dispatch(
       `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`,
       {
