@@ -58,12 +58,12 @@ export default {
             },
             
             feedback: [
-                {"img": "/images/home/feedback-1.png", "name": "Arlene Warren", "feedback": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "},
-                {"img": "/images/home/feedback-2.png", "name": "Julie Miles", "feedback": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "},
-                {"img": "/images/home/feedback-3.png", "name": "Leslie Howard", "feedback": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "},
-                {"img": "/images/home/feedback-1.png", "name": "Arlene Warren", "feedback": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "},
-                {"img": "/images/home/feedback-2.png", "name": "Julie Miles", "feedback": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "},
-                {"img": "/images/home/feedback-3.png", "name": "Leslie Howard", "feedback": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "}
+                {"img": "/images/home/feedback-1.png", "name": "Hà Sơn Hải", "feedback": "Các hệ thống E-Learning dành cho các trường phổ thông hiện nay đa phần đều rất khó sử dụng. Với Schoolly, mọi thứ trở nên thật dễ dàng."},
+                {"img": "/images/home/feedback-2.png", "name": "Đỗ Văn Nam", "feedback": "Hệ thống các bài giảng đa dạng, phong phú. Giao diện cũng rất bắt mắt và trực quan nên mình học tập cũng thấy hứng thú hơn."},
+                {"img": "/images/home/feedback-3.png", "name": "Nguyễn Tiến Linh", "feedback": "Với một giáo viên không có nhiều kiến thức về máy tính như tôi thì việc tạo nội dung học tập trực tuyến phải thật đơn giản. Và Schoolly đã đáp ứng được điều đó. Cảm ơn các bạn!"},
+                // {"img": "/images/home/feedback-1.png", "name": "Arlene Warren", "feedback": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "},
+                // {"img": "/images/home/feedback-2.png", "name": "Julie Miles", "feedback": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "},
+                // {"img": "/images/home/feedback-3.png", "name": "Leslie Howard", "feedback": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "}
             ],
         }
     },

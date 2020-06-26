@@ -7,19 +7,15 @@
     }
 
     .learn-everywhere-content {
-        .col-12.col-md-5, .col-12.col-md-7 {
+
+        .col-12.col-md-5,
+        .col-12.col-md-7 {
             margin-bottom: 4rem;
         }
 
         .learn-everywhere-box {
             &__title {
                 margin-bottom: 2rem;
-
-                span {
-                    @media (min-width: 768px) {
-                        display: block;
-                    }
-                }
             }
 
             .border {
