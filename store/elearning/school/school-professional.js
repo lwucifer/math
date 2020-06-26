@@ -20,12 +20,11 @@ const getters = {};
 const actions = {
   async [actionTypes.SCHOOL_PROFESSIONAL.LIST]({ commit }, params) {
     try {
-      const options = { params };
-      const result = await new Professional(this.$axios)[actionTypes.BASE.LIST](
-        options
+      const result = await new Professional(this.$axios)[actionTypes.BASE.DETAIL](
+        params.id
       );
       // set to mutation
-      commit(mutationTypes.SCHOOL_PROFESSIONAL.SET_SCHOOL_PROFESSIONAL_LIST, result);
+      commit(mutationTypes.SCHOOL_PROFESSIONAL.SET_SCHOOL_PROFESSIONAL_LIST, result.data);
     } catch (error) {
       console.log("[School Professional] list.error", error);
     }
