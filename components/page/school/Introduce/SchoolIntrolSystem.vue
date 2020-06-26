@@ -1,11 +1,11 @@
 <template>
   <div>
       <div class="row">
-        <div class="col-md-6 mb-3 mx-0" v-for="(item,index) in listSystem" :key="index">
+        <div class="col-md-6 mb-3 mx-0" v-for="(item,index) in get(this,'schoolProfessional',[])" :key="index">
             <app-button
                 class="btn-system-school"
                 color="white"
-                :class="changeContent==item.key ? 'change-tab' :''"
+                :class="changeContent==item.id ? 'change-tab' :''"
                 @click="changeTab(item)"
             >
                 <slot name="icon">
@@ -15,33 +15,35 @@
             </app-button>
         </div>
      </div>
-     <div class="intro-system-detail-school" v-if="changeContent">
+     <div class="intro-system-detail-school" v-if="get(this,'schoolStaffs',[])">
          <div class="title-system-school">
-             {{nameSystem}}
+             {{get(this,'nameSystem','')}}
          </div>
         <div class="content-system-school container">
-            <div class="row mb-4" v-for="(el,index) in 4" :key="index">
-                <div class="col-md-2">
-                    <img v-lazy="'https://picsum.photos/96/128'"/>
-                </div>
-                <div class="col-md-10 d-flex flex-column justify-content-center">
-                    <div class="d-flex mb-3">
-                        <span class="title-left">Họ và tên</span>
-                        <span>Ngộ Thị Không</span>
+            <div class="mb-4" v-for="(el,index) in get(this,'schoolStaffs.content',[])" :key="index">
+                <n-link class="row" :to="'/public/profile/teacher?user_id='+ get(el,'staff_id','')">
+                    <div class="col-md-2">
+                        <img height="128" v-lazy="get(el,'avatar','') ? get(el,'avatar','') : 'https://picsum.photos/96/128'"/>
                     </div>
-                    <div class="d-flex mb-3">
-                        <span class="title-left">Chức vụ</span>
-                        <span >Hiệu trưởng</span>
+                    <div class="col-md-10 d-flex flex-column justify-content-center">
+                        <div class="d-flex mb-3">
+                            <span class="title-left">Họ và tên</span>
+                            <span>{{ get(el,'name','') }}</span>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <span class="title-left">Chức vụ</span>
+                            <span >{{ get(el,'duty','') }}</span>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <span class="title-left">Điện thoại</span>
+                            <span>{{ get(el,'phone','') }}</span>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <span class="title-left">Email</span>
+                            <span>{{ get(el,'email','') }}</span>
+                        </div>
                     </div>
-                    <div class="d-flex mb-3">
-                        <span class="title-left">Điện thoại</span>
-                        <span>0546869</span>
-                    </div>
-                    <div class="d-flex mb-3">
-                        <span class="title-left">Email</span>
-                        <span>Gmail.com</span>
-                    </div>
-                </div>
+                </n-link>
             </div>
         </div>
      </div>
@@ -50,6 +52,11 @@
 
 <script>
 import IconArrowRight24px from '~/assets/svg/v2-icons/arrow_right_24px.svg?inline';
+
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+import {moment} from "moment";
 export default {
     components:{
         IconArrowRight24px
@@ -57,44 +64,51 @@ export default {
     data(){
         return{
             changeContent:'',
-            nameSystem:',',
-            listSystem:[
-            {
-                name:"Chi Bộ Đảng",
-                key:"1"
+            nameSystem:'Tất cả giáo viên',
+            params:{
+                school_id : this.$route.params.id,
+                size: null,
+                profession_id: null
             },
-            {
-                name:"Tổ Hành Chính - Văn Phòng",
-                key:"2"
-            },
-            {
-                name:"Ban Giám Hiệu",
-                key:"3"
-            },
-            {
-                name:"Tổ Chuyên môn",
-                key:"4"
-            },
-            {
-                name:"Công Đoàn",
-                key:"5"
-            },
-            {
-                name:"Ban thường trực Hội PHHS",
-                key:"6"
-            },
-            {
-                name:"Đoàn Thanh Niên",
-                key:"7"
-            }
-        ]
+            pageLoading: true
         }
+    },
+    computed:{
+        ...mapState("elearning/school/school-professional", { schoolProfessional: "schoolProfessional" }),
+        ...mapState("elearning/school/school-staffs", { schoolStaffs: "schoolStaffs" })
+    },
+    created(){
+        this.fetchlProfessionalList(),
+        this.fetchlStaffsList()
     },
     methods:{
         changeTab(val){
-            this.changeContent = val.key
+            this.changeContent = val.id
             this.nameSystem = val.name
-        }
+            this.params.profession_id = val.id;
+            this.fetchlStaffsList();
+        },
+        async fetchlProfessionalList(){
+    
+            const data = { id : this.$route.params.id};
+            await this.$store.dispatch(
+            `elearning/school/school-professional/${actionTypes.SCHOOL_PROFESSIONAL.LIST}`,
+                data
+            );
+            this.pageLoading = false;
+
+        },
+        async fetchlStaffsList(){
+    
+            const data = this.params;
+            await this.$store.dispatch(
+            `elearning/school/school-staffs/${actionTypes.SCHOOL_STAFFS.LIST}`,
+                data
+            );
+            this.pageLoading = false;
+
+        },
+        get
     }
 }
 </script>

@@ -11,7 +11,7 @@
                     <div v-else>
                         <div class="row news-item-school" v-for="(item,index) in list" :key="index" @click="showDetailNews(item)">
                             <div class="col-md-4">
-                                <img :height="131" class="w-100" :src="get(item,'thumb','')">
+                                <img :height="131" class="w-100" :src="get(item,'thumb','https://picsum.photos/218/131')">
                             </div>
                             <div class="col-md-8">
                                 <p class="title-notify">{{get(item,"title","")}}</p>
@@ -69,7 +69,6 @@ export default {
                 category_id:1,
                 size:10,
                 page:null
-
             },
             titleNews:'Tin tức mới',
             pageLoading:true

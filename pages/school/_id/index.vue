@@ -9,7 +9,7 @@
       />
       <div v-if="tab=='index'">
         <IntroSchool
-          :organization="organization"
+          :organization="get(this,'organization',{})"
         />
         <div class="highlight" id="lesson">
           <ElearningHomeBox class="mb-0">
@@ -95,7 +95,7 @@ import { getParamQuery } from "~/utils/common"
 
 export default {
   watchQuery: ["school_id"],
-
+  scrollToTop: true,
   components: {
     SchoolSummary,
     ListScrollTo,
@@ -121,6 +121,7 @@ export default {
       ['index', 'intro','courses','notify','news','schedule'].includes(get(newQuery, 'tab', false))
     ) {
       this.tab = get(newQuery, 'tab', 'index')
+      window.scrollTo(0, 300);
     } else {
       this.tab = 'index'
     }

@@ -5,19 +5,40 @@
        <div class="school-link__line"></div>
 
        <div class="school-link__content">
-           <n-link to=""><img src="~assets/images/tmp/connect-1.png" alt=""></n-link>
-           <n-link to=""><img src="~assets/images/tmp/connect-2.png" alt=""></n-link>
-           <n-link to=""><img src="~assets/images/tmp/connect-3.png" alt=""></n-link>
-           <n-link to=""><img src="~assets/images/tmp/connect-4.png" alt=""></n-link>
-           <n-link to=""><img src="~assets/images/tmp/connect-5.png" alt=""></n-link>
-           <n-link to=""><img src="~assets/images/tmp/connect-6.png" alt=""></n-link>
+           <a 
+            v-for="(item,index) in get(this,'linkWebsList.content',[])"
+            :key="index"
+            :href="item.link"
+            target='_blank'
+           >
+               <img :src="get(item,'logo','~assets/images/tmp/connect-1.png')" :alt="item.name">
+            </a>
        </div>
     </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
 export default {
-
+    computed:{
+        ...mapState("elearning/school/school-linkwebs",{ linkWebsList : "schoolLinkWebs"})
+    },
+    methods:{
+        async fetchLinkWebsList(){
+            const data = { organization_id : this.$route.params.id};
+            await this.$store.dispatch(
+            `elearning/school/school-linkwebs/${actionTypes.SCHOOL_LINK_WEBSITE.LIST}`,
+                data
+            );
+            console.log('linkwebs')
+        },
+        get
+    },
+    created(){
+        this.fetchLinkWebsList();
+    }
 }
 </script>
 

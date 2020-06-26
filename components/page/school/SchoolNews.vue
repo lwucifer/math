@@ -1,12 +1,11 @@
 <template>
     <div class="school-news" id="news">
         <div class="school-news__title">Tin tức sự kiện</div>
-
         <div class="school-news__line"></div>
 
         <div class="school-news__content">
             <div class="row">
-                <div class="col-12 col-md-4" v-for="(item, index) in dataFake" :key="index">
+                <div class="col-12 col-md-4" v-for="(item, index) in get(this,'newsList.content',[])" :key="index">
                     <SchoolNewsItem :data="item"/>
                 </div>
             </div>
@@ -16,7 +15,9 @@
             <app-button
                 class="text-white"
                 size="md"
-                color="primary">
+                color="primary"
+                @click="getAllNews"
+                >
                 Xem tất cả
             </app-button>
         </div>
@@ -26,17 +27,41 @@
 <script>
 import SchoolNewsItem from "~/components/page/school/SchoolNewsItem"
 
+import { mapState } from "vuex";
+import * as actionTypes from "~/utils/action-types";
+import { get } from "lodash";
+
 export default {
     data() {
         return {
-            dataFake: [
-                {date: "20/05/2020", title: "Chuyên đề giáo dục kĩ năng sống chủ đề: phát triển sự tự tin"},
-                {date: "20/05/2020", title: "Sơ kết học kì I và kỉ niệm 4 năm ngày trường đi vào hoạt động (04/01/2016 – 04/01/2020)"},
-                {date: "20/05/2020", title: "Trao giải Võ Trường Toản cho 50 nhà giáo tiêu biểu của thành phố Hồ Chí Minh"}
-            ]
+            params:{
+                organization_id : this.$route.params.id,
+                size:3,
+            }
         }
     },
+    computed:{
+        ...mapState("elearning/school/school-news", { newsList: "schoolNews" }),
+    },
+    methods:{
+        getAllNews(){
+            this.$router.push({query: { tab: 'news'}})
+        },
+        async fetchNewsList(){
+    
+            const data = this.params;
+            await this.$store.dispatch(
+            `elearning/school/school-news/${actionTypes.SCHOOL_NEWS.LIST}`,
+                data
+            );
+            this.pageLoading = false;
 
+        },
+        get
+    },
+    created(){
+        this.fetchNewsList();
+    },
     components: {
         SchoolNewsItem
     }
