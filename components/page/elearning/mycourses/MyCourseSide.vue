@@ -1,7 +1,7 @@
 <template>
   <sub-block-section
     v-sticky
-    sticky-offset="{ top: 88 }"
+    sticky-offset="{ top: 88, bottom: 30 }"
     :sticy-z-index="9"
     class="my-course-side"
     title="Góc học tập"

@@ -41,7 +41,7 @@
     
       <template v-slot:cell(creator)="{row}">
         <td>
-          {{ get(row, 'student.name', '') }}
+          <span class="nowrap">{{ get(row, 'student.name', '') }}</span>
           <p>
             <app-stars :stars="row.vote" :size="13" class="mt-3 mb-2"/>
           </p>
@@ -64,7 +64,9 @@
     
       <template v-slot:cell(created_at)="{row}">
         <td>
-          {{ get(row, 'timestamp', '') | getDateTimeHH_MM_D_M_Y }}
+          <span class="nowrap">
+            {{ get(row, 'timestamp', '') | getDateTimeHH_MM_D_M_Y }}
+          </span>
         </td>
       </template>
     </app-table>

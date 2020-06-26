@@ -10,7 +10,7 @@
               </div>
               <div>
                 <p class="mb-3"><span class="h4">{{ studentName }}</span></p>
-                <p><span class="font-weight-normal">Lớp 10B</span></p>
+                <p><span class="font-weight-normal">{{ className }}</span></p>
               </div>
             </div>
             <app-divider class="mt-15 mb-15"/>
@@ -31,7 +31,7 @@
               </div>
               <div class="col-md-7 col-sm-8 value">
                 <!--Thứ 4, 18 tháng 10 năm 2019, 11:00 AM-->
-                {{ startedAt | moment(DATETIME_FULL_WEEK_DAY) | uppercaseFirst }}
+                {{ startedAt | getDateTimeFullWeekDay | uppercaseFirst }}
               </div>
             </div>
             <div class="row item">
@@ -40,7 +40,7 @@
               </div>
               <div class="col-md-7 col-sm-8 value">
                 <!--Thứ 4, 18 tháng 10 năm 2019, 11:00 AM-->
-                {{ finishedAt | moment(DATETIME_FULL_WEEK_DAY) | uppercaseFirst }}
+                {{ finishedAt | getDateTimeFullWeekDay | uppercaseFirst }}
               </div>
             </div>
             <div class="row item">
@@ -85,16 +85,19 @@
 
 <script>
   import { DATETIME_FULL_WEEK_DAY } from "~/utils/config";
-  import AppAvatar from "../../../../common/avatar/AppAvatar";
   
   export default {
-    components: {AppAvatar},
+    components: {},
     props: {
       studentName: {
         type: String,
         required: true
       },
       studentAva: {
+        type: String,
+        required: true
+      },
+      className: {
         type: String,
         required: true
       },
