@@ -69,7 +69,7 @@
       
       <template v-slot:cell(created)="{row}">
         <td>
-          {{ get(row, 'created', '') | moment("DD/MM/YYYY") }}
+          {{ get(row, 'created', '') | getDateBirthDay }}
         </td>
       </template>
     </app-table><!--End table-->
