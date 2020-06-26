@@ -226,7 +226,6 @@ export const TEACHING_INTERACTIVE_ANNOUNCEMENTS = `/elearning/teaching/interacti
 export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = `/elearning/teaching/interactive/announcement`;
 export const TEACHING_PUBLIC_LIST = `/elearning/public/list`;
 export const PUBLIC_CLASSES = `/elearning/public/classes`;
-// export const TEACHING_STUDENTS = `/elearning/teaching/students`;
 /**
  * PAYMENT
  */
