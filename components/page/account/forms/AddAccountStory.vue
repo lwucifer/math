@@ -3,7 +3,7 @@
     <app-editor class="mb-4" v-model="detail"></app-editor>
     <div>
       <app-button class="mr-3" color="white" @click="cancel">Hủy</app-button>
-      <app-button @click="submit" v-if="story == ''">Thêm tiểu sử</app-button>
+      <app-button @click="submit" v-if="story == '' || story == null">Thêm tiểu sử</app-button>
       <app-button @click="submit" v-else>Cập nhật</app-button>
     </div>
   </div>

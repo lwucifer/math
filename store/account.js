@@ -274,6 +274,7 @@ const actions = {
                 mutationTypes.ACCOUNT_PROFILE.SET_ACCOUNT_PROFILE_LIST,
                 result.data
             );
+            return result
         } catch (err) {
             console.log("PROFILE add.err", err);
             return err;

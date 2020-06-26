@@ -161,7 +161,7 @@
             <span v-if="!isPoint">Không áp dụng</span>
           </p>
 
-          <div v-if="isPoint" class="popover-point">
+          <div v-if="isPoint && isCaculation" class="popover-point">
             <v-popover class="popover-detail" placement="right" trigger="click">
               <IconQuestionCircle
                 width="16px"
