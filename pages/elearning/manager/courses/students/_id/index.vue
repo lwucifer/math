@@ -61,8 +61,8 @@
       @ok="bannedStudent"
       :width="550"
       @cancel="showModalBanned = false"
-      :title="titleBanned"
-      :description="descBanned"
+      :title="!get(progress, 'banned', false) ? 'Bạn có chắc chắn muốn cấm học sinh này?': 'Bạn muốn bỏ cấm học sinh này?'"
+      :description="!get(progress, 'banned', false) ? 'Học sinh này sẽ không thể tham gia học tập và làm bài' : 'Học sinh này sẽ có thể tiếp tục tham gia học tập và làm bài'"
     />
   </div>
 </template>
@@ -145,8 +145,6 @@ export default {
         size: 10,
         category: 'EXERCISE'
       },
-      titleBanned:"Bạn có chắc chắn muốn cấm học sinh này này?",
-      descBanned:"Học sinh này sẽ không thể tham gia học tập và làm bài",
       confirmBannedLoading: false,
       showModalBanned: false
     };
@@ -165,8 +163,6 @@ export default {
     bannedStudent() {
       this.confirmBannedLoading = true;
       let isBanned = this.get(this.progress, 'banned', false);
-      this.titleBanned = !isBanned ? 'Bạn muốn bỏ cấm học sinh này?' : 'Bạn có chắc chắn muốn cấm học sinh này?';
-      this.descBanned = !isBanned ? 'Học sinh này sẽ có thể tiếp tục tham gia học tập và làm bài' : 'Học sinh này sẽ không thể tham gia học tập và làm bài';
       const data = createBannedStudent({
         elearning_id:
           this.$route.query && this.$route.query.elearning_id

@@ -83,12 +83,12 @@
                   <app-vue-select
                     style="width: 14rem"
                     class="app-vue-select filter-form__item__selection"
-                    v-model="selectPrivacy"
+                    v-model="selectSubject"
                     label="text"
                     placeholder="Môn học"
-                    :value="params.privacy"
+                    :value="params.subject"
                     :reduce="(item) => item.value"
-                    @input="handleChangePrivacy"
+                    @input="handleChangeSubject"
                     :options="subjectsOpt"
                     has-border
                   ></app-vue-select>
@@ -182,7 +182,7 @@ export default {
         page: 1,
         keyword: null,
         completed: null,
-        privacy: null,
+        subject: null,
         free: null,
         is_archive: false,
         is_hidden: true
@@ -192,7 +192,7 @@ export default {
       dataModal: {},
       showFilter: false,
       selectType: null,
-      selectPrivacy: null,
+      selectSubject: null,
       selectFree: null
     };
   },
@@ -247,8 +247,8 @@ export default {
       this.params.type = type;
     },
 
-    handleChangePrivacy(privacy) {
-      this.params.privacy = privacy;
+    handleChangeSubject(subject) {
+      this.params.subject = subject;
     },
 
     handleChangeFree(free) {
@@ -291,11 +291,11 @@ export default {
       }
       if (tab == 3) {
         this.params.completed = true;
-        this.params.is_archive = null;
+        this.params.is_archive = false;
       }
       if (tab == 4) {
         this.params.completed = null;
-        this.params.is_archive = null;
+        this.params.is_archive = false;
       }
       if (tab == 5) {
         this.params.completed = null;
@@ -413,7 +413,7 @@ export default {
     toggleFilter() {
       if (this.showFilter) {
         this.selectType = null;
-        this.selectPrivacy = null;
+        this.selectSubject = null;
         this.selectFree = null;
       }
       this.showFilter = !this.showFilter;
