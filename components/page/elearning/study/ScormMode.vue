@@ -17,7 +17,7 @@
       <ul class="es-scorm-mode__menu-list">
         <li v-for="(item, index) in scormItems" :key="index">
           <a
-            @click="setElearningStudyScormItemActive(item)"
+            @click="setElearningStudyScormItemActive(item); activeIndex=index"
             :class="{ active: index == activeIndex }"
             >Bài học {{ index + 1 }}</a
           >
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       showMenu: false,
-      activeLink: "",
+      // activeLink: "",
       activeIndex: ""
     };
   },
@@ -56,10 +56,10 @@ export default {
       "setElearningStudyScormItemActive",
     ]),
 
-    setLink(_link, _idx) {
-      this.activeLink = _link;
-      this.activeIndex = _idx;
-    }
+    // setLink(_link, _idx) {
+    //   this.activeLink = _link;
+    //   this.activeIndex = _idx;
+    // }
   },
 
   watch: {
