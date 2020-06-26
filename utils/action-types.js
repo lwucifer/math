@@ -261,6 +261,7 @@ export const TEACHING_OLCLASSES = {
     LIST: "teachingOlclassesList",
     ADD: "teachingOlclassesAdd",
     EDIT: "teachingOlclassesEdit",
+    INFO: "teachingOlclassesInfo",
     DELETE: "teachingOlclassesDelete",
     BLOCK: "teachingOlclassesBlock",
     UNBLOCK: "teachingOlclassesUnBlock",
@@ -430,6 +431,11 @@ export const SCHOOL_INFO = {
 
 export const SCHOOL_ELEARNING = {
     LIST: "schoolElearning",
+};
+
+
+export const SCHOOL_ORGANIZATION = {
+    LIST: "schoolOrganization",
 };
 
 export const SCHOOL_PROFESSIONAL = {

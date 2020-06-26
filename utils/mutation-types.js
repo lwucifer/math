@@ -390,6 +390,10 @@ export const SCHOOL_TEACHERS = {
     SET_SCHOOL_TEACHERS_DELETE: "setSchoolTeachersDelete",
 };
 
+export const SCHOOL_ORGANIZATION = {
+    SET_SCHOOL_ORGANIZATION: "setSchoolOrganization",
+};
+
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",

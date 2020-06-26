@@ -1,7 +1,7 @@
 <template>
   <div>
     <app-vue-select
-      class="app-vue-select w-100"
+      class="app-vue-select w-100 app-vue-select--voted-elearnings"
       :options="list"
       searchable
       append-to-body
@@ -140,4 +140,11 @@ export default {
 </script>
 
 <style lang="scss">
+  .app-vue-select--voted-elearnings {
+    .v-select.vs--open {
+      .vs__dropdown-menu {
+        display: block;
+      }
+    }
+  }
 </style>

@@ -5,18 +5,13 @@
                 <div class="intro-text">
                     <div class="intro-text__title">Giới thiệu</div>
 
-                    <div class="intro-text__border"></div>
-
                     <div class="intro-text__content">
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros.</p> 
-
-                        <p>Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p> 
-
-                        <p>Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.</p>
+                        <div v-html="get(this,'organization.content')"></div>
                     </div>
 
                     <app-button
                         size="md"
+                         @click="getDetail"
                         class="intro-text__btn text-white"
                         color="primary">Xem thêm</app-button>
                 </div>
@@ -24,7 +19,7 @@
 
             <div class="col-12 col-md-6">
                 <div class="intro-img">
-                    <img src="~assets/images/tmp/img-intro.png" alt="">
+                    <img :src="get(this,'organization.cover') ? get(this,'organization.cover') : '~assets/images/tmp/img-intro.png'" alt="">
                 </div>
             </div>
         </div>
@@ -32,11 +27,33 @@
 </template>
 
 <script>
+import { get } from "lodash"
 export default {
+    props:{
+        organization:{
+            type: Object,
+            default:()=>{}
+        }
+    },
+    computed:{
+        shortContent(){
 
+        }
+    },
+    methods:{
+        getDetail(){
+            this.$router.push({query: { tab: 'intro',type: 'organization'}})
+        },
+        get
+    }
 }
 </script>
 
 <style lang="scss" scoped>
 @import "~assets/scss/components/school/_intro-school.scss";
+.intro-text__content{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 198px;
+}
 </style>

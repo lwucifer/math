@@ -78,8 +78,8 @@
               </template>
             </app-input>
             <div class="form--normal__note mb-3 d-flex justify-content-between">
-              <span><i>Rút tối thiểu:</i> <i>{{ minAmount | numeralFormat("0,0.00") }}</i>{{ CURRENCY }}</span>
-              <span>Số dư: <span>{{ balance | numeralFormat("0,0.00") }}</span>{{ CURRENCY }}</span>
+              <span><i>Rút tối thiểu:</i> <i>{{ minAmount | numeralFormat("0,0") }}</i>{{ CURRENCY }}</span>
+              <span>Số dư: <span>{{ balance | numeralFormat("0,0") }}</span>{{ CURRENCY }}</span>
             </div>
           </div>
           
