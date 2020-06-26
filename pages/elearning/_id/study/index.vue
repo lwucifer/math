@@ -1,6 +1,9 @@
 <template>
-  <div class="elearning-study" :class="{ 'pt-0': expand || fullscreen }">
-    <HeaderCourse @exit="exitStudy" />
+  <div
+    class="elearning-study"
+    :class="{ 'pt-0': expand, fullscreen: fullscreen }"
+  >
+    <HeaderCourse v-show="!fullscreen" @exit="exitStudy" />
 
     <div class="container" v-if="pageLoading">
       <div class="row">
@@ -16,7 +19,11 @@
     <template v-else>
       <portal-target
         name="theater"
-        :class="['elearning-study-theater', fullscreen && 'elearning-study-theater--fullscreen']"
+        :class="{
+          'elearning-study-theater': true,
+          'elearning-study-theater--fullscreen': fullscreen,
+          'elearning-study-theater--active': fullscreen || expand
+        }"
       />
 
       <div class="container">
@@ -24,9 +31,32 @@
           <div class="col-md-8">
             <portal to="theater" :disabled="!(expand || fullscreen)">
               <div class="elearning-study-content">
-                <ElearningExercise v-if="isExerciseMode" />
+                <!-- EXERCISE MODE -->
+                <div
+                  v-if="isExerciseMode"
+                  class="elearning-lesson-screen elearning-lesson-screen--exercise-mode"
+                >
+                  <ElearningExercise />
+                </div>
 
-                <div v-else class="elearning-lesson-screen">
+                <div
+                  v-else
+                  :class="{
+                    'elearning-lesson-screen': true,
+                    'elearning-lesson-screen--default-mode':
+                      studyMode === defaultMode,
+                    'elearning-lesson-screen--video-mode':
+                      studyMode === videoMode,
+                    'elearning-lesson-screen--doc-mode': studyMode === docMode,
+                    'elearning-lesson-screen--image-mode':
+                      studyMode === imageMode,
+                    'elearning-lesson-screen--article-mode':
+                      studyMode === articleMode,
+                    'elearning-lesson-screen--scorm-mode':
+                      studyMode === scormMode
+                  }"
+                >
+                  <!-- DEFAULT MODE -->
                   <img
                     v-if="studyMode === defaultMode"
                     :src="
@@ -36,37 +66,57 @@
                     width="750"
                     alt
                   />
+
+                  <!-- VIDEO MODE -->
                   <Streaming
                     v-if="studyMode == videoMode"
                     :url="get(payload, 'stream_urls.hls_url', '')"
                     :thumbnail="
-                    get(info, 'cover_url.high', '') ||
-                      '/images/adefltu - course - image.png'
-                  "
+                      get(info, 'cover_url.high', '') ||
+                        '/images/adefltu - course - image.png'
+                    "
                   />
-                  <ElearningDownload v-if="studyMode == docMode" :link="get(payload, 'link', '')" />
-                  <img v-if="studyMode === imageMode" :src="get(payload, 'link', '')" alt />
-                  <iframe v-if="studyMode == articleMode" :src="get(payload, 'link', '')"></iframe>
-                </div>
 
-                <!-- <div class="lession-screen">
-                  SCORM TEST
+                  <!-- DOC MODE -->
+                  <ElearningDownload
+                    v-if="studyMode == docMode"
+                    :link="get(payload, 'link', '')"
+                  />
+
+                  <!-- IMAGE MODE -->
+                  <img
+                    v-if="studyMode === imageMode"
+                    :src="get(payload, 'link', '')"
+                    alt
+                  />
+
+                  <!-- ARTICLE MODE -->
                   <iframe
-                    style="width: 712px"
-                    src="https://file-elearning.moet.gov.vn/upload2015/s7Y1xcf7oYzG94jLEhRi/baigiang/lop03/tnxh/tiet61a/index.htm"
+                    v-if="studyMode == articleMode"
+                    :src="get(payload, 'link', '')"
                   ></iframe>
-                </div>-->
+
+                  <!-- SCORM TEST -->
+                  <!-- <ScormLecture v-if="studyMode === articleMode" /> -->
+                  <ScormLecture v-if="studyMode == scormMode" />
+                </div>
 
                 <!-- DO EXERCISE -->
 
-                <div class="elearning-study-bottom">
+                <div
+                  class="elearning-study-bottom"
+                  v-if="studyMode !== defaultMode && studyMode !== videoMode"
+                >
                   <button
                     v-if="!fullscreen"
                     class="elearning-study-bottom__button elearning-study-bottom__button--expand"
                     type="button"
                     @click="setExpand(!expand)"
                   >
-                    <IconStudyNarrow v-if="expand" class="icon fill-opacity-1" />
+                    <IconStudyNarrow
+                      v-if="expand"
+                      class="icon fill-opacity-1"
+                    />
                     <IconStudyExpand v-else class="icon fill-opacity-1" />
                   </button>
                   <button
@@ -74,7 +124,10 @@
                     type="button"
                     @click="setFullscreen(!fullscreen)"
                   >
-                    <IconCropFreeReverse v-if="fullscreen" class="icon fill-opacity-1" />
+                    <IconCropFreeReverse
+                      v-if="fullscreen"
+                      class="icon fill-opacity-1"
+                    />
                     <IconCropFree v-else class="icon fill-opacity-1" />
                   </button>
                 </div>
@@ -83,13 +136,24 @@
 
             <div class="box22">
               <div class="elearning-study-tabs">
-                <a :class="{ active: type === 'summary' }" @click="type = 'summary'">Tổng quan</a>
-                <a :class="{ active: type === 'qa' }" @click="type = 'qa'">Hỏi đáp</a>
+                <a
+                  :class="{ active: type === 'summary' }"
+                  @click="type = 'summary'"
+                  >Tổng quan</a
+                >
+                <a :class="{ active: type === 'qa' }" @click="type = 'qa'"
+                  >Hỏi đáp</a
+                >
                 <a
                   :class="{ active: type === 'notification' }"
                   @click="type = 'notification'"
-                >Thông báo</a>
-                <a :class="{ active: type === 'review' }" @click="type = 'review'">Đánh giá</a>
+                  >Thông báo</a
+                >
+                <a
+                  :class="{ active: type === 'review' }"
+                  @click="type = 'review'"
+                  >Đánh giá</a
+                >
               </div>
 
               <TabSummary :info="info" v-if="type === 'summary'" />
@@ -119,7 +183,7 @@ import { mapState, mapMutations } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { ELEARNING_STUDY as ELEARNING_STUDY_MUTATION } from "~/utils/mutation-types";
 import { STUDY_MODE, EXERCISE_CATEGORIES } from "~/utils/constants";
-import { useEffect } from "~/utils/common";
+import { useEffect, redirectWithParams, getParamQuery } from "~/utils/common";
 import InfoService from "~/services/elearning/study/Info";
 import InteractiveQuestionService from "~/services/elearning/study/InteractiveQuestion";
 import ProgramService from "~/services/elearning/public/Program";
@@ -141,14 +205,13 @@ import TabSummary from "~/components/page/elearning/study/tab-summary/TabSummary
 import TabQA from "~/components/page/elearning/study/tab-qa/TabQA";
 import TabNotification from "~/components/page/elearning/study/tab-notification/TabNotification";
 import TabReview from "~/components/page/elearning/study/tab-review/TabReview";
-// import ElearningQuestion from "~/components/page/elearning/study/ElearningQuestion";
 import Streaming from "~/components/page/elearning/study/Streaming";
 import ElearningExercise from "~/components/page/elearning/study/exercise/ElearningExercise";
+import ScormLecture from "~/components/page/elearning/study/ScormMode";
 import { VclList } from "vue-content-loading";
 
 import ElearningDownload from "~/components/page/elearning/study/ElearningDownload";
 // http://localhost:5000/elearning/79408a5d-12d7-4498-a2b3-faf4b9a9d1bd/study?lession_id=xxx&start_time=yyyy
-
 export default {
   name: "Elearning",
 
@@ -163,7 +226,6 @@ export default {
     TabQA,
     TabNotification,
     TabReview,
-    // ElearningQuestion,
     Streaming,
     ElearningExercise,
     VclList,
@@ -171,20 +233,21 @@ export default {
     IconCropFree,
     IconCropFreeReverse,
     IconStudyExpand,
-    IconStudyNarrow
+    IconStudyNarrow,
+    ScormLecture
   },
 
   data() {
     return {
       type: "summary",
       pageLoading: true,
-      // interactive_questions: null,
       videoMode: STUDY_MODE.VIDEO_PLAYING,
       exerciseMode: STUDY_MODE.DO_EXERCISE,
       defaultMode: STUDY_MODE.DEFAULT,
       docMode: STUDY_MODE.DOCS,
       articleMode: STUDY_MODE.ARTICLE,
-      imageMode: STUDY_MODE.IMAGE
+      imageMode: STUDY_MODE.IMAGE,
+      scormMode: STUDY_MODE.SCORM
     };
   },
 
@@ -204,30 +267,36 @@ export default {
           STUDY_MODE.REVIEW_EXERCISE_RESULT
         ].includes(this.studyMode);
 
-      // console.log("[isExerciseScreen]", isExerciseScreen, this.studyMode);
       return isExerciseScreen;
     }
+
   },
 
   mounted() {
     console.log("[mounted]", this.studyMode);
     this.getData(get(this, "$router.history.current.params.id", ""));
 
-    document.addEventListener(
-      "fullscreenchange",
-      this.handleFullscreenChange,
-      true
-    );
+    const typeParams = getParamQuery("question_id");
+    this.type = typeParams ? "qa" : "summary";
+    // document.addEventListener(
+    //   "fullscreenchange",
+    //   this.handleFullscreenChange,
+    //   true
+    // );
   },
 
   destroyed() {
     this.setStudyMode("");
     this.setPayload(null);
+    this.setExpand(false);
+    this.setFullscreen(false);
     document.removeEventListener(
       "fullscreenchange",
       this.handleFullscreenChange,
       true
     );
+
+    // window.removeEventListener('beforeunload', this.warningF5);
   },
 
   watch: {
@@ -249,10 +318,30 @@ export default {
       } else {
         document.fullscreenElement !== null && this.closeFullscreen();
       }
+    },
+
+    studyMode(_newVal) {
+      console.log("[studyMode] watch", _newVal);
+      if (_newVal !== this.videoMode) {
+        document.addEventListener(
+          "fullscreenchange",
+          this.handleFullscreenChange,
+          true
+        );
+      } else {
+        document.removeEventListener(
+          "fullscreenchange",
+          this.handleFullscreenChange,
+          true
+        );
+      }
     }
   },
 
   methods: {
+    ...mapMutations("event", ["setStudyMode", "setPayload"]),
+    get,
+
     async getData(elearning_id) {
       const options = {
         params: {
@@ -270,13 +359,9 @@ export default {
 
       this.pageLoading = true;
 
-      const data = await Promise.all([
-        getInfo,
-        getProgress
-      ]);
+      const data = await Promise.all([getInfo, getProgress]);
 
       this.pageLoading = false;
-
     },
 
     async addQuestionSuccess() {
@@ -294,6 +379,7 @@ export default {
     },
 
     setExpand(value) {
+      console.log("[setExpand]", value);
       this.$store.commit(
         `elearning/study/study/${ELEARNING_STUDY_MUTATION.SET_EXPAND}`,
         value
@@ -342,16 +428,22 @@ export default {
     },
 
     handleFullscreenChange() {
-      console.log("[handleFullscreenChange] 1", document.fullscreenElement)
+      console.log("[handleFullscreenChange] 1", document.fullscreenElement);
       if (document.fullscreenElement !== null) {
         this.setFullscreen(true);
       } else {
         this.setFullscreen(false);
       }
-    },
+    }
 
-    get,
-    ...mapMutations("event", ["setStudyMode", "setPayload"])
+    // warningF5(event) {
+    //   console.log("[warningF5]", event.keyCode);
+    //   alert(event.keyCode);
+    //   alert(this.studyMode);
+    //   if(116 == event.keyCode && this.studyMode == STUDY_MODE.DO_EXERCISE_DOING) { // enter key code
+    //     console.log("[warningF5] prevent exit");
+    //   }
+    // }
   }
 };
 </script>

@@ -5,7 +5,7 @@
         <td
           v-for="month in row"
           :key="month"
-          :class="{ active: isMatchDate && MONTHS.indexOf(month) === localValue }"
+          :class="{ active: isMatchDate && MONTHS.indexOf(month) === value }"
           @click="chooseMonth(month)"
         >
           <span>{{ month }}</span>
@@ -39,11 +39,6 @@ const MONTHS_DISPLAY = [
 ];
 
 export default {
-  model: {
-    prop: "value",
-    event: "change"
-  },
-
   props: {
     value: {
       type: Number,
@@ -59,28 +54,13 @@ export default {
     return {
       MONTHS: Object.freeze(MONTHS),
       MONTHS_DISPLAY: Object.freeze(MONTHS_DISPLAY),
-      localValue: this.value
     };
-  },
-
-  watch: {
-    value(newValue) {
-      this.localValue = newValue;
-    },
-
-    localValue(newValue) {
-      this.$emit("change", newValue);
-    }
   },
 
   methods: {
     chooseMonth(month) {
       const newValue = MONTHS.indexOf(month);
-      this.localValue = newValue;
-
-      if (this.localValue === newValue) {
-        this.$emit("change", newValue);
-      }
+      this.$emit("change", newValue);
     }
   }
 };

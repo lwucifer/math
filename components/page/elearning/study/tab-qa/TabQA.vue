@@ -29,6 +29,7 @@
         :key="question.id"
         :question="question"
         v-slot:default="slotProps"
+        :id="question.id"
       >
         <TabQACommentEditor
           v-if="slotProps.showReply"
@@ -41,10 +42,7 @@
       <div
         @click="handleLoadMoreQuestion"
         class="text-center"
-        v-if="
-          !get(questions, 'page.last', true) &&
-            get(questions, 'page.total_elements', 0)
-        "
+        v-if="isShowParentMoreQuestion"
       >
         <a class="e-study-tab-qa__more">Xem thêm bình luận</a>
       </div>
@@ -61,7 +59,7 @@ import TabQACommentEditor from "~/components/page/elearning/study/tab-qa/TabQACo
 import { get } from "lodash";
 import { mapState } from "vuex";
 import numeral from "numeral";
-import { useEffect } from "~/utils/common";
+import { useEffect, getParamQuery } from "~/utils/common";
 
 export default {
   components: {
@@ -80,6 +78,12 @@ export default {
     ...mapState("elearning/study/detail", {
       questions: "questions",
     }),
+    isShowParentMoreQuestion() {
+      const currPage = get(this.questions, 'page.number', 0) + 1;
+      const totalPage = get(this.questions, 'page.total_pages', 0);
+
+      return (currPage < totalPage)  
+    }
   },
 
   data() {
@@ -103,6 +107,7 @@ export default {
         page: 1,
         sort_by: "NEWEST", //NEWEST | OLDEST | FAVOURITE
       },
+      isScroll:false
     };
   },
 

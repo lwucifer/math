@@ -30,7 +30,7 @@
           :category="category"
         />
 
-        <FormCreateExercise
+        <AddExercise
           v-if="isShowFormAdd"
           @cancel="handleCancelAddCreate"
           :lesson="lesson"
@@ -61,6 +61,7 @@
       @ok="handleOk"
       @cancel="handleCancel"
       title="Xác nhận"
+      description="Bạn có chắc chắn là đã hoàn thành việc tạo bài tập?"
     />
   </div>
 </template>
@@ -79,7 +80,7 @@ import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 import { VclFacebook } from "vue-content-loading";
 import ButtonCreateExercise from "~/components/page/course/create/exercise/ButtonCreateExercise";
-import FormCreateExercise from "~/components/page/course/create/exercise/FormCreateExercise";
+import AddExercise from "~/components/page/course/create/exercise/AddExercise";
 import ExerciseList from "~/components/page/course/create/exercise/ExerciseList";
 import SelectLesson from "~/components/page/course/create/exercise/SelectLesson";
 import CreateAction from "~/components/page/course/create/common/CreateAction";
@@ -99,7 +100,7 @@ export default {
     IconClipboardNotes,
     CreateAction,
     ButtonCreateExercise,
-    FormCreateExercise,
+    AddExercise,
     ExerciseList,
     SelectLesson,
     IconPlus2,
@@ -133,15 +134,26 @@ export default {
       general: "general",
       lesson: "lesson",
       lessons: "lessons",
+      progress: "progress",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
+    name() {
+      return get(this, "general.type", "") === "COURSE"
+        ? "khoá học"
+        : "bài giảng";
+    },
   },
 
   methods: {
     handleCancel() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
     },
 
     handleOk() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.$emit("nextStep", "exam");
     },
@@ -158,16 +170,22 @@ export default {
     },
 
     handleShowFormAdd() {
+      if (this.disabled_all) return;
       this.isShowButtonCreate = false;
       this.isShowFormAdd = true;
     },
 
     handleCancelAddCreate() {
+      if (this.disabled_all) return;
       this.isShowButtonCreate = true;
       this.isShowFormAdd = false;
     },
 
     handleNextStep() {
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
       this.showModalConfirm = true;
     },
 

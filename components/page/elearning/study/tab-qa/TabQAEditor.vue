@@ -3,7 +3,7 @@
     <app-avatar
       :size="40"
       class="mr-4"
-      :src="get(user_login, 'avatar.low', '')"
+      :src="$store.state.auth.token ? $store.state.auth.token.avatar : ''"
     />
 
     <div class="flex-grow e-study-tab-qa-editor__right">
@@ -129,10 +129,13 @@ export default {
             elearning_id: get(this, "$route.params.id", ""),
           },
         };
-        this.$store.dispatch(
-          `elearning/study/detail/getListQuestion`,
-          options
-        );
+        setTimeout(() => {
+          this.$store.dispatch(
+            `elearning/study/detail/getListQuestion`,
+            options
+          );
+        }, 500);
+        
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));

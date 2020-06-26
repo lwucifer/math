@@ -23,7 +23,7 @@ module.exports = {
       {
         rel: "icon",
         type: "image/x-icon",
-        href: "/favicon.ico",
+        href: "/favicon/favicon.svg",
       },
     ],
   },
@@ -88,7 +88,7 @@ module.exports = {
      * Global middleware
      */
     router: {
-        middleware: ["check-auth"]
+        middleware: ["check-auth", "watch-route"]
     },
 
   /*

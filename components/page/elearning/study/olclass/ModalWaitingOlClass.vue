@@ -16,7 +16,7 @@
               Tên phòng:
               <b>{{ get(data, "extra_info.online_class_name", "--") }}</b>
             </p>
-            <p class="mb-3">
+            <p class="mb-3" v-if="isCanJoinRoom">
               <span
                 >Đang diễn ra:
                 <b>Tiết học {{ get(activeSession, "position", "") }}</b
@@ -34,8 +34,8 @@
                     activeSession.duration,
                     "minutes"
                   )
-                }}</a
-              >
+                }}</a>
+                
             </p>
             <p class="mb-3">
               Giáo viên:
@@ -43,13 +43,20 @@
             </p>
             <p class="mb-3">
               Giờ bắt đầu:
-              <b>{{
+              <b v-if="isCanJoinRoom">{{
                 get(data, "extra_info.start_time", "") | fullDateTimeSlash
               }}</b>
+              <b v-else>{{
+                get(data, "next_time", "") | fullDateTimeSlash
+              }}</b>
             </p>
-            <p>
+            <p v-if="isCanJoinRoom">
               Thời lượng:
               <b>{{ get(data, "extra_info.duration", 0) | formatHour }}</b>
+            </p>
+
+            <p v-if="!isCanJoinRoom">
+              <b>Phòng học chưa bắt đầu. Vui lòng quay lại sau.</b>
             </p>
           </div>
 
@@ -77,9 +84,9 @@
               :href="activeSession.join_url"
               target="_blank"
               class="btn btn--color-primary btn--square mr-4 btn--size-lg"
-              :v-if="is_started"
+              v-if="is_started"
               @click="handleStartJoin"
-              :disabled="contentLoading"
+              :disabled="!isCanJoinRoom"
               >Vào phòng học</a
             >
             <app-button color="white" size="lg" @click="showModalConfirm = true"
@@ -165,7 +172,7 @@ export default {
       currentZoom: null,
       showModalConfirm: false,
       activeSession: {},
-      activeSession: false
+      // activeSession: false
     };
   },
 
@@ -262,6 +269,10 @@ export default {
 
     is_started() {
       return get(this.data, "is_started", false);
+    },
+
+    isCanJoinRoom() {
+      return !!this.dataLength;
     }
   },
 

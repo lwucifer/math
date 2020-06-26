@@ -39,6 +39,7 @@
       />
 
       <DocumentSelectDoc
+        descriptionModal="Bạn có chắc chắn muốn xóa tài liệu này?"
         @handleSelectUrl="handleSelectUrl"
         v-if="tabAddDocument === 'choose'"
         type="DOCS"
@@ -68,6 +69,9 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancelModal"
+      :okText="chagingBtnOk"
+      :title="changingTitle"
+      :description="chagingDescription"
     />
   </div>
 </template>
@@ -81,6 +85,7 @@ import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSe
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadAddDocument } from "~/models/course/AddCourse";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -109,36 +114,74 @@ export default {
         format: "",
         url: "",
       },
+      modalType: "",
     };
+  },
+
+  computed: {
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
+    changingTitle() {
+      if (this.modalType == "upload") {
+        return "Upload tài liệu";
+      } else {
+        return "Thêm tài liệu";
+      }
+    },
+
+    chagingDescription() {
+      if (this.confirmLoading) {
+        return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+      } else if (this.modalType == "url") {
+        return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
+      }
+      return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
+    },
+
+    chagingBtnOk() {
+      if (this.confirmLoading) {
+        return "Đang tải";
+      }
+      return "Xác nhận";
+    },
   },
 
   methods: {
     handleCloseAdd(e) {
       e.preventDefault();
+      if (this.disabled_all) return;
       this.$emit("handleCloseAdd");
     },
 
     changeTabAddDocument(type) {
+      if (this.disabled_all) return;
       this.tabAddDocument = type;
     },
 
     handleSelectFile(file) {
+      if (this.disabled_all) return;
+      this.modalType = "upload";
       this.payload.doc = file;
       this.payload.url = "";
       this.payload.format = "";
     },
 
     handleSelectUrl(file) {
+      if (this.disabled_all) return;
+      this.modalType = "url";
       this.payload.url = file.id;
       // this.payload.format = file.format;
       this.payload.doc = "";
     },
 
     async handleAddDocument() {
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 
     async handleOk() {
+      if (this.disabled_all) return;
       this.confirmLoading = true;
       const payload = createPayloadAddDocument(this.payload);
       const result = await this.$store.dispatch(
@@ -159,6 +202,7 @@ export default {
     },
 
     handleCancelModal() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.confirmLoading = false;
     },

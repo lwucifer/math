@@ -1,27 +1,53 @@
 <template>
   <div class="list-scroll">
-        <n-link to="" v-scroll-to="'#homepage'">Trang chủ</n-link>
-
-        <app-dropdown
-            class="sub-list"
-            position="left"
-            open-on-click
-            content-width="100px">
-
-            <a slot="activator" slot-scope="{ on }" v-on="on" v-scroll-to="'#introduction'">
-                Giới thiệu <IconCaretDownThin class="ml-2"/>
-            </a>
-
-            <ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-            </ul>
-        </app-dropdown>
-
-        <n-link to="" v-scroll-to="'#lesson'">Bài giảng - Khóa học</n-link>
-        <n-link to="" v-scroll-to="'#notification'">Thông báo <IconCaretDownThin class="ml-2"/></n-link>
-        <n-link to="" v-scroll-to="'#news'">Tin tức - Sự kiện</n-link>
+    <span @click.prevent="changeTab('index')">
+        <n-link 
+            :class="tab=='index' ?  'active' : ''"
+            to
+         >
+            Trang chủ
+         </n-link>
+    </span>
+    <span  @click.prevent="changeTab('intro')">
+        <n-link 
+            to 
+            :class="tab=='intro' ?  'active' : ''" 
+        >
+            Giới thiệu <IconCaretDownThin class="ml-2"/>
+        </n-link>
+    </span> 
+    <span  @click.prevent="changeTab('courses')">
+        <n-link 
+            to=""
+            :class="tab=='courses' ?  'active' : ''" 
+        >
+            Bài giảng - Khóa học
+        </n-link>
+    </span>
+    <span @click.prevent="changeTab('notify')">
+        <n-link 
+            to=""
+            :class="tab=='notify' ?  'active' : ''" 
+        >
+            Thông báo <IconCaretDownThin class="ml-2"/>
+        </n-link>
+    </span>
+    <span   @click.prevent="changeTab('news')">
+        <n-link 
+            to=""
+            :class="tab=='news' ?  'active' : ''" 
+        >
+            Tin tức - Sự kiện <IconCaretDownThin class="ml-2"/>
+        </n-link>
+    </span>
+    <span @click.prevent="changeTab('schedule')">
+        <n-link 
+            to=""
+            :class="tab=='schedule' ?  'active' : ''" 
+        >
+            Thời khóa biểu
+        </n-link>
+    </span>
   </div>
 </template>
 
@@ -31,6 +57,17 @@ import IconCaretDownThin from '~/assets/svg/icons/caret-down-thin.svg?inline';
 export default {
     components: {
         IconCaretDownThin
+    },
+    props:{
+        tab:{
+            type: String,
+            default:''
+        }
+    },
+    methods:{
+        changeTab(tab){
+            this.$emit('changeTab',tab)
+        }
     }
 }
 </script>

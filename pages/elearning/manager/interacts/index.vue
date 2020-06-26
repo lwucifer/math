@@ -30,7 +30,7 @@
 
             <div class="elearning-manager-content__main">
               <keep-alive>
-                <component v-bind:is="currentTabComponent"></component>
+                <component :loading="loading" v-bind:is="currentTabComponent"></component>
               </keep-alive>
             </div>
           </template>
@@ -85,7 +85,8 @@ export default {
   data() {
     return {
       tab: 1,
-      isAuthenticated: true
+      isAuthenticated: true,
+      loading: false
     };
   },
   computed: {
@@ -101,7 +102,14 @@ export default {
       return this.tab > 0 ? MATCHED_TABS[this.tab - 1] : MATCHED_TABS[0];
     }
   },
-
+  mounted(){
+    const hash = this.$route.hash
+    const type = hash ? hash.substring(1) : ''
+    if(type == 'notify'){
+      this.tab = 2;
+      console.log('hello')
+    }
+  },
   methods: {
     onPageChange(e) {
       const that = this;
@@ -109,6 +117,7 @@ export default {
       console.log(that.pagination);
     },
     async fetchElearningCourses(){
+      this.loading = true
       const payload = { 
         params:{
           status : "APPROVED",
@@ -119,6 +128,7 @@ export default {
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNINGS.LIST}`,
         payload
       )
+      this.loading = false
     }
   },
   created(){

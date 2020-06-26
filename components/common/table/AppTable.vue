@@ -1,97 +1,102 @@
 <template>
-  <div class="app-table">
-    <table :class="{...tableCls, ...extTableCls}">
-      <thead class="app-table__head" :class="{...headerCls, ...headerExtCls}">
-        <tr>
-          <th
-            v-if="multipleSelection"
-          >
-            <app-checkbox
-              @change="changeSelect"
-              v-model="allSelected"
-              :disabled="!hasData"
-              title="Chọn tất cả"
-            />
-          </th>
-          <th v-for="(item, index) in heads" :key="index">
-            <div v-html="item.text" class="d-inline-block"></div>
-            <!--<app-checkbox @change="changeSelect" v-if="item.selectAll" v-model="allSelected" />-->
-            <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
-              <IconDirection height="18" width="18" />
-            </span>
-          </th>
-        </tr>
-      </thead>
-      <!-- Use slot body -->
-      <tbody v-if="hasDefaultSlot && hasData" :class="bodyCls">
-        <slot />
-      </tbody>
-      <!-- Use data list -->
-      <tbody v-if="(!hasDefaultSlot) && hasData && (!loading)" :class="bodyCls">
-        <tr v-for="(cat, i) in cats" :key="i" :class="selectedItems.includes(cat) ? 'selected' : ''">
-        
-          <td v-if="multipleSelection || selectAll" class="pr-0" 
-          @mouseover="mouseOver = false" 
-          @mouseleave="mouseOver = true">
-            <app-checkbox
-              @change="check($event, cat)"
-              :checked="selectedItems.includes(cat)"
-            />
-          </td>
-          <!--Slot is named by column key-->
-          <template>
-          <slot
-            v-for="(item, j) in heads"
-            :item="item"
-            :index="i"
-            :row="cat"
-            :name="'cell(' + item.name + ')'"
+  <no-ssr>
+    <div class="app-table">
+      <table :class="{ ...tableCls, ...extTableCls, ...gridCls }">
+        <thead class="app-table__head" :class="{ ...headerCls, ...headerExtCls }">
+          <tr>
+            <th v-if="multipleSelection" class="checkbox">
+              <app-checkbox
+                @change="changeSelect"
+                v-model="allSelected"
+                :disabled="!hasData"
+                title="Chọn tất cả"
+              />
+            </th>
+            <th
+              v-for="(item, index) in heads"
+              :key="index"
+              :class="item.classTextCenter ? 'text-center': ''"
+            >
+              <div class="div-head">
+                <div v-html="item.text"></div>
+                <span class="btn-sort" @click="sort(item.name)" v-if="item.sort">
+                  <IconDirection height="18" width="18" />
+                </span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <!-- Use slot body -->
+        <tbody v-if="hasDefaultSlot && hasData" :class="bodyCls">
+          <slot />
+        </tbody>
+        <!-- Use data list -->
+        <tbody v-if="!hasDefaultSlot && hasData && !loading" :class="bodyCls">
+          <tr
+            v-for="(cat, i) in cats"
+            :key="i"
+            :class="selectedItems.includes(cat) ? 'selected' : ''"
           >
             <td
-              v-html="cat[item.name]"
-              v-bind:style="cat[item.css] ? cat[item.css] : ''"
-              v-bind:class="(cat[item.name] && cat[item.class]) ? cat[item.class] : ''"
-              :key="j"
+              v-if="multipleSelection || selectAll"
+              class="checkbox"
+              @mouseover="mouseOver = false"
+              @mouseleave="mouseOver = true"
             >
+              <app-checkbox @change="check($event, cat)" :checked="selectedItems.includes(cat)" />
             </td>
-          </slot>
-          </template>
+            <!--Slot is named by column key-->
+            <template>
+              <slot
+                v-for="(item, j) in heads"
+                :item="item"
+                :index="i"
+                :row="cat"
+                :name="'cell(' + item.name + ')'"
+              >
+                <td
+                  v-html="cat[item.name]"
+                  v-bind:style="cat[item.css] ? cat[item.css] : ''"
+                  v-bind:class="
+                    cat[item.name] && cat[item.class] ? cat[item.class] : ''
+                  "
+                  :key="j"
+                ></td>
+              </slot>
+            </template>
 
-          <!-- Hover actions -->
-          <div class="actions" :class="mouseOver ? 'show' : ''" v-if="hasActionsSlot">
-            <slot name="actions" :row="cat"></slot>
-          </div>
-        </tr>
-      </tbody>
-    </table>
-    <div class="text-center w-100 py-5" v-if="(!hasData) && (!loading)">
-      {{ noDataTxt }}
+            <!-- Hover actions -->
+            <td class="actions" :class="mouseOver ? 'show' : ''" v-if="hasActionsSlot">
+              <slot name="actions" :row="cat"></slot>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-center w-100 py-5" v-if="!hasData && !loading">{{ noDataTxt }}</div>
+      <div class="text-center w-100 py-5" v-if="loading">
+        <app-spin />
+      </div>
+      <div v-if="needPagination" class="pagination mt-3">
+        <app-pagination
+          v-if="hasData && !loading"
+          :pagination="pagination"
+          @pagechange="onPageChange"
+          :opts="opts"
+          class="mt-3"
+          :position="get(paginationStyle, 'position', 'center')"
+          :ext-cls="get(paginationStyle, 'extCls', {})"
+        />
+      </div>
     </div>
-    <div class="text-center w-100 py-5" v-if="loading"><app-spin /></div>
-    <div v-if="needPagination" class="pagination mt-3">
-      <app-pagination
-        v-if="hasData && (!loading)"
-        :pagination="pagination"
-        @pagechange="onPageChange"
-        :opts="opts"
-        class="mt-3"
-        :position="get(paginationStyle, 'position', 'center')"
-        :ext-cls="get(paginationStyle, 'extCls', {})"
-      />
-    </div>
-  </div>
+  </no-ssr>
 </template>
 
 <script>
-import IconStar from "~/assets/svg/icons/star.svg?inline";
-import IconStarO from "~/assets/svg/icons/star-o.svg?inline";
 import IconDirection from "~/assets/svg/design-icons/direction.svg?inline";
 import { isEqual, get } from "lodash";
 
 export default {
   components: {
-    IconStar,
-    IconStarO,
     IconDirection
   },
 
@@ -103,11 +108,11 @@ export default {
     },
     headerFontweight: {
       type: String,
-      default: 'semi-bold' // normal | semi-bold | bold
+      default: "semi-bold" // normal | semi-bold | bold
     },
     headerSize: {
       type: String,
-      default: 'sm' // sm | md | lg
+      default: "sm" // sm | md | lg
     },
     headerExtCls: {
       type: Object,
@@ -115,21 +120,22 @@ export default {
     },
     headerColor: {
       type: String,
-      default: 'dark' //primary | secondary | info...
+      default: "dark" //primary | secondary | info...
     },
     bodyColor: {
       type: String,
-      default: 'base' //primary | secondary | info...
+      default: "base" //primary | secondary | info...
     },
     bgTable: {
       type: String,
-      default: 'transparent' //primary | secondary | info...
+      default: "transparent" //primary | secondary | info...
     },
     extTableCls: {
       type: Object,
       default: () => {}
     },
-    paginationStyle: {  // { position: '...', extCls: '...' }
+    paginationStyle: {
+      // { position: '...', extCls: '...' }
       type: Object,
       default: () => {}
     },
@@ -150,7 +156,7 @@ export default {
           first: 1,
           last: 1,
           number: 0
-        }
+        };
       }
     },
     selectAll: Boolean,
@@ -167,12 +173,12 @@ export default {
           { value: 20, text: "20" },
           { value: 30, text: "30" },
           { value: 50, text: "50" }
-        ]
+        ];
       }
     },
     noDataTxt: {
       type: String,
-      default: 'Không tìm thấy dữ liệu'
+      default: "Không tìm thấy dữ liệu"
     },
     loading: {
       type: Boolean,
@@ -184,16 +190,25 @@ export default {
     },
     primaryKey: {
       type: String,
-      default: 'id'
+      default: "id"
     },
     orderBy: {
       type: String,
-      default: 'name'
+      default: "name"
     },
     order: {
       type: String,
-      default: 'asc'
-    }
+      default: "asc"
+    },
+    classTextCenter: {
+      type: Boolean,
+      default: false
+    }, 
+    cols: {
+      type: Array,
+      required: false,
+      default: () => []
+    }, 
   },
 
   data() {
@@ -202,17 +217,17 @@ export default {
       listSortBy: [],
       currentSort: this.orderBy,
       currentSortDir: this.order,
-      selectedItems: [], // An array of selected rows
+      selectedItems: [] // An array of selected rows
     };
   },
   watch: {
-    selectedItems: function (oldVal, newVal) {
+    selectedItems: function(oldVal, newVal) {
       this.$emit("selectionChange", this.selectedItems);
     },
-    loading: function (oldVal, newVal) {
+    loading: function(oldVal, newVal) {
       this.selectedItems.length = 0;
-      this.selectAll= false;
-    },
+      this.selectAll = false;
+    }
   },
   methods: {
     check(checked, item) {
@@ -225,19 +240,25 @@ export default {
     },
 
     popSelectedIndexes(item) {
-      if (_.some(this.selectedItems, item)) { // this.selectedItems include item
+      if (_.some(this.selectedItems, item)) {
+        // this.selectedItems include item
         let popId = item[this.primaryKey];
-        this.selectedItems = _.reject([...this.selectedItems], (i) => i[this.primaryKey] === popId);
+        this.selectedItems = _.reject(
+          [...this.selectedItems],
+          i => i[this.primaryKey] === popId
+        );
       }
     },
 
     pushSelectedIndexes(item) {
-      if (!(_.some(this.selectedItems, item))) { // this.selectedItems include item
+      if (!_.some(this.selectedItems, item)) {
+        // this.selectedItems include item
         this.selectedItems.push(item);
       }
     },
 
-    changeSelect(checked) {// select all
+    changeSelect(checked) {
+      // select all
       if (checked) {
         this.selectedItems = this.data;
       } else {
@@ -251,7 +272,10 @@ export default {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       }
       this.currentSort = sortBy;
-      this.$emit("sort", { sortBy: this.currentSort, order: this.currentSortDir });
+      this.$emit("sort", {
+        sortBy: this.currentSort,
+        order: this.currentSortDir
+      });
     },
     onPageChange(e) {
       this.$emit("pagechange", e);
@@ -269,7 +293,7 @@ export default {
       return !!this.$slots.default;
     },
     hasActionsSlot() {
-      return !!this.$slots[ 'actions' ] || !!this.$scopedSlots[ 'actions' ];
+      return !!this.$slots["actions"] || !!this.$scopedSlots["actions"];
     },
     sortedCats: function() {
       for (let i = this.cats.length - 1; i > 0; i--) {
@@ -306,98 +330,110 @@ export default {
     },
     allSelected: {
       set(value) {
-        return value
+        return value;
       },
       get() {
-        return this.hasData && isEqual(this.selectedItems, this.data)
+        return this.hasData && isEqual(this.selectedItems, this.data);
       }
     },
     hasData() {
-      return this.data.length > 0
+      return this.data.length > 0;
     },
     headerCls() {
       const fontWeightCls = {
-        'app-table__head--normal': this.headerFontweight === 'normal',
-        'app-table__head--semi-bold': this.headerFontweight === 'semi-bold',
-        'app-table__head--bold': this.headerFontweight === 'bold',
-      }
-      
+        "app-table__head--normal": this.headerFontweight === "normal",
+        "app-table__head--semi-bold": this.headerFontweight === "semi-bold",
+        "app-table__head--bold": this.headerFontweight === "bold"
+      };
+
       const fontSizeCls = {
-        'app-table__head--sm': this.headerSize === 'sm',
-        'app-table__head--md': this.headerSize === 'md',
-        'app-table__head--lg': this.headerSize === 'lg',
-      }
-      
+        "app-table__head--sm": this.headerSize === "sm",
+        "app-table__head--md": this.headerSize === "md",
+        "app-table__head--lg": this.headerSize === "lg"
+      };
+
       const colorCls = {
-        'app-table__head--color-primary': this.headerColor === 'primary',
-        'app-table__head--color-secondary': this.headerColor === 'secondary',
-        'app-table__head--color-info': this.headerColor === 'info',
-        'app-table__head--color-error': this.headerColor === 'error',
-        'app-table__head--color-warning': this.headerColor === 'warning',
-        'app-table__head--color-base': this.headerColor === 'base',
-        'app-table__head--color-sub': this.headerColor === 'sub',
-        'app-table__head--color-gray': this.headerColor === 'gray',
-        'app-table__head--color-gray-2': this.headerColor === 'gray-2',
-        'app-table__head--color-gray-3': this.headerColor === 'gray-3',
-        'app-table__head--color-black': this.headerColor === 'black',
-        'app-table__head--color-light': this.headerColor === 'light',
-        'app-table__head--color-light-2': this.headerColor === 'light-2',
-        'app-table__head--color-dark': this.headerColor === 'dark',
-        'app-table__head--color-active': this.headerColor === 'active',
-      }
-      
+        "app-table__head--color-primary": this.headerColor === "primary",
+        "app-table__head--color-secondary": this.headerColor === "secondary",
+        "app-table__head--color-info": this.headerColor === "info",
+        "app-table__head--color-error": this.headerColor === "error",
+        "app-table__head--color-warning": this.headerColor === "warning",
+        "app-table__head--color-base": this.headerColor === "base",
+        "app-table__head--color-sub": this.headerColor === "sub",
+        "app-table__head--color-gray": this.headerColor === "gray",
+        "app-table__head--color-gray-2": this.headerColor === "gray-2",
+        "app-table__head--color-gray-3": this.headerColor === "gray-3",
+        "app-table__head--color-black": this.headerColor === "black",
+        "app-table__head--color-light": this.headerColor === "light",
+        "app-table__head--color-light-2": this.headerColor === "light-2",
+        "app-table__head--color-dark": this.headerColor === "dark",
+        "app-table__head--color-active": this.headerColor === "active"
+      };
+
       return {
         ...fontWeightCls,
         ...fontSizeCls,
         ...colorCls
-      }
+      };
     },
     bodyCls() {
       const colorCls = {
-        'app-table__body--color-primary': this.bodyColor === 'primary',
-        'app-table__body--color-secondary': this.bodyColor === 'secondary',
-        'app-table__body--color-info': this.bodyColor === 'info',
-        'app-table__body--color-error': this.bodyColor === 'error',
-        'app-table__body--color-warning': this.bodyColor === 'warning',
-        'app-table__body--color-base': this.bodyColor === 'base',
-        'app-table__body--color-sub': this.bodyColor === 'sub',
-        'app-table__body--color-gray': this.bodyColor === 'gray',
-        'app-table__body--color-gray-2': this.bodyColor === 'gray-2',
-        'app-table__body--color-gray-3': this.bodyColor === 'gray-3',
-        'app-table__body--color-black': this.bodyColor === 'black',
-        'app-table__body--color-light': this.bodyColor === 'light',
-        'app-table__body--color-light-2': this.bodyColor === 'light-2',
-        'app-table__body--color-dark': this.bodyColor === 'dark',
-        'app-table__body--color-active': this.bodyColor === 'active',
-      }
+        "app-table__body--color-primary": this.bodyColor === "primary",
+        "app-table__body--color-secondary": this.bodyColor === "secondary",
+        "app-table__body--color-info": this.bodyColor === "info",
+        "app-table__body--color-error": this.bodyColor === "error",
+        "app-table__body--color-warning": this.bodyColor === "warning",
+        "app-table__body--color-base": this.bodyColor === "base",
+        "app-table__body--color-sub": this.bodyColor === "sub",
+        "app-table__body--color-gray": this.bodyColor === "gray",
+        "app-table__body--color-gray-2": this.bodyColor === "gray-2",
+        "app-table__body--color-gray-3": this.bodyColor === "gray-3",
+        "app-table__body--color-black": this.bodyColor === "black",
+        "app-table__body--color-light": this.bodyColor === "light",
+        "app-table__body--color-light-2": this.bodyColor === "light-2",
+        "app-table__body--color-dark": this.bodyColor === "dark",
+        "app-table__body--color-active": this.bodyColor === "active"
+      };
       return {
         ...colorCls
-      }
+      };
     },
     tableCls() {
       const bgCls = {
-        'app-table__table--bg-transparent': this.bgTable === 'transparent',
-        'app-table__table--bg-primary': this.bgTable === 'primary',
-        'app-table__table--bg-secondary': this.bgTable === 'secondary',
-        'app-table__table--bg-info': this.bgTable === 'info',
-        'app-table__table--bg-success': this.bgTable === 'success',
-        'app-table__table--bg-error': this.bgTable === 'error',
-        'app-table__table--bg-warning': this.bgTable === 'warning',
-        'app-table__table--bg-gray': this.bgTable === 'gray',
-        'app-table__table--bg-input-gray': this.bgTable === 'input-gray',
-        'app-table__table--bg-white': this.bgTable === 'white',
-        'app-table__table--bg-black': this.bgTable === 'black',
-        'app-table__table--bg-light-2': this.bgTable === 'light-2',
-      }
+        "app-table__table--bg-transparent": this.bgTable === "transparent",
+        "app-table__table--bg-primary": this.bgTable === "primary",
+        "app-table__table--bg-secondary": this.bgTable === "secondary",
+        "app-table__table--bg-info": this.bgTable === "info",
+        "app-table__table--bg-success": this.bgTable === "success",
+        "app-table__table--bg-error": this.bgTable === "error",
+        "app-table__table--bg-warning": this.bgTable === "warning",
+        "app-table__table--bg-gray": this.bgTable === "gray",
+        "app-table__table--bg-input-gray": this.bgTable === "input-gray",
+        "app-table__table--bg-white": this.bgTable === "white",
+        "app-table__table--bg-black": this.bgTable === "black",
+        "app-table__table--bg-light-2": this.bgTable === "light-2"
+      };
       return {
         ...bgCls
+      };
+    },
+    gridCls() {
+      let gCls = {
+        'table-grid': this.cols.length > 0
+      };
+      
+      if (this.cols.length > 0) {
+        this.cols.forEach((e, index) => {
+          let i = index + 1;
+          gCls['col-' + i + '--' + e] = true;
+        })
       }
+
+      return {
+        ...gCls
+      };
     }
   },
-
-  mounted() {
-    // this.cats = [...this.data];
-  }
 };
 </script>
 

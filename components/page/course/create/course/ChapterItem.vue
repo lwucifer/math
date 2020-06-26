@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <CreateLessonOfChapter
+    <AddLesson
       v-if="isShowCreateLessonOfChapter"
       :chapter="chapter"
       @toggleShowAddLesson="toggleShowAddLesson"
@@ -49,7 +49,7 @@ const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import { get, toNumber, cloneDeep, orderBy } from "lodash";
 import * as actionTypes from "~/utils/action-types";
-import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
+import AddLesson from "~/components/page/course/create/course/AddLesson";
 import EditChapterName from "~/components/page/course/create/course/EditChapterName";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
 import IconAngleUp from "~/assets/svg/design-icons/angle-up.svg?inline";
@@ -60,7 +60,7 @@ export default {
   components: {
     IconEditAlt,
     IconTrashAlt,
-    CreateLessonOfChapter,
+    AddLesson,
     IconAngleDown,
     IconAngleUp,
     LessonDetail,
@@ -78,6 +78,9 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     lessons() {
       let lessons = cloneDeep(get(this, "chapter.lessons", []));
       lessons = orderBy(lessons, "index", "asc");
@@ -110,6 +113,7 @@ export default {
     },
 
     toggleShowAddLesson() {
+      if (this.disabled_all) return;
       this.isShowCreateLessonOfChapter = !this.isShowCreateLessonOfChapter;
     },
   },

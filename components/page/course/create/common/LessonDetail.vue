@@ -8,12 +8,12 @@
     />
 
     <div v-else>
-      <CreateLessonOfChapter
+      <UpdateLessonChapter
         :lesson="lesson"
         @toggleShowAddLesson="toggleShowLesson"
         v-if="get(general, 'type', '') === 'COURSE'"
       />
-      <CreateLessonOfElearning
+      <UpdateLesson
         @toggleShowAddLesson="toggleShowLesson"
         :lesson="lesson"
         v-if="get(general, 'type', '') === 'LECTURE'"
@@ -22,7 +22,15 @@
 
     <!-- <app-divider class="my-4" /> -->
 
-    <p class="mt-4 mb-3 heading-6" v-if="lesson.lesson_docs && lesson.lesson_docs.length > 0 || lesson.lesson_videos && lesson.lesson_videos.length > 0">Tài liệu tham khảo</p>
+    <p
+      class="mt-4 mb-3 heading-6"
+      v-if="
+        (lesson.lesson_docs && lesson.lesson_docs.length > 0) ||
+          (lesson.lesson_videos && lesson.lesson_videos.length > 0)
+      "
+    >
+      Tài liệu tham khảo
+    </p>
 
     <DocumentDetail
       v-for="doc in get(lesson, 'lesson_docs', [])"
@@ -68,11 +76,11 @@ const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
 import { get } from "lodash";
 import DocumentAdd from "~/components/page/course/create/common/DocumentAdd";
 import DocumentDetail from "~/components/page/course/create/common/DocumentDetail";
-import CreateLessonOfChapter from "~/components/page/course/create/course/CreateLessonOfChapter";
+import UpdateLessonChapter from "~/components/page/course/create/course/AddLesson";
 const IconFileBlank = () =>
   import("~/assets/svg/design-icons/file-blank.svg?inline");
 import LessonDetailInfo from "~/components/page/course/create/common/LessonDetailInfo";
-import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
+import UpdateLesson from "~/components/page/course/create/lecture/AddLesson";
 
 export default {
   components: {
@@ -83,9 +91,9 @@ export default {
     DocumentAdd,
     IconFileBlank,
     DocumentDetail,
-    CreateLessonOfChapter,
+    UpdateLessonChapter,
     LessonDetailInfo,
-    CreateLessonOfElearning,
+    UpdateLesson,
   },
 
   data() {
@@ -104,6 +112,9 @@ export default {
     ...mapState("elearning/create", {
       general: "general",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
   },
 
   props: {
@@ -119,20 +130,24 @@ export default {
 
   methods: {
     toggleShowLesson() {
+      if (this.disabled_all) return;
       this.isShowDetailLesson = !this.isShowDetailLesson;
     },
 
     handleCloseAdd() {
+      if (this.disabled_all) return;
       this.isShowFormAddDocument = false;
       this.isShowButtonAddDocument = true;
     },
 
     handleAddDocument() {
+      if (this.disabled_all) return;
       this.isShowFormAddDocument = true;
       this.isShowButtonAddDocument = false;
     },
 
     handleEditLesson() {
+      if (this.disabled_all) return;
       this.isShowDetailLesson = false;
     },
 
@@ -144,4 +159,3 @@ export default {
   },
 };
 </script>
-

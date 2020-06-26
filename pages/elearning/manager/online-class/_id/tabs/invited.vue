@@ -7,7 +7,7 @@
           <div style="width: 100%">
             <app-search
               :placeholder="'Nhập để tìm kiếm...'"
-              v-model="params.query"
+              v-model="query"
               :size="'sm'"
               @submit="submit"
               @keyup.enter.native="submit"
@@ -48,6 +48,9 @@
           </app-button>
         </div>
       </div>
+      <div class="text-right mb-3">
+        <i>Danh sách học sinh đã tham gia bài giảng “{{get(stateClassInfo, 'data.name', '')}}” của bạn.</i>
+      </div>
     </div>
     <!--End filter form-->
 
@@ -58,6 +61,7 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @sort="handleSort"
       :data="students"
     >
       <template v-slot:cell(student_name)="{row}">
@@ -74,57 +78,50 @@
           <div class="attendance-points">
             <div class="points">
               <span class="bg-green">
-                {{row.total_lesson_finished_from_joined_time ?
-                row.num_attendance/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                {{covertPercent(row, 'num_attendance')}}%
               </span>
               <span class="bg-red">
-                {{row.total_lesson_finished_from_joined_time ?
-                row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                {{covertPercent(row, 'num_absent_with_out_permission')}}%
               </span>
               <span class="bg-yellow">
-                {{row.total_lesson_finished_from_joined_time ?
-                row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                {{covertPercent(row, 'num_absent_with_permission')}}%
               </span>
               <span class="bg-blue">
-                {{row.total_lesson_finished_from_joined_time ?
-                row.num_late/row.total_lesson_finished_from_joined_time * 100 : 0}}%
+                {{covertPercent(row, 'num_late')}}%
               </span>
             </div>
             <div class="desc">
               <div class="content">
-                <h6>Tỷ lệ tham gia Phòng học online số 1</h6>
-                <div class="row mt-3">
-                  <div class="col-6 mb-3">
-                    Có mặt:
-                    <span class="color-primary">
-                      {{row.total_lesson_finished_from_joined_time ?
-                      row.num_attendance/row.total_lesson_finished_from_joined_time * 100 : 0}}%
-                    </span>
-                  </div>
-                  <div class="col-6 mb-3">
-                    Có phép:
-                    <span class="color-yellow">
-                      {{row.total_lesson_finished_from_joined_time ?
-                      row.num_absent_with_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
-                    </span>
-                  </div>
-                  <div class="col-6 mb-3">
-                    Không phép:
-                    <span class="color-red">
-                      {{row.total_lesson_finished_from_joined_time ?
-                      row.num_absent_with_out_permission/row.total_lesson_finished_from_joined_time * 100 : 0}}%
-                    </span>
-                  </div>
-                  <div class="col-6 mb-3">
-                    Vào muộn:
-                    <span class="color-blue">
-                      {{row.total_lesson_finished_from_joined_time ?
-                      row.num_late/row.total_lesson_finished_from_joined_time * 100 : 0}}%
-                    </span>
+                <div class="inner">
+                  <h6>Tỷ lệ tham gia {{get(stateClassInfo, 'data.name', '')}}</h6>
+                  <div class="row mt-3">
+                    <div class="col-6 mb-3 nowrap">
+                      Có mặt:
+                      <span class="color-primary">
+                        {{covertPercent(row, 'num_attendance')}}%
+                      </span>
+                    </div>
+                    <div class="col-6 mb-3">
+                      Có phép:
+                      <span class="color-yellow nowrap">
+                        {{covertPercent(row, 'num_absent_with_permission')}}%
+                      </span>
+                    </div>
+                    <div class="col-6 mb-3 nowrap">
+                      Không phép:
+                      <span class="color-red">
+                        {{covertPercent(row, 'num_absent_with_out_permission')}}%
+                      </span>
+                    </div>
+                    <div class="col-6 mb-3 nowrap">
+                      Vào muộn:
+                      <span class="color-blue">
+                        {{covertPercent(row, 'num_late')}}%
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="arroư"></div>
             </div>
           </div>
         </td>
@@ -156,15 +153,15 @@
     </app-table>
     <!--End table-->
 
-    <div class="pl-4 pr-4 mt-4">
-      <i class="color-999">
+    <div class="pl-4 pr-4 mt-4 text-center">
+      <i>
         *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia
-        <b>Phòng học online số 1</b> theo yêu cầu của giáo viên
+        <b>{{get(stateClassInfo, 'data.name', '')}}</b> theo yêu cầu của giáo viên
       </i>
     </div>
 
     <!-- Modal invite students -->
-    <ModalInviteStudent @close="closeModal" v-if="openModal" />
+    <ModalInviteStudent @close="closeModal" v-if="openModal" :title="get(stateClassInfo, 'data.name', '')"/>
     <!-- End -->
   </div>
 </template>
@@ -210,6 +207,7 @@ export default {
 
   data() {
     return {
+      query: null,
       allOpt: {
         value: null,
         text: "Tất cả"
@@ -235,7 +233,6 @@ export default {
         {
           name: "attendance",
           text: "Điểm chuyên cần",
-          sort: true
         },
         {
           name: "banned",
@@ -256,10 +253,12 @@ export default {
       params: {
         page: 1,
         size: 10,
-        query: null
+        query: null,
+        sort: 'join_date,desc'
       },
       loading: false,
-      listSchoolClasses: []
+      listSchoolClasses: [],
+      checkFilter: false
     };
   },
 
@@ -271,13 +270,33 @@ export default {
     ...mapState(STORE_SCHOOL_CLASSES, {
       stateSchoolClasses: "schoolClasses"
     }),
+    ...mapState(STORE_NAMESPACE, {
+      stateClassInfo: "OnlineClassInfo"
+    }),
     courseOpts() {
       return [this.allOpt, ...this.courses];
-    }
+    },
   },
 
+  watch: {
+    query() {
+      this.checkFilter = true;
+    },
+  },
+  
   methods: {
     getDateBirthDay,
+
+    covertPercent(row, feild) {
+      return row.total_lesson_finished_from_joined_time ?
+             _.round(row[feild] / row.total_lesson_finished_from_joined_time * 100, 0) : 0;
+    },
+
+    handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
 
     toggleFilter() {
       if (this.showFilter && this.filterCourse != null) {
@@ -300,8 +319,10 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = { ...this.params };
-      this.getList();
+      if (this.checkFilter) {
+        this.getList();
+        this.checkFilter = false;
+      }
     },
     handleChangedCourse() {
       this.params.class_id = this.filterCourse.value;
@@ -350,6 +371,7 @@ export default {
           ? this.$route.params.id
           : "";
         this.params.online_class_id = online_class_id;
+        if (this.query != null) {this.params.query = this.query}
         if (this.filterCourse) {
           this.params.class_id = this.filterCourse.value;
         }
@@ -359,7 +381,6 @@ export default {
           { params }
         );
         this.students = this.get(this.stateInvites, "data.content", []);
-        console.log("xxxxxxx", this.stateInvites);
         this.pagination.size = this.get(this.stateInvites, "data.size", 10);
         this.pagination.first = this.get(this.stateInvites, "data.first", 1);
         this.pagination.last = this.get(this.stateInvites, "data.last", 1);

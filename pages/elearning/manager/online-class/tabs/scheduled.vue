@@ -5,7 +5,7 @@
       <div class="d-flex">
       <div class="filter-form__item">
         <app-date-picker
-          v-model="params.query_date"
+          v-model="query_date"
           square
           size="sm"
           placeholder="dd/mm/yyyy"
@@ -22,7 +22,7 @@
             class
             :placeholder="'Nhập để tìm kiếm...'"
             bordered
-            v-model="params.query"
+            v-model="query"
             :size="'sm'"
             @submit="submit"
             @keyup.enter.native="submit"
@@ -77,46 +77,14 @@
     <!--Options group-->
 
     <!--Table-->
-    <app-table
-      :loading="loading"
-      :heads="heads"
-      :pagination="pagination"
+    <OnlineClassTable 
+      :loading="loading" 
+      :pagination="pagination" 
       @pagechange="onPageChange"
       @selectionChange="selectRow"
-      :data="classList"
-      primaryKey="online_class_id"
-      multiple-selection
-    >
-      <template v-slot:cell(online_class_name)="{row}">
-        <td>
-          <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          {{row.online_class_name}}
-          </n-link>
-        </td>
-      </template>
-      <template v-slot:cell(privacy)="{row}">
-        <td>
-          <span class="text-primary" v-if="row.privacy == 'PUBLIC'">Công khai</span>
-          <span class="text-secondary" v-else>Riêng tư</span>
-        </td>
-      </template>
-      <template v-slot:cell(time)="{row}">
-        <td>
-          <div>
-            {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
-          </div>
-          <div>
-            {{getDateBirthDay(row.start_time)}}
-          </div>
-        </td>
-      </template>
-
-      <template v-slot:actions="{row}">
-        <n-link :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'" class="link">
-          <IconPeople class="fill-yellow mr-2"/>Xem danh sách học sinh
-        </n-link>
-      </template>
-    </app-table>
+      @sort="handleSort"
+      :actions="[0,0,1]"
+      :data="classList"/>
     <!--End table-->
 
     <app-modal-confirm
@@ -142,20 +110,12 @@
 </template>
 
 <script>
-import IconFilter from "~/assets/svg/icons/filter.svg?inline";
-import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconArrow from "~/assets/svg/icons/arrow.svg?inline";
 import IconCalendar from "~/assets/svg/icons/calendar2.svg?inline";
 import IconTrash from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconHamberger from '~/assets/svg/icons/hamberger.svg?inline';
-import IconTimesCircle from '~/assets/svg/design-icons/times-circle.svg?inline';
-import IconPeople from '~/assets/svg/v2-icons/people_24px.svg?inline';
 import IconCalendarDelete from '~/assets/svg/v2-icons/calendar-delete.svg?inline';
+import OnlineClassTable from "~/components/page/elearning/manager/olclass/OnlineClassTable";
 
-import {
-  getDateBirthDay,
-  getLocalTimeHH_MM_A
-} from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -164,19 +124,13 @@ import { useEffect } from "~/utils/common";
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
-export default {
-  layout: "manage",
-    
+export default {    
   components: {
-    IconTimesCircle,
-    IconFilter,
-    IconSearch,
-    IconArrow,
     IconCalendar,
     IconTrash,
-    IconPeople,
     IconHamberger,
-    IconCalendarDelete
+    IconCalendarDelete,
+    OnlineClassTable
   },
 
   data() {
@@ -189,29 +143,6 @@ export default {
       showModalConfirm: false,
       showModalConfirmSchedules: false,
       rowClassId: null,
-      tab: 1,
-      heads: [
-        {
-          name: "online_class_name",
-          text: "Phòng học",
-          sort: true
-        },
-        {
-          name: "elearning_name",
-          text: "Thuộc khóa học",
-          sort: true
-        },
-        {
-          name: "time",
-          text: "Thời gian",
-          sort: true
-        },
-        {
-          name: "num_invitation",
-          text: "Số học sinh đã mời",
-          sort: true
-        }
-      ],
       courses: [],
       filterCourse: null,
       pagination: {
@@ -233,8 +164,12 @@ export default {
         status: null,
         query_date: null,
         query: null,
+        sort: 'start_time,desc'
       },
       loading: false,
+      query: '',
+      query_date: '',
+      checkSubmit: false
     };
   },
   computed: {
@@ -246,13 +181,35 @@ export default {
       stateElearnings: "Elearnings"
     }),
     courseOpts() {
-      return [this.allOpt, ...this.courses]
+      let list = [];
+      let elearnings = get(this.stateElearnings, 'data', []);
+      elearnings.forEach(element => {
+        if (!element.is_hidden) {
+          list.push({
+            value: element.id,
+            text: element.name
+          });
+        }
+      });
+      return [this.allOpt, ...list]
     }
   },
 
+  watch: {
+    query() {
+      this.checkSubmit = true;
+    },
+    query_date() {
+      this.checkSubmit = true;
+    },
+  },
+
   methods: {
-    getDateBirthDay,
-    getLocalTimeHH_MM_A,
+    handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
 
     toggleFilter() {
       if (this.showFilter && this.filterCourse != null) {
@@ -274,7 +231,10 @@ export default {
     },
 
     submit() {
-      this.getList();
+      if (this.checkSubmit) {
+        this.getList();
+        this.checkSubmit = false;
+      }
     },
 
     handleChangedCourse(val) {
@@ -288,36 +248,13 @@ export default {
       });
     },
 
-    async getElearnings() {
-      try {
-        let userId = this.$store.state.auth.token
-          ? this.$store.state.auth.token.id
-          : "";
-        await this.$store.dispatch(
-          `${STORE_PUBLIC_SEARCH}/${actionTypes.ELEARNING_PUBLIC_ELEARNING.LIST}`,
-          { params: {teacher_id: userId} }
-        );
-        let lessonList = this.get(this.stateElearnings, "data", []);
-        let list = [];
-        lessonList.forEach(element => {
-          if (!element.is_hidden) {
-            list.push({
-              value: element.id,
-              text: element.name
-            });
-          }
-        });
-        this.courses = list;
-      } catch (e) {
-      } finally {
-      }
-    },
-
     async getList() {
       const self = this;
       try {
         self.loading = true;
         let params = { ...self.params };
+        if (this.query_date) params.query_date = this.query_date;
+        if (this.query) params.query = this.query;
         await self.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.LIST}`,
           { params }
@@ -346,6 +283,7 @@ export default {
       );
 
       if (doDelete.success) {
+        this.ids = [];
         this.getList();
       } else {
         this.$toasted.error(doDelete.message);
@@ -363,6 +301,7 @@ export default {
       );
 
       if (doDelete.success) {
+        this.ids = [];
         this.showModalConfirmSchedules = false;
         //this.getList();
       } else {
@@ -375,7 +314,6 @@ export default {
 
   created() {
     this.getList();
-    this.getElearnings();
   }
 };
 </script>

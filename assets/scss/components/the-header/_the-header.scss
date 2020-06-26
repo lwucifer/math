@@ -99,6 +99,7 @@
       padding: 2.5rem 0;
       display: block;
       position: relative;
+      outline: none !important;
       /*
       &.nuxt-link-exact-active:after {
         content: "";
@@ -213,7 +214,7 @@
       margin: 0;
     }
   }
-  button.item {
+  button.item, > a.item {
     padding: 0 1rem;
     margin: 0 0.5rem;
     svg {

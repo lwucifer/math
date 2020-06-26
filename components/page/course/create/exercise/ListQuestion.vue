@@ -12,14 +12,16 @@
 
       <span
         class="text-sub mr-4 question-point"
-        v-if="get(question, 'type', '') === 'ESSAY' && get(question, 'points', '')"
+        v-if="
+          get(question, 'type', '') === 'ESSAY' && get(question, 'points', '')
+        "
         >{{ get(question, "points", "") }} điểm</span
       >
 
       <div
         class="d-flex align-items-center justify-content-end ce-question-item__actions question-actions"
       >
-        <button class="mr-3" @click="isShowEditQuestion = !isShowEditQuestion">
+        <button class="mr-3" @click="handleEditQuestion">
           <IconEditAlt class="icon d-block subheading fill-primary" />
         </button>
 
@@ -42,6 +44,8 @@
         :confirmLoading="confirmLoading"
         @ok="handleOk"
         @cancel="handleCancel"
+        title="Xóa câu hỏi"
+        description="Bạn có chắc chắn muốn xóa câu hỏi này?"
       />
     </div>
 
@@ -126,15 +130,24 @@ export default {
       lesson: "lesson",
     }),
 
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
+
     limit() {
-      const value = get(this, 'question.content', '')
-      
-      return limitCharacter(value, 60, 20)
-    }
+      const value = get(this, "question.content", "");
+
+      return limitCharacter(value, 60, 20);
+    },
   },
 
   methods: {
+    handleEditQuestion() {
+      if (this.disabled_all) return;
+      this.isShowEditQuestion = !this.isShowEditQuestion;
+    },
     handleDeleteQuestion() {
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 
@@ -150,14 +163,8 @@ export default {
       this.handleCancel();
       if (get(res, "success", false)) {
         this.$toasted.success("success");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        const lesson_id = get(this, "lesson.id", "");
+        this.$store.dispatch("elearning/create/getLesson", lesson_id);
 
         return;
       }

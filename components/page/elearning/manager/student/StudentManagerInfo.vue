@@ -7,11 +7,11 @@
           <div class="text-black">
             <p class="mb-4">
               Họ và tên:
-              <strong>{{progress.name}}</strong>
+              <strong>{{get(progress, 'name', '')}}</strong>
             </p>
             <p>
               Lớp :
-              <strong>{{progress.class_name}}</strong>
+              <strong>{{get(progress, 'class', '')}}</strong>
             </p>
           </div>
         </div>
@@ -19,10 +19,10 @@
       <div class="col-md-6 wrap-border flex-column justify-content-center">
         <h5 class="mb-4">
           Tiến độ học tập:
-          <span class="text-primary">{{progress.progress}} %</span>
+          <span class="text-primary">{{get(progress, 'progress', 0)}} %</span>
         </h5>
         <div class="w-100">
-          <app-progress :percentage="progress.progress" size="lg" rounded />
+          <app-progress :percentage="get(progress, 'progress', 0)" size="lg" rounded />
         </div>
       </div>
     </div>
@@ -32,10 +32,15 @@
 <script>
 const STORE_TEACHING_PROGRESS = "elearning/teaching/progress";
 import { mapState } from "vuex";
+import { get } from "lodash";
+
 export default {
   computed: {
     ...mapState(STORE_TEACHING_PROGRESS, ["progress"])
-  }
+  },
+  methods: {
+    get
+  },
 };
 </script>
 

@@ -4,54 +4,64 @@
       <!-- <breadcrumb /> -->
 
       <SchoolSummary :school="school"/>
-      <ListScrollTo/>
-      <IntroSchool/>
+      <ListScrollTo 
+        @changeTab="changeTab"
+        :tab="tab"
+      />
+      <div v-if="tab=='index'">
+        <IntroSchool/>
 
-      <div class="highlight" id="lesson">
-        <ElearningHomeBox class="mb-0">
-          <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
+        <div class="highlight" id="lesson">
+          <ElearningHomeBox class="mb-0">
+            <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
 
-          <AppCarouseSchool
-            :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
-          >
-            <template slot="default" slot-scope="{ classes }">
-              <div
-                v-for="item in newestLecture && newestLecture.content || []"
-                :key="item.id"
-                :class="classes"
-              >
-                <CourseItem2 class="my-0" :item="item" :size="'sm'" />
-              </div>
-            </template>
-          </AppCarouseSchool>
-        </ElearningHomeBox>
+            <AppCarouseSchool
+              :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+            >
+              <template slot="default" slot-scope="{ classes }">
+                <div
+                  v-for="item in newestLecture && newestLecture.content || []"
+                  :key="item.id"
+                  :class="classes"
+                >
+                  <CourseItem2 class="my-0" :item="item" :size="'sm'" />
+                </div>
+              </template>
+            </AppCarouseSchool>
+          </ElearningHomeBox>
+        </div>
+
+        <div class="highlight pt-0">
+          <ElearningHomeBox>
+            <h2 slot="title" class="heading-3 font-weight-medium mb-4">Khóa học nổi bật</h2>
+
+            <AppCarouseSchool
+              :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+            >
+              <template slot="default" slot-scope="{ classes }">
+                <div
+                  v-for="item in newestCourse && newestCourse.content || []"
+                  :key="item.id"
+                  :class="classes"
+                >
+                  <CourseItem2 class="my-0" :item="item" :size="'sm'" />
+                </div>
+              </template>
+            </AppCarouseSchool>
+          </ElearningHomeBox>
+        </div>
+
+        <DataSchool :school="school"/>
+        <ListTeacher/>
+        <SchoolNoti/>
+        <SchoolNews/>
+        <SchoolLink/>
       </div>
-
-      <div class="highlight pt-0">
-        <ElearningHomeBox>
-          <h2 slot="title" class="heading-3 font-weight-medium mb-4">Khóa học nổi bật</h2>
-
-          <AppCarouseSchool
-            :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
-          >
-            <template slot="default" slot-scope="{ classes }">
-              <div
-                v-for="item in newestCourse && newestCourse.content || []"
-                :key="item.id"
-                :class="classes"
-              >
-                <CourseItem2 class="my-0" :item="item" :size="'sm'" />
-              </div>
-            </template>
-          </AppCarouseSchool>
-        </ElearningHomeBox>
-      </div>
-
-      <DataSchool/>
-      <ListTeacher/>
-      <SchoolNoti/>
-      <SchoolNews/>
-      <SchoolLink/>
+      <SchoolIntroduceContent v-else-if="tab=='intro'"/>
+      <SchoolCoursesContent v-else-if="tab=='courses'"/>
+      <SchoolNotifyContent v-else-if="tab=='notify'"/>
+      <SchoolNewsContent v-else-if="tab=='news'"/>
+      <SchoolScheduleContent v-else-if="tab=='schedule'"/>
     </div>
   </div>
 </template>
@@ -68,6 +78,11 @@ import ListTeacher from "~/components/page/school/ListTeacher";
 import SchoolNoti from "~/components/page/school/SchoolNoti";
 import SchoolNews from "~/components/page/school/SchoolNews";
 import SchoolLink from "~/components/page/school/SchoolLink";
+import SchoolIntroduceContent from "~/components/page/school/Introduce/SchoolIntroduceContent";
+import SchoolNotifyContent from "~/components/page/school/Notify/SchoolNotifyContent";
+import SchoolNewsContent from "~/components/page/school/News/SchoolNewsContent";
+import SchoolScheduleContent from "~/components/page/school/Schedule/SchoolScheduleContent";
+import SchoolCoursesContent from "~/components/page/school/Courses/SchoolCoursesContent";
 
 import IconArrowForwardIos from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 
@@ -75,6 +90,8 @@ import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { ELEARNING_TYPES, SUBJECT_CODE } from "~/utils/constants";
 import { get } from "lodash";
+import OlClass from '../../../services/elearning/teaching/Olclass';
+import { getParamQuery } from "~/utils/common"
 
 export default {
   watchQuery: ["school_id"],
@@ -91,9 +108,23 @@ export default {
     ListTeacher,
     SchoolNoti,
     SchoolNews,
-    SchoolLink
+    SchoolLink,
+    SchoolIntroduceContent,
+    SchoolNotifyContent,
+    SchoolNewsContent,
+    SchoolScheduleContent,
+    SchoolCoursesContent
   },
-
+  watchQuery(newQuery, oldQuery){
+    if (
+      get(newQuery, 'tab', false) && 
+      ['index', 'intro','courses','notify','news','schedule'].includes(get(newQuery, 'tab', false))
+    ) {
+      this.tab = get(newQuery, 'tab', 'index')
+    } else {
+      this.tab = 'index'
+    }
+  },
   async fetch({ params, query, store }) {
     const school_id = params.id;
     const data = { school_id };
@@ -130,7 +161,8 @@ export default {
 
   data() {
     return {
-      pageLoading: true
+      pageLoading: true,
+      tab:'index'
     };
   },
   computed: {
@@ -145,11 +177,23 @@ export default {
   mounted() {
     this.pageLoading = false;
   },
-
-  watch: {},
-
+  created(){
+    this.checkTab()
+  },
   methods: {
     get,
+    changeTab(tab){
+      this.tab = tab
+      this.$router.push({query: { tab: tab}})
+    },
+    checkTab(){
+      const typeTab = getParamQuery('tab')
+      if(typeTab && ['index', 'intro','courses','notify','news','schedule'].includes(typeTab)){
+        this.tab = typeTab
+      }else{
+        this.tab = "index"
+      }
+    }
   }
 };
 </script>

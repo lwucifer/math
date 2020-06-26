@@ -1,14 +1,14 @@
 <template>
   <div class="box">
     <div class="row">
-      <TabMessage :isCreated="isCreate" :isGroup="isGroup" />
+      <TabMessage :isCreated="isCreate" :isGroup="isGroup" @emitMessageTag1="emitMessageTag1" />
       <!-- <TabInfo :isGroup="isGroup" /> -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 import * as actionTypes from "~/utils/action-types";
 import Logo from "~/assets/svg/logo/schoolly.svg?inline";
@@ -42,7 +42,7 @@ export default {
       type: "image"
     };
     const fileOptions = {
-      limit: 12,
+      limit: 20,
       type: "file"
     };
     // const payloadMessage = {
@@ -71,11 +71,7 @@ export default {
       //   id: room_id,
       //   end: "messages"
       // }),
-      //   store.dispatch(`message/${actionTypes.MESSAGE_GROUP.MEMBER_LIST}`, {
-      //     params: {
-      //       room_id: room_id
-      //     }
-      //   }),
+      store.dispatch(`chat/${actionTypes.CHAT.FRIENDS_LIST}`),
       store.dispatch(`chat/${actionTypes.CHAT.ROOM_DETAIL}`, room_id)
       // store.dispatch(`account/${actionTypes.ACCOUNT_PERSONAL.LIST}`, userId)
     ]);
@@ -119,7 +115,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations("chat", ["setOnMessage", "setResEmit"]),
+    ...mapActions("chat", ["getRoomList"]),
+    ...mapMutations("chat", ["setOnMessage", "setResEmit", "setEmitMessage"]),
     async initSocket() {
       // init socket
       // URI: http://178.128.80.30:9994?user_id=xxx&token=xxx&unique_id=xxx
@@ -187,11 +184,33 @@ export default {
       //     console.log("ket qua message", res);
       //   }
       // );
+    },
+    emitMessageTag1(dataEmit, id) {
+      console.log("aaa", dataEmit, id);
+      this.socket.emit(
+        constants.CHAT.JOIN_ROOM,
+        {
+          room_id: id
+        },
+        res => {
+          console.log("[socket] User has joined this channel", res);
+        }
+      );
+      this.$nextTick(() => {
+        this.setEmitMessage(dataEmit);
+        this.getRoomList();
+        this.$router.push(`/messages/t/${id}`);
+      });
     }
   },
 
   beforeDestroy() {
-    this.socket.off("join_room");
+    const params = {
+      room_id: this.$route.params.id
+    };
+    this.socket.emit(constants.CHAT.LEAVE_ROOM, params, res => {
+      console.log("[socket] User has leave this channel", res);
+    });
   },
   watch: {
     messageEmit(_newVal) {
@@ -203,9 +222,9 @@ export default {
         };
         // console.log("[socket] params emit message", paramsMessage);
         this.socket.emit(constants.CHAT.MESSAGE, paramsMessage, res => {
-          console.log("[socket] emit", res);
+          console.log("[socket] emit", res.data);
           if (res) {
-            this.setResEmit(res);
+            this.setResEmit(res.data);
           }
         });
       }

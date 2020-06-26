@@ -17,8 +17,9 @@
                     <div class="col-md-6 d-flex align-items-center">
                       <span class="mr-3">Số dư khả dụng:</span>
                       <strong
-                        class="color-red h3 mr-4"
-                      >{{ balance | toThousandFilter('.') }} {{ CURRENCY }}</strong>
+                        style="color: #E9446A;"
+                        class="h3 mr-4"
+                      >{{ balance | numeralFormat("0,0.00")}} {{ CURRENCY }}</strong>
                       <app-button
                         size="sm"
                         nuxt
@@ -38,7 +39,7 @@
                         >
                           <slot name="icon">
                             <IconHistory24px class="icon--btn icon--btn--pre" />
-                          </slot>Xem lịch sử rút tiền
+                          </slot>Lịch sử rút tiền
                         </app-button>
                       </div>
                     </div>
@@ -55,7 +56,7 @@
                           <span class="value">
                             <strong
                               class="text-primary"
-                            >{{ today_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
+                            >{{ today_revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -65,7 +66,7 @@
                           <span class="value">
                             <strong
                               class="color-blue"
-                            >{{ week_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
+                            >{{ week_revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -75,7 +76,7 @@
                           <span class="value">
                             <strong
                               class="color-yellow"
-                            >{{ month_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
+                            >{{ month_revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -83,7 +84,7 @@
                         <div class="item">
                           <p class="title">Tháng trước</p>
                           <span class="value">
-                            <strong>{{ last_month_revenue | toThousandFilter }} {{ CURRENCY }}</strong>
+                            <strong>{{ last_month_revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</strong>
                           </span>
                         </div>
                       </div>
@@ -104,15 +105,22 @@
               >
                 <template v-slot:title>
                   <div class="row">
-                    <div class="col-md-9 mb-3">
+                    <div class="col-md-9">
                       <filter-form>
                         <div class="mb-2">
                           <span class="filter-form__title">Chọn khoảng thời gian</span>
                         </div>
 
                         <div class="d-flex filter-form__input-wrapper">
-                          <div class="filter-form__item" style="min-width: 25rem;">
-                            <app-date-picker
+                          <div class="filter-form__item" style="min-width: 21rem;">
+                            <app-range-calendar
+                              :placeholder="'DD/MM/YYYY - DD/MM/YYYY'"
+                              v-model="dateDefault"
+                              value-type="YYYY-MM-DD"
+                              bordered
+                              @change="changeDate"
+                            />
+                            <!-- <app-date-picker
                               class="w-100"
                               popupClass="datepicker-range-v2"
                               v-model="dateDefault"
@@ -122,21 +130,21 @@
                               placeholder="DD/MM/YYYY - DD/MM/YYYY"
                               :shortcuts="DATE_SHORTCUT"
                               @input="changeDate"
-                              valueFormat="YYYY-MM-DD"
-                            >
+                              value-type="YYYY-MM-DD"
+                            > -->
                               <!--<template v-slot:icon-calendar>-->
                               <!--<IconCalendar />-->
                               <!--</template>-->
-                            </app-date-picker>
+                            <!-- </app-date-picker> -->
                           </div>
                         </div>
                       </filter-form>
                     </div>
                     <div class="col-md-3 text-md-right">
-                      <p class="font-weight-semi-bold mb-2">Tổng tiền</p>
+                      <p class="font-weight-semi-bold mb-2">Tổng thực nhận</p>
                       <p
                         class="font-weight-bold h3"
-                      >{{ revenue | toThousandFilter('.') }} {{ CURRENCY }}</p>
+                      >{{ revenue | numeralFormat("0,0.00") }} {{ CURRENCY }}</p>
                     </div>
                   </div>
                 </template>
@@ -158,19 +166,30 @@
                       :pagination-style="{ position: 'right' }"
                     >
                       <template v-slot:cell(cost)="{row}">
-                        <td>{{ get(row, 'cost', '') | toThousandFilter('.') }} {{ CURRENCY }}</td>
+                        <td>{{ get(row, 'cost', '') | numeralFormat("0,0.00") }} {{ CURRENCY }}</td>
                       </template>
                       <template v-slot:cell(fee)="{row}">
-                        <td>{{ formatFee(get(row, 'fee', ''))}}%</td>
+                        <td class="text-center">{{ formatFee(get(row, 'fee', ''))}}%</td>
                       </template>
                       <template v-slot:cell(total)="{row}">
-                        <td class="text-primary">{{ formatFee(get(row, 'total', '')) | toThousandFilter('.') }} {{ CURRENCY }}</td>
+                        <td class="text-primary">{{ formatFee(get(row, 'total', '')) | numeralFormat("0,0.00") }} {{ CURRENCY }}</td>
                       </template>
                       <template v-slot:cell(timestamp)="{row}">
                         <td>{{ get(row, 'timestamp', '-') | moment("DD-MM-YYYY") }}</td>
                       </template>
-                      <template v-slot:cell(desc)="{row}">
-                        <td class="long-text__table" :title="get(row, 'desc', '-')">{{ get(row, 'desc', '-') }}</td>
+                      <template v-slot:cell(elearning_name)="{row}">
+                        <td>
+                          <v-popover
+                            trigger="hover"
+                            popover-inner-class="tooltip-inner popover-inner dont-break-out"
+                            popover-class="tooltip-account-info-table"
+                          >
+                            {{get(row, 'elearning_name',"") | truncStrFilter(30)}}
+                            <template slot="popover">
+                              {{get(row, 'elearning_name',"")}}
+                            </template>
+                          </v-popover>
+                        </td>
                       </template>
                     </app-table>
                   </div>
@@ -178,81 +197,6 @@
               </sub-block-section>
             </template>
           </block-section>
-
-          <!--<div class="elearning-history__title">-->
-          <!--<h5 class="color-primary mb-3">Doanh thu</h5>-->
-          <!--<div class="d-flex-center">-->
-          <!--<p>-->
-          <!--<span>Số dư:</span>-->
-          <!--<strong class="color-red h5">{{this.balance}}</strong>-->
-          <!--</p>-->
-          <!--<app-button color="secondary" size="sm" class="ml-4" square>Rút tiền</app-button>-->
-          <!--<n-link class="ml-auto" :to="'/elearning/revenue/withdrawal'">Xem lịch sử rút tiền</n-link>-->
-          <!--</div>-->
-          <!--<hr class="mt-3" />-->
-          <!--</div>-->
-
-          <!--<div class="elearning-history__statistical">-->
-          <!--<h5 class="mt-15 mb-3">Thống kê doanh thu</h5>-->
-          <!--<div class="row">-->
-          <!--<div class="col-md-3">-->
-          <!--<div class="item">-->
-          <!--<p>Hôm nay</p>-->
-          <!--<strong>{{this.today_revenue}} đ</strong>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<div class="col-md-3">-->
-          <!--<div class="item">-->
-          <!--<p>Tuần này</p>-->
-          <!--<strong>{{this.week_revenue}} đ</strong>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<div class="col-md-3">-->
-          <!--<div class="item">-->
-          <!--<p>Tháng này</p>-->
-          <!--<strong>{{this.month_revenue}} đ</strong>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<div class="col-md-3">-->
-          <!--<div class="item">-->
-          <!--<p>Tháng trước</p>-->
-          <!--<strong>{{this.last_month_revenue}}</strong>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<hr class="mt-4" />-->
-          <!--</div>-->
-
-          <!--<h3>Chi tiết doanh thu</h3>-->
-          <!--<div class="elearning-history__table">-->
-          <!--<div class="d-flex mb-3 pl-4 pr-4">-->
-          <!--<app-date-picker label="from" -->
-          <!--@input="changeDateFrom" -->
-          <!--v-model="params.from"-->
-          <!--valueFormat="YYYY-MM-DD"-->
-          <!--/>-->
-          <!--<app-date-picker label="to"-->
-          <!--@input="changeDateTo"-->
-          <!--v-model="params.to"-->
-          <!--valueFormat="YYYY-MM-DD"-->
-          <!--/>-->
-          <!--<div class="ml-auto">-->
-          <!--<p class="text-right">Tổng tiền</p>-->
-          <!--<h3>{{this.revenue}}</h3>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<app-table :heads="heads" :pagination="pagination" @pagechange="onPageChange" :data="list">-->
-          <!--<tr v-for="(item , index) in list" :key="index">-->
-          <!--<td v-html="item[head.name]" v-for="(head , j) in heads" :key="j"></td>-->
-          <!--</tr>-->
-          <!--<template v-slot:cell(fee)="{row}">-->
-          <!--<td>{{ formatFee(get(row, 'fee', ''))}}%</td>-->
-          <!--</template>-->
-          <!--<template v-slot:cell(total)="{row}">-->
-          <!--<td>{{ formatFee(get(row, 'total', ''))}} đ</td>-->
-          <!--</template>-->
-          <!--</app-table>-->
-          <!--</div>-->
         </div>
       </div>
     </div>
@@ -271,6 +215,7 @@ import { number } from "yup";
 import { CURRENCY } from "~/utils/config";
 import IconHistory24px from '~/assets/svg/v2-icons/history_24px.svg?inline';
 import { DATE_SHORTCUT } from "~/utils/config";
+import moment from "moment"
 
 export default {
   name: "E-learning",
@@ -305,13 +250,12 @@ export default {
           text: "Khách hàng"
         },
         {
-          name: "desc",
-          text: "Nội dung"
-        },
-        {
           name: "cost",
           text: "Giá trị",
-          sort: true
+        },
+        {
+          name: "elearning_name",
+          text: "Sản phẩm",
         },
         {
           name: "fee",
@@ -319,7 +263,7 @@ export default {
         },
         {
           name: "total",
-          text: "Tổng"
+          text: "Thực nhận"
         }
       ],
       pagination: {},
@@ -331,10 +275,11 @@ export default {
         page: ""
       },
       revenue: "",
-      dateDefault: ""
+      dateDefault: []
     };
   },
   created() {
+    this.getDateSelect()
     this.fetchRevenue();
     this.fetchEarning();
   },
@@ -414,6 +359,13 @@ export default {
       this.params.from = date[0];
       this.params.to = date[1];
       this.fetchEarning();
+    },
+    getDateSelect(){
+      const firstday = moment().startOf('month');
+      const today = moment();
+      this.dateDefault = [firstday,today];
+      this.params.from = firstday.format("YYYY-MM-01");
+      this.params.to = today.format("YYYY-MM-DD");
     },
     get,
     numeral

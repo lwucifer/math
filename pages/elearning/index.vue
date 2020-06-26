@@ -62,12 +62,12 @@
                 :teacher="item.teacher"
                 :averageRate="get(item, 'voting.rate', 0)"
                 :totalReview="get(item, 'voting.votes', 0)"
-                :price="item.price"
-                :originalPrice="item.original_price"
-                :free="!item.price"
+                :price="get(item, 'price.price', null)"
+                :originalPrice="get(item, 'price.original_price', null)"
+                :free="get(item, 'price.free', false)"
                 :discount="item.discount"
                 :online-class="item.is_streaming"
-                :description="`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non dolor tincidunt turpis eget sit egestas eget dui.`"
+                :description="item.description"
               />
             </div>
           </template>
@@ -175,7 +175,7 @@
                 :num-of-course="item.courses"
                 :averageRate="item.voting_rate ? Math.floor(item.voting_rate) : 0"
                 :totalReview="item.votings"
-                :description="item.biography || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dolor vitae maecenas nec nisl ornare nec duis. Tempor, non'"
+                :description="item.biography"
               />
             </div>
           </template>
@@ -329,7 +329,7 @@ export default {
     ]),
     ...mapState("elearning/public/public-highlight-teachers", [
       "highlightTeachers"
-    ])
+    ]),
   },
 
   mounted() {
@@ -338,7 +338,6 @@ export default {
 
   methods: {
     get,
-
     calcDiscount(elearning) {
       const { price = {} } = elearning;
       const currentPrice = price.price || 0;

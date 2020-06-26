@@ -37,6 +37,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      description="Bạn có chắc chắn là muốn gửi bài giảng này lên để kiểm duyệt?"
     />
   </aside>
 </template>
@@ -109,6 +110,9 @@ export default {
       exams: "exams",
     }),
     is_submit() {
+      if (get(this, "progress.elearning_status", "") === "APPROVED") {
+        return false;
+      }
       return (
         get(this, "progress.general_status", -1) == 1 &&
         get(this, "progress.content_status", -1) == 1 &&

@@ -1,5 +1,10 @@
 <template>
-  <div class="school-side menu-side">
+  <div
+    class="school-side menu-side"
+    v-sticky
+    sticky-offset="{ top: 88 }"
+    :sticy-z-index="9"
+  >
     <!--
     <aside-menu :selected-item="active" :items="menuItems"></aside-menu>
     -->
@@ -52,7 +57,7 @@
     >
       <n-link class="link-gray" :to="'/'+token.id+'/info/announcement'">
         <span>
-          <IconMonetizationOn24px class="icon"/>
+          <IconNotifications24px class="icon"/>
         </span>
         <span>
           Thông báo

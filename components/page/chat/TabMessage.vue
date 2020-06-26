@@ -36,7 +36,7 @@
       </div>
 
       <div class="aside-box__top" v-if="!isCreated">
-        <div class="message-desc">
+        <div class="message-desc" v-if="!checkId">
           <div class="message-decs__image">
             <app-avatar
               :src="avatarSrc ? avatarSrc : 'https://picsum.photos/60/60'"
@@ -48,7 +48,7 @@
             <p class="text-base">Đang hoạt động</p>
           </div>
         </div>
-        <div class="message-tool">
+        <div class="message-tool" v-if="!checkId">
           <ul class="list-unstyle">
             <li>
               <a href="#">
@@ -82,7 +82,12 @@
         </client-only>-->
       </div>
 
-      <div class="aside-box__content" :class="{'padding-show-info': showInfo}">
+      <div
+        class="aside-box__content"
+        id="content-message"
+        :class="{'padding-show-info': showInfo}"
+        v-if="!checkList"
+      >
         <!-- <h4 style="margin-top:10px; text-align:center">Chức năng đang phát triển</h4> -->
         <client-only>
           <infinite-loading
@@ -93,12 +98,14 @@
             <template slot="no-more">Không còn tin nhắn.</template>
           </infinite-loading>
         </client-only>
+
         <div class="message-box__time">
           <!-- <div class="message-box__time__line"></div> -->
           <div class="message-box__time__content">
             <!-- <span>Thứ 5, Ngày 19/09/2019</span> -->
           </div>
         </div>
+
         <div class="message-box">
           <!-- message date -->
           <!-- END / message date -->
@@ -111,9 +118,33 @@
           >
             <!-- v-show="item.content || (item.img_url && item.img_url.low) || item.file_url" -->
             <div class="message-box__item__content">
+              <div class="message-box__item__meta" v-if="index == 0">
+                <div class="message-box__item__meta__image">
+                  <app-dropdown
+                    position="left"
+                    v-model="dropdownShow"
+                    :content-width="'10rem'"
+                    class="link--dropdown"
+                  >
+                    <button slot="activator" type="button" class="link--dropdown__button">
+                      <app-avatar
+                        :src="item.user && item.user.avatar && item.user.avatar.low ? item.user.avatar.low : ''"
+                        size="sm"
+                        class="comment-item__avatar"
+                      />
+                    </button>
+                  </app-dropdown>
+                </div>
+                <div class="message-box__item__meta__desc">
+                  <span>{{item.user && item.user.full_name}}</span>
+                </div>
+                <div class="message-box__item__meta__time">
+                  <span>{{item.sent_at | moment("hh:mm A") }}</span>
+                </div>
+              </div>
               <div
                 class="message-box__item__meta"
-                v-if="index == filterMessageList.length -1 && filterMessageList[index].user_id != filterMessageList[index-1].user_id"
+                v-else-if="index > 0 && index == filterMessageList.length -1 && filterMessageList[index].user_id != filterMessageList[index-1].user_id"
               >
                 <div class="message-box__item__meta__image">
                   <app-dropdown
@@ -139,7 +170,6 @@
                 </div>
               </div>
               <div class="message-box__item__meta" v-else-if="item.check">
-                <!-- v-else-if="index < messageList.length - 1 && messageList[index].user && messageList[index].user.id != messageList[index+1].user.id" -->
                 <div class="message-box__item__meta__image">
                   <app-dropdown
                     position="left"
@@ -154,20 +184,6 @@
                         class="comment-item__avatar"
                       />
                     </button>
-                    <!-- <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Gửi tin nhắn</span>
-                          </n-link>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <n-link to="/" class="link-dark">
-                            <span>Xem trang cá nhân</span>
-                          </n-link>
-                        </li>
-                      </ul>
-                    </div>-->
                   </app-dropdown>
                 </div>
                 <div class="message-box__item__meta__desc">
@@ -183,9 +199,7 @@
                   <div class="message-box__item__desc__text">
                     <p>{{item.text}}</p>
                   </div>
-                  <!-- <div class="message-box__item__desc__image">
-                  <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
-                  </div>-->
+
                   <div class="message-box__item__desc__actions">
                     <button title="Trả lời" @click="reply()">
                       <IconReply />
@@ -193,208 +207,44 @@
                     <button title="Chuyển tiếp">
                       <IconUpload />
                     </button>
-                    <app-dropdown
-                      position="left"
-                      v-model="dropdownEdit"
-                      :content-width="'10rem'"
-                      class="link--dropdown"
-                    >
-                      <button slot="activator" type="button" class="link--dropdown__button">
+                    <button title="Khác">
+                      <v-popover
+                        position="left"
+                        v-model="dropdownEdit"
+                        :content-width="'10rem'"
+                        class="link--dropdown"
+                      >
                         <IconDots />
-                      </button>
-                      <div class="link--dropdown__content">
-                        <ul>
-                          <li class="link--dropdown__content__item">
-                            <a>Sửa tin nhắn</a>
-                          </li>
-                          <li class="link--dropdown__content__item">
-                            <a @click="visibleDelete = true">Xóa tin</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </app-dropdown>
+                        <template #popover>
+                          <ul class="ul-popover">
+                            <li class="link--dropdown__content__item">
+                              <a>Sửa tin nhắn</a>
+                            </li>
+                            <li class="link--dropdown__content__item">
+                              <a @click="visibleDelete = true">Xóa tin</a>
+                            </li>
+                          </ul>
+                        </template>
+                      </v-popover>
+                    </button>
                   </div>
                 </div>
-                <!-- <div class="message-box__item__desc" v-if="item.img_url.low">
-                  <div class="message-box__item__desc__image">
-                    <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
-                  </div>
-                  <div class="message-box__item__desc__actions">
-                    <button title="Trả lời" @click="reply()">
-                      <IconReply />
-                    </button>
-                    <button title="Chuyển tiếp">
-                      <IconUpload />
-                    </button>
-                    <app-dropdown
-                      position="left"
-                      v-model="dropdownEdit"
-                      :content-width="'10rem'"
-                      class="link--dropdown"
-                    >
-                      <button slot="activator" type="button" class="link--dropdown__button">
-                        <IconDots />
-                      </button>
-                      <div class="link--dropdown__content">
-                        <ul>
-                          <li class="link--dropdown__content__item">
-                            <a>Sửa tin nhắn</a>
-                          </li>
-                          <li class="link--dropdown__content__item">
-                            <a @click="visibleDelete = true">Xóa tin</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </app-dropdown>
-                  </div>
-                </div>
-                <div class="message-box__item__desc" v-if="item.file_url">
-                  <div class="item-file">
-                    <div class="icon">
-                      <IconFileAlt class="fill-primary" />
-                    </div>
-                    <span>{{item.file_name_upload}}</span>
-                  </div>
-                  <div class="message-box__item__desc__actions">
-                    <button title="Trả lời" @click="reply()">
-                      <IconReply />
-                    </button>
-                    <button title="Chuyển tiếp">
-                      <IconUpload />
-                    </button>
-                    <app-dropdown
-                      position="left"
-                      v-model="dropdownEdit"
-                      :content-width="'10rem'"
-                      class="link--dropdown"
-                    >
-                      <button slot="activator" type="button" class="link--dropdown__button">
-                        <IconDots />
-                      </button>
-                      <div class="link--dropdown__content">
-                        <ul>
-                          <li class="link--dropdown__content__item">
-                            <a>Sửa tin nhắn</a>
-                          </li>
-                          <li class="link--dropdown__content__item">
-                            <a @click="visibleDelete = true">Xóa tin</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </app-dropdown>
-                  </div>
-                </div>-->
               </template>
-              <!-- <div class="message-box__item__desc" v-else-if="item.content">
-                <div class="message-box__item__desc__text">
-                  <p>{{item.content}}</p>
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-              </div>-->
-              <!-- <div class="message-box__item__desc" v-else-if="item.img_url && item.img_url.low">
-                <div class="message-box__item__desc__image">
-                  <img
-                    v-if="item.img_url && item.img_url.low"
-                    :src="item.img_url && item.img_url.low ? item.img_url.low : ''"
-                  />
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-              </div>-->
-              <!-- <div class="message-box__item__desc" v-else-if="item.file_url">
-                <div class="item-file">
-                  <div class="icon">
-                    <IconFileAlt class="fill-primary" />
-                  </div>
-                  <span>{{item.file_name_upload}}</span>
-                </div>
-                <div class="message-box__item__desc__actions">
-                  <button title="Trả lời" @click="reply()">
-                    <IconReply />
-                  </button>
-                  <button title="Chuyển tiếp">
-                    <IconUpload />
-                  </button>
-                  <app-dropdown
-                    position="left"
-                    v-model="dropdownEdit"
-                    :content-width="'10rem'"
-                    class="link--dropdown"
-                  >
-                    <button slot="activator" type="button" class="link--dropdown__button">
-                      <IconDots />
-                    </button>
-                    <div class="link--dropdown__content">
-                      <ul>
-                        <li class="link--dropdown__content__item">
-                          <a>Sửa tin nhắn</a>
-                        </li>
-                        <li class="link--dropdown__content__item">
-                          <a @click="visibleDelete = true">Xóa tin</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </app-dropdown>
-                </div>
-              </div>-->
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="aside-box__content" v-else></div> -->
+      <div class="aside-box__content" v-else>
+        <!-- <client-only>
+          <infinite-loading
+            direction="top"
+            @infinite="messageInfiniteHandler"
+            :identifier="infiniteId"
+          >
+            <template slot="no-more">Không còn tin nhắn.</template>
+          </infinite-loading>
+        </client-only>-->
+      </div>
 
       <div class="aside-box__bottom">
         <div v-if="isReply" class="aside-box__bottom__reply">
@@ -446,7 +296,7 @@
               </template>
             </app-input>
 
-            <button class="bg-primary button-send">
+            <button class="bg-primary button-send" @click="handleEmitMessage">
               <IconSend24px width="15" height="15" class="fill-white" />
             </button>
           </div>
@@ -579,10 +429,10 @@ export default {
   },
 
   props: {
-    // isCreated: {
-    //   type: Boolean,
-    //   default: false
-    // },
+    checkId: {
+      type: Boolean,
+      default: false
+    },
     isGroup: {
       type: Boolean,
       default: false
@@ -682,20 +532,23 @@ export default {
         from_message_id: null,
         fetch_type: null
       },
-      infiniteId: +new Date()
+      infiniteId: +new Date(),
+      roomId: ""
     };
   },
 
   computed: {
     ...mapState("social", [{ labelList: "labels" }]),
-    ...mapState("message", ["groupListDetail", "friendList", "isCreated"]),
+    ...mapState("message", ["groupListDetail", "isCreated"]),
     ...mapState("chat", [
       "messageList",
       "memberList",
       "roomDetail",
       "stateIdPush",
       "messageRes",
-      "messageOn"
+      "messageOn",
+      "friendList",
+      "messageListFetch"
     ]),
     ...mapState("account", ["personalList"]),
     ...mapGetters("auth", ["userId", "fullName", "avatarUser"]),
@@ -716,19 +569,23 @@ export default {
     tagOptions() {
       return (
         this.friendList &&
-        this.friendList.listFriend &&
-        this.friendList.listFriend.map(item => ({
+        this.friendList.map(item => ({
           ...item,
           value: item.id,
-          text: item.fullname,
+          text: item.first_name,
           avatar: item.avatar
         }))
       );
     },
     nameRoom() {
       const data = this.roomDetail ? this.roomDetail.room_data : {};
+      const dataTotal = this.roomDetail ? this.roomDetail.total_member : 0;
       if (data && data.type == constants.CHAT.PUBLIC_GROUP) {
-        return data.name;
+        if (dataTotal > 3) {
+          return data.name + ", " + (dataTotal - 3) + " người khác";
+        } else {
+          return data.name;
+        }
       } else if (data && data.type == constants.CHAT.PRIVATE_GROUP) {
         const [dataFilterMember] =
           this.memberList &&
@@ -816,7 +673,7 @@ export default {
         return {
           ...item,
           user: tmpUser,
-          user_id: tmpUser ? tmpUser.int_id.low : ""
+          user_id: tmpUser ? tmpUser.int_id : ""
         };
       });
       let filterData = [];
@@ -850,32 +707,53 @@ export default {
       "messageSendFile",
       "getListMessageType"
     ]),
+    ...mapActions("chat", [
+      "getRoomList",
+      "getRoomListFetch",
+      "getMessageListFetch",
+      "createRoom"
+    ]),
     ...mapMutations("message", ["emitCloseFalse", "setIsCreated"]),
     ...mapMutations("chat", ["setMessageList", "setEmitMessage"]),
     async messageInfiniteHandler($state) {
-      const room_id = this.$route.params.id;
-      const query = this.messageQuery;
-      const getData = await this.$store.dispatch(
-        `chat/${actionTypes.CHAT.MESSAGE_LIST_INFINITE}`,
-        {
-          params: this.messageQuery,
-          id: room_id,
-          end: "messages"
+      // const room_id = this.roomIdPush ? this.roomIdPush : this.$route.params.id;
+      if (this.tag.length < 2) {
+        if (this.roomId) {
+          this.checkList = false;
+          const getData = await this.$store.dispatch(
+            `chat/${actionTypes.CHAT.MESSAGE_LIST_INFINITE}`,
+            {
+              params: this.messageQuery,
+              id: this.roomId,
+              end: "messages"
+            }
+          );
+          console.log("getData Message", getData);
+          if (getData && getData.length == 0 && this.messagesList.length == 0) {
+            this.checkList = true;
+          }
+          // console.log("getData id", getData[getData.length - 1].id);
+          if (getData && getData.length) {
+            this.messageQuery.from_message_id = getData[0].id;
+            this.messageQuery.fetch_type = "prior";
+            const dataClone = cloneDeep(getData);
+            // this.messagesList.push(...dataClone.reverse());
+            if (this.messagesList.length >= 30) {
+              this.messagesList = dataClone.reverse().concat(this.messagesList);
+            } else {
+              this.messagesList.push(...getData);
+            }
+
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        } else {
+          this.checkList = true;
+          $state.complete();
         }
-      );
-      console.log("getData Message", getData);
-      // if (getData && !getData.messages && this.messagesList.length == 0) {
-      //   this.checkList = true;getData[getData.length - 1].id;
-      // }
-      // console.log("getData id", getData[getData.length - 1].id);
-      if (getData && getData.length) {
-        this.messageQuery.from_message_id = getData[getData.length - 1].id;
-        this.messageQuery.fetch_type = "prior";
-        // const dataClone = cloneDeep(getData);
-        // this.messagesList.push(...dataClone.reverse());
-        this.messagesList.push(...getData);
-        $state.loaded();
       } else {
+        this.checkList = true;
         $state.complete();
       }
     },
@@ -1003,11 +881,48 @@ export default {
       }
     },
     handleEmitMessage() {
-      const dataEmit = {
-        room_id: this.$route.params.id,
-        text: this.textChat
-      };
-      this.setEmitMessage(dataEmit);
+      if (this.tag.length == 0) {
+        if (this.textChat != "") {
+          const dataEmit = {
+            room_id: this.$route.params.id,
+            text: this.textChat
+          };
+          this.setEmitMessage(dataEmit);
+          this.getRoomList();
+        }
+      } else if (this.tag.length == 1) {
+        if (this.textChat != "") {
+          const dataEmit = {
+            room_id: this.roomIdPush,
+            text: this.textChat
+          };
+          this.$emit("emitMessageTag1", dataEmit, this.roomIdPush);
+          this.setIsCreated(false);
+        }
+        // this.$router.push(`/messages/t/${this.roomIdPush}`);
+        // console.log("this.textChat", this.textChat);
+        // const dataTextChat = this.textChat;
+
+        // this.setEmitMessage(dataEmit);
+        // this.getRoomList();
+      } else {
+        if (this.textChat != "") {
+          const data = {
+            type: constants.CHAT.PUBLIC_GROUP,
+            member_ids: this.tag
+          };
+          this.createRoom(data).then(result => {
+            if (result.data) {
+              const dataEmit = {
+                room_id: result.data.id,
+                text: this.textChat
+              };
+              this.$emit("emitMessageTag2", dataEmit, this.roomIdPush);
+              this.setIsCreated(false);
+            }
+          });
+        }
+      }
       this.textChat = "";
       // this.emitCloseFalse(false, this.isGroup);
       // await this.uploadFile();
@@ -1106,36 +1021,59 @@ export default {
       // this.removeImgSrc();
     },
     changeUser() {
-      console.log("[option]", this.tag.length);
+      console.log("[option]", this.tag, this.tag.length);
       if (this.tag.length == 0) {
+        this.checkList = false;
+        this.roomId = this.$route.params.id;
         this.roomIdPush = "";
-        this.getMessageList({
-          params: {
-            room_id: this.$route.params.id
-          }
-        });
+        this.messagesList = [];
+        this.infiniteId += 1;
+        this.messageQuery.from_message_id = null;
+        this.messageQuery.fetch_type = null;
+        // const data = {
+        //   id: this.$route.params.id,
+        //   end: "messages",
+        //   params: {}
+        // };
+        // this.getMessageListFetch(data);
       } else if (this.tag.length == 1) {
         const data = {
-          type: 1,
-          members: this.tag[0].toString(),
-          name: this.name ? this.name : ""
+          friend_id: this.tag[0],
+          fetch_type: constants.CHAT.FETCH_PRIVATE_ROOM_BY_FRIEND_ID
         };
-        this.createGroup(data).then(result => {
-          if (result.success == true) {
-            console.log("[result]", result.data.id);
-            this.roomIdPush = result.data.id;
-            this.getMessageList({
-              params: {
-                room_id: result.data.id
-              }
-            });
+        this.getRoomListFetch({ params: data }).then(result => {
+          if (result) {
+            console.log("[result]", result);
+            this.roomIdPush = result.room ? result.room.id : "";
+            this.roomId = result.room ? result.room.id : "";
+
+            const data = {
+              id: result.room ? result.room.id : "",
+              end: "messages",
+              params: {}
+            };
+            this.checkList = false;
+            this.messagesList = [];
+            this.infiniteId += 1;
+            this.messageQuery.from_message_id = null;
+            this.messageQuery.fetch_type = null;
+            // this.$nextTick(() => {
+            // });
+            // this.getMessageListFetch(data);
+
             // this.$router.push(`/messages/t/${result.data.id}`);
           } else {
             this.$toasted.error(result.message);
           }
         });
       } else {
-        this.messagesList = [];
+        this.roomId = "";
+        this.checkList = true;
+        // this.roomIdPush = "";
+        // this.messagesList = [];
+        // this.infiniteId += 1;
+        // this.messageQuery.from_message_id = null;
+        // this.messageQuery.fetch_type = null;
       }
     },
     removeImgSrc() {
@@ -1147,17 +1085,23 @@ export default {
     }
   },
   created() {
-    this.messageListQuery.room_id = this.$route.params.id;
+    this.roomId = this.$route.params.id;
   },
   watch: {
     messageOn(_newVal) {
       if (_newVal) {
+        this.getRoomList();
         console.log("[messageOn]", _newVal);
         // console.log("data", data);
         // this.messagesList.unshift(_newVal);
         this.messagesList.push(_newVal);
-        // console.log("[this.messagesList]", this.messagesList);
-        // img_url: { low: _newVal.img_url }
+        this.$nextTick(() => {
+          const el = document.getElementById("content-message");
+          // console.log("el.scrollTop", el.scrollTop, el.scrollHeight);
+          if (el && el.scrollHeight - el.scrollTop <= 500) {
+            el.scrollTop = el.scrollHeight;
+          }
+        });
       }
     },
     // messageList(_newVal) {
@@ -1179,22 +1123,42 @@ export default {
         // this.messageQuery.fetch_type = null;
       }
     },
-    isCreated(_newVal) {
+    // isCreated(_newVal) {
+    //   console.log("_newVal", _newVal);
+    //   if (_newVal == false && this.tag.length > 0) {
+    //     this.getMessageList({
+    //       params: {
+    //         room_id: this.$route.params.id
+    //       }
+    //     });
+    //   }
+    // },
+    messageRes(_newVal) {
       console.log("_newVal", _newVal);
-      if (_newVal == false && this.tag.length > 0) {
-        this.getMessageList({
-          params: {
-            room_id: this.$route.params.id
+      if (_newVal) {
+        this.getRoomList();
+        // this.messagesList.unshift(_newVal);
+        this.messagesList.push(_newVal);
+        this.$nextTick(() => {
+          const el = document.getElementById("content-message");
+          if (
+            el &&
+            el.scrollTop &&
+            el.scrollHeight &&
+            el.scrollTop != el.scrollHeight
+          ) {
+            el.scrollTop = el.scrollHeight;
           }
         });
       }
     },
-    messageRes(_newVal) {
-      console.log("_newVal", _newVal);
-      if (_newVal) {
-        // this.messagesList.unshift(_newVal);
-        this.messagesList.push(_newVal);
-      }
+    messageListFetch(_newVal) {
+      this.messagesList = [];
+      this.$nextTick(() => {
+        this.infiniteId += 1;
+        this.messageQuery.from_message_id = null;
+        this.messageQuery.fetch_type = null;
+      });
     }
   }
 };

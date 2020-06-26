@@ -1,67 +1,102 @@
 <template>
   <div class="container">
     <h3>Danh sách học sinh</h3>
-    <div class="wrap_list-students">
-      <app-search
-        size="sm"
-        v-model="params.query"
-        @submit="handleSearch"
-        placeholder="Tìm kiếm học sinh"
-      />
-      <filter-button
-        class="mr-2"
-        :color="isFilter ? 'primary' : 'default'"
-        :outline="!isFilter"
-        size="sm"
-        @click="isFilter = !isFilter"
-      />
-      <div>
-        <app-select
-          v-if="isFilter"
-          placeholder="Năm học"
+    <div class="wrap-header-students">
+      <div class="wrap_list-students">
+        <app-search
           size="sm"
-          :options="filterYears"
-          class="mr-2"
-          clearable
-          @change="handleChangedYear"
+          v-model="params.query"
+          @input="handleChangedSearch"
+          @submit="handleSearch"
+          placeholder="Tìm kiếm học sinh"
         />
-        <app-select
-          v-if="isFilter"
-          placeholder="Lớp học"
+        <filter-button
+          class="mr-2"
+          :color="isFilter ? 'primary' : 'white'"
           size="sm"
-          class="mr-2"
-          v-model="params.class_id"
-          :options="filterClasses"
-          clearable
-          @change="handleChangedClass"
+          @click="isFilter = !isFilter"
         />
+        <div>
+          <app-select
+            v-if="isFilter"
+            placeholder="Năm học"
+            size="sm"
+            :options="filterYears"
+            class="mr-2"
+            clearable
+            :default-value="filterYears && filterYears[0] ? filterYears[0].value : null"
+            @change="handleChangedYear"
+          />
+          <app-select
+            v-if="isFilter"
+            placeholder="Lớp học"
+            size="sm"
+            class="mr-2"
+            v-model="params.class_id"
+            :options="filterClasses"
+            clearable
+            @change="handleChangedClass"
+          />
+        </div>
+        <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
+          <app-vue-select
+            class="app-vue-select w-100"
+            :options="optionYear"
+            placeholder="Năm học"
+            size="sm"
+            @input="handleChangedYear"
+            clearable
+          />
+        </div>-->
+        <!-- <app-select-school-year @input="handleChangedYear" /> -->
+        <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
+          <app-vue-select
+            class="app-vue-select w-100"
+            :options="optionClass"
+            placeholder="Lớp học"
+            size="sm"
+            @input="handleChangedClass"
+            clearable
+          />
+        <app-vue-select placeholder="Lớp học" size="sm" />-->
       </div>
-      <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
-        <app-vue-select
-          class="app-vue-select w-100"
-          :options="optionYear"
-          placeholder="Năm học"
-          size="sm"
-          @input="handleChangedYear"
-          clearable
-        />
-      </div>-->
-      <!-- <app-select-school-year @input="handleChangedYear" /> -->
-      <!-- <div class="filter-form__item" style="min-width: 11rem;" v-if="isFilter">
-        <app-vue-select
-          class="app-vue-select w-100"
-          :options="optionClass"
-          placeholder="Lớp học"
-          size="sm"
-          @input="handleChangedClass"
-          clearable
-        />
-      <app-vue-select placeholder="Lớp học" size="sm" />-->
+      <div class="filter-avg-mark">
+        <h6 class="mt-5 mb-2">Chọn cách tính điểm trung bình và tỷ lệ hoàn thành</h6>
+        <div class="d-flex align-items-center">
+          <app-select
+            size="sm"
+            v-model="params.cal_type"
+            :options="filterAvgMark"
+            @change="handleChangedAvgMark"
+            clearable
+          />
+          <i
+            v-if="checkProcess"
+            class="ml-3"
+          >* Điểm và tỷ lệ sẽ được tính dựa trên toàn bộ quá trình học tập của học sinh tính từ lúc tham gia đến niên khóa mà bạn lựa chọn.</i>
+          <i
+            v-else
+            class="ml-3"
+          >* Điểm và tỷ lệ sẽ được tính dựa vào quá trình học tập của học sinh trong niên khóa mà bạn lựa chọn.</i>
+        </div>
+      </div>
     </div>
     <div class="wrap-table">
-      <app-table :heads="heads" :data="filterStudentPrivates">
+      <app-table
+        :heads="heads"
+        :data="filterStudentPrivates"
+        @pagechange="onPageChange"
+        :pagination="filterPagination"
+        :pagination-style="{ position: 'right' }"
+        bg-table="white"
+        :ext-table-cls="{ 'pt-4': true }"
+        @sort="sortTable"
+      >
         <template v-slot:cell(name)="{row}">
           <td class="wrap-name__table">{{get(row,"name","")}}</td>
+        </template>
+        <template v-slot:cell(joint_at)="{row}">
+          <td class="wrap-name__table">{{get(row,"joint_at","")}}</td>
         </template>
         <template v-slot:cell(year)="{row}">
           <td class="wrap-name__table">{{get(row,"school_year","")}}</td>
@@ -83,17 +118,17 @@
               >
                 <IconAccountBox24px class="fill-primary ml-2" />
                 <template slot="popover">
-                  <span>Giáo viên chủ nhiệm</span>
+                  <span class="text-primary">Giáo viên chủ nhiệm</span>
                 </template>
               </v-popover>
             </div>
           </td>
         </template>
-        <template v-slot:cell(mark)="{row}">
-          <td class="wrap-name__table">{{get(row,"attendance","")}}%</td>
+        <template v-slot:cell(medium_score)="{row}">
+          <td class="wrap-name__table text-center">{{get(row,"medium_score", 0)}}</td>
         </template>
-        <template v-slot:cell(percent)="{row}">
-          <td style="width:30%">
+        <template v-slot:cell(completion_rate)="{row}">
+          <td class="wrap-name__table">
             <div class="d-flex align-items-center">
               <span class="mr-3">{{ get(row,"completion_rate","") }}%</span>
               <div class="w-100">
@@ -104,12 +139,14 @@
         </template>
       </app-table>
     </div>
+    <!--
     <app-pagination
       :pagination="filterPagination"
       :type="1"
       @pagechange="onPageChange"
       class="right-pagination"
     />
+    -->
   </div>
 </template>
 
@@ -121,15 +158,37 @@ const STORE_NAME_STUDENTS = "elearning/teaching/students";
 const STORE_NAME_CLASS = "elearning/teaching/teaching-class";
 const STORE_NAME_YEARS = "elearning/public/public-school-year";
 import IconAccountBox24px from "~/assets/svg/v2-icons/account_box_24px.svg?inline";
+import { getDateFormat } from "~/utils/moment";
 export default {
   async fetch({ params, store }) {
+    const { data = [] } = await store.dispatch(
+      `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`
+    );
+    console.log("data", data);
+    const school_year_id = data && data[0] ? data[0].id : null;
+    const queryStudent = {
+      cal_type: "SCHOOL_YEAR",
+      school_year_id: school_year_id
+    };
+    const queryClass = {
+      school_year_id: school_year_id
+    };
     await Promise.all([
       store.dispatch(
-        `${STORE_NAME_STUDENTS}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`
+        `${STORE_NAME_STUDENTS}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
+        {
+          params: queryStudent
+        }
       ),
       store.dispatch(
-        `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`
+        `${STORE_NAME_CLASS}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`,
+        {
+          params: queryClass
+        }
       )
+      // store.dispatch(
+      //   `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`
+      // )
       // store.dispatch(
       //   `${STORE_NAMESPACE}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
       //   {
@@ -152,6 +211,10 @@ export default {
           sort: "true"
         },
         {
+          name: "joint_at",
+          text: "Ngày tham gia"
+        },
+        {
           name: "year",
           text: "Năm học"
         },
@@ -160,12 +223,15 @@ export default {
           text: "Lớp"
         },
         {
-          name: "mark",
-          text: "Điểm chuyên cần"
+          name: "medium_score",
+          text: "Điểm trung bình",
+          sort: "true",
+          classTextCenter: "true"
         },
         {
-          name: "percent",
-          text: "Tỉ lệ hoàn thành các bài học và khóa học"
+          name: "completion_rate",
+          text: "Tỉ lệ hoàn thành các bài học và khóa học",
+          sort: "true"
         }
       ],
       list: [
@@ -198,7 +264,10 @@ export default {
         limit: 10,
         query: null,
         school_year: null,
-        class_id: null
+        class_id: null,
+        cal_type: "SCHOOL_YEAR",
+        sort_by: null,
+        sort_type: null
       },
       optionYear: [
         { value: "2018", text: "2018" },
@@ -211,7 +280,12 @@ export default {
         { value: "6B", text: "6B" },
         { value: "-1", text: "Khác" }
       ],
-      isFilter: false
+      filterAvgMark: [
+        { value: "SCHOOL_YEAR", text: "Theo từng năm học" },
+        { value: "PROCESS", text: "Theo quá trình học" }
+      ],
+      isFilter: false,
+      checkProcess: false
     };
   },
   computed: {
@@ -219,14 +293,22 @@ export default {
     ...mapState(STORE_NAME_YEARS, ["years"]),
     ...mapState(STORE_NAME_CLASS, ["classes"]),
     filterStudentPrivates() {
-      return this.studentPrivates && this.studentPrivates.content
-        ? this.studentPrivates.content
-        : [];
+      const data =
+        this.studentPrivates && this.studentPrivates.content
+          ? this.studentPrivates.content
+          : [];
+      const dataFilter = data.map(item => {
+        return {
+          ...item,
+          joint_at: item && item.joint_at ? getDateFormat(item.joint_at) : ""
+        };
+      });
+      return dataFilter;
     },
     filterPagination() {
       return this.studentPrivates && this.studentPrivates.page
         ? this.studentPrivates.page
-        : [];
+        : {};
     },
     filterYears() {
       const data =
@@ -237,7 +319,6 @@ export default {
             text: item ? item.from_year + " - " + item.to_year : ""
           };
         });
-      data.push({ value: null, text: "Tất cả" });
       return data;
     },
     filterClasses() {
@@ -266,6 +347,14 @@ export default {
       console.log("[onPageChange]", e);
       this.params.page = e.number + 1;
       this.teachingStudentsPrivatesList({ params: this.params });
+    },
+    handleChangedSearch(val) {
+      console.log("[handleChangedSearch] val", val);
+      if (val == "") {
+        this.params.query = null;
+      } else {
+        this.params.query = val;
+      }
     },
     handleSearch() {
       this.params.page = 1;
@@ -309,6 +398,26 @@ export default {
           params: this.params
         });
       }
+    },
+    handleChangedAvgMark(val) {
+      console.log("[handleChangedAvgMark] val", val);
+      this.params.cal_type = val;
+      this.teachingStudentsPrivatesList({
+        params: this.params
+      });
+      if (val == "PROCESS") {
+        this.checkProcess = true;
+      } else {
+        this.checkProcess = false;
+      }
+    },
+    sortTable(val) {
+      console.log("[sortTable] val", val);
+      this.params.sort_by = val.sortBy;
+      this.params.sort_type = val.order;
+      this.teachingStudentsPrivatesList({
+        params: this.params
+      });
     }
   }
 };

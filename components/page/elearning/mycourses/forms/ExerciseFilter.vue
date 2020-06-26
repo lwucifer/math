@@ -3,14 +3,14 @@
     <div class="d-flex">
       <div
         class="ml-0 filter-form__item filter-form__item--search border-0"
-        style="max-width: 36rem; min-width: 30rem;"
+        style="max-width: 33rem; min-width: 28rem;"
       >
         <app-search
           class="w-100"
           size="sm"
           placeholder="Nhập để tìm kiếm"
           bordered
-          v-model="filters.keyword"
+          v-model="filters.query"
           @input="handleChangedSearch"
           @keyup.enter.native="handleSubmitSearch"
           @submit="submit"
@@ -42,7 +42,7 @@
           class="app-vue-select w-100"
           :options="rateOpts"
           :reduce="item => item.value"
-          v-model="filters.rate"
+          v-model="filters.status"
           label="text"
           placeholder="Trạng thái"
           @input="handleSelectRate"
@@ -50,15 +50,15 @@
           has-border
         />
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
+      <div class="filter-form__item" v-if="filterSelect" style="min-width: 13.7rem;">
         <app-vue-select
           class="app-vue-select w-100"
-          :options="rateOpts"
+          :options="optionOpts"
           :reduce="item => item.value"
-          v-model="filters.rate"
+          v-model="filters.required"
           label="text"
           placeholder="Hình thức"
-          @input="handleSelectRate"
+          @input="handleSelectOption"
           :all-opt="allOpt"
           has-border
         />
@@ -84,8 +84,9 @@
         filterSelect:false,
         filters: {
           type: null,
-          keyword: '',
-          rate: null,
+          query: '',
+          status: null,
+          required: null
         },
         types: [
           {
@@ -107,9 +108,23 @@
             text: 'Không đạt'
           },
           {
+            value: ELEARNING_STATUSES.NONE,
+            text: 'Chưa làm'
+          },
+          {
             value: ELEARNING_STATUSES.PENDING,
             text: 'Chưa chấm'
           },
+        ],
+        options: [
+          {
+            value: true,
+            text: 'Bắt buộc'
+          },
+          {
+            value: false,
+            text: 'Không bắt buộc'
+          }
         ],
         initStatus: true
       }
@@ -129,6 +144,9 @@
       },
       rateOpts() {
         return [this.allOpt, ...this.rates]
+      },
+      optionOpts() {
+        return [this.allOpt, ...this.options]
       }
     },
     methods: {
@@ -146,6 +164,9 @@
       handleChangedSearch(val) {
         this.$emit('changedQuery', val)
       },
+      handleSelectOption(val) {
+        this.$emit('changedOption', val)
+      },
       handleSubmitSearch(e) {
         this.$emit('submitSearch', e.target.value)
       },
@@ -161,8 +182,9 @@
         }
       },
       resetForm() {
-        this.filters.rate = null
+        this.filters.status = null
         this.filters.type = null
+        this.filters.required = null
         this.filters.query = ''
       }
     }

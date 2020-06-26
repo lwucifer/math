@@ -10,7 +10,12 @@
         maxlength="80"
       />
       <h2 class="cc-box__title heading-6" v-else>
-        Bài {{ index + 1 }}: {{ exerciseNameModel.length > 40 ? (exerciseNameModel.slice(0, 40) + "...") :  exerciseNameModel}}
+        Bài {{ index + 1 }}:
+        {{
+          exerciseNameModel.length > 40
+            ? exerciseNameModel.slice(0, 40) + "..."
+            : exerciseNameModel
+        }}
       </h2>
     </div>
 
@@ -92,7 +97,7 @@ export default {
     }),
     ...mapState("elearning/create", {
       lesson: "lesson",
-    })
+    }),
   },
 
   data() {
@@ -137,13 +142,7 @@ export default {
       if (get(result, "success", false)) {
         this.$toasted.success(get(result, "message", ""));
         this.isEditExerciseName = false;
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          this.$store.dispatch("elearning/create/getLessons");
-        }
+        this.$store.dispatch("elearning/create/getLessons");
 
         return;
       }
@@ -168,20 +167,14 @@ export default {
       this.handleCancel();
       if (get(result, "success", false)) {
         this.$toasted.success(get(result, "message", ""));
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        const lesson_id = get(this, "lesson.id", "");
+        this.$store.dispatch("elearning/create/getLesson", lesson_id);
 
         return;
       }
       this.$toasted.error(get(result, "message", ""));
     },
-  }
+  },
 };
 </script>
 

@@ -2,10 +2,11 @@
   <div class="e-exercise-list-item text-center bg-white" :class="classes">
     <h3 class="e-exercise-list-item__name heading-5 mb-3">{{ name }}</h3>
     <div class="e-exercise-list-item__desc mb-3">
-      <span class="text-primary">{{ type | getExerciseTypeText }}</span>
-      <app-divider class="e-exercise-list-item__divider" direction="vertical" />
-      <span class="text-gray">Thời gian:</span>
-      <b class="text-dark">{{ getDurationText(duration) }}</b>
+      <span v-if="isTest" class="text-primary">{{ type | getTestTypeText }}</span>
+      <span v-else class="text-primary">{{ type | getExerciseTypeText }}</span>
+      <app-divider class="e-exercise-list-item__divider" direction="vertical" v-if="duration"/>
+      <span class="text-gray" v-if="duration">Thời gian:</span>
+      <b class="text-dark" v-if="duration">{{ getDurationText(duration) }}</b>
     </div>
 
     <app-button
@@ -29,8 +30,8 @@
       color="secondary"
       size="sm"
       :pointer="canDoExercise"
-      @click.prevent="handleDoExercise"
-      >Làm lại {{ exerciseTextTransform }} ({{ works }}/{{ reworks }})</app-button
+      @click.prevent="handleReviewResult"
+      >Làm lại {{ exerciseTextTransform }} ({{ reworksTransform }})</app-button
     >
 
     <app-button
@@ -130,12 +131,20 @@ export default {
       return isBeforeNow(this.deadline);
     },
 
+    isTest() {
+      return !this.currentLession;
+    },
+
     exerciseTextTransform() {
-      if(!this.currentLession) {
+      if(this.isTest) {
         return "bài kiểm tra";
       } else {
-        return " bài tập";
+        return "bài tập";
       }
+    },
+
+    reworksTransform() {
+      return this.reworks ? `${this.works}/${this.reworks}` : 'Không giới hạn';
     }
   },
 
@@ -165,6 +174,7 @@ export default {
         reworks: this.reworks,
         works: this.works,
         open_time: this.open_time,
+        required: this.required
       });
 
       // show befor begin exercise
@@ -173,6 +183,19 @@ export default {
 
     handleReviewResult() {
       console.log("[handleReviewResult]");
+      // set current exercise for redo exercise
+      this.setStudyExerciseCurrent({
+        id: this.id,
+        name: this.name,
+        type: this.type,
+        duration: this.duration,
+        questions: this.questions,
+        result: this.result,
+        reworks: this.reworks,
+        works: this.works,
+        open_time: this.open_time,
+        required: this.required
+      });
       // get review result
       this.elearningSudyExerciseResultList({ exercise_id: this.id});
       // show review result

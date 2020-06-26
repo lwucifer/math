@@ -1,29 +1,36 @@
 <template>
   <div class="e-exercise-do-exercise">
     <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center">
-      {{ currentExercise.name }} - {{ type | getExerciseTypeText }}
+      {{ currentExercise.name }} - {{ currentExercise.type | getExerciseTypeText }}
     </h1>
-    <div class="text-center font-weight-semi-bold heading-5 mb-15">
+    <div class="text-center font-weight-semi-bold heading-5 mb-15" >
       <span v-if="studyMode != doingExerciseMode">
         Số câu hỏi:
         <span class="text-secondary mr-6">{{ currentExercise.questions }}</span>
       </span>
 
-      <!-- v-if -->
-      <span v-else>
+      <span v-if="currentExercise.required">
         Thời gian làm bài:
         <span class="text-secondary">{{ currentExercise.duration }} phút</span>
       </span>
-      <!-- v-else -->
-      <span style="padding-left: 3.6rem;">
+      <span v-else>
+        Thời gian làm bài:
+        <span class="text-secondary">Không giới hạn</span>
+      </span>
+
+      <span style="padding-left: 3.6rem;" v-if="currentExercise.required">
         Thời gian còn lại:
         <!-- countdown clock here -->
         <span class="text-secondary e-exercise-do-exercise__countdown">{{
           countdown
         }}</span>
       </span>
+      <span style="padding-left: 3.6rem;" v-else>
+        Thời gian còn lại:
+        <span class="text-secondary e-exercise-do-exercise__countdown">Không giới hạn</span>
+      </span>
     </div>
-    <div v-if="!!currentExerciseQuestion">
+    <template v-if="!!currentExerciseQuestion">
       <ElearningExerciseDoExerciseChoice
         v-if="currentExerciseQuestion.type === EXERCISE_TYPES.CHOICE"
         :questionId="currentExerciseQuestion.id"
@@ -32,7 +39,7 @@
         v-else-if="currentExerciseQuestion.type === EXERCISE_TYPES.ESSAY"
         :questionId="currentExerciseQuestion.id"
       />
-    </div>
+    </template>
   </div>
 </template>
 
@@ -53,13 +60,13 @@ export default {
     ElearningExerciseDoExerciseEssay
   },
 
-  props: {
-    type: {
-      type: String,
-      default: EXERCISE_TYPES.ESSAY,
-      validator: value => Object.values(EXERCISE_TYPES).includes(value)
-    }
-  },
+  // props: {
+  //   type: {
+  //     type: String,
+  //     default: EXERCISE_TYPES.ESSAY,
+  //     validator: value => Object.values(EXERCISE_TYPES).includes(value)
+  //   }
+  // },
 
   data() {
     return {

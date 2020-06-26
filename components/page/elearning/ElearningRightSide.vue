@@ -63,7 +63,7 @@
         class="text-uppercase mt-3 mb-3"
         v-if="isDoneElearning"
       >
-        <IconDone24px /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
+        <IconDone24px /> &nbsp; ĐÃ HOÀN THÀNH {{ title.toUpperCase() }}
       </app-button>
     </div>
 
@@ -74,15 +74,6 @@
       @click.prevent="handleAddToCart"
       >CHỌN MUA</app-button
     >
-
-    <!-- <app-button
-      color="primary"
-      fullWidth
-      square
-      class="text-uppercase mt-3 mb-3"
-    >
-      <IconDone24px /> &nbsp; BÀI GIẢNG ĐÃ HOÀN THÀNH
-    </app-button> -->
 
     <app-alert
       v-if="get(info, 'is_study', false)"
@@ -106,18 +97,27 @@
         <IconInsertComment class="icon" />
         Số bài học: {{ get(info, "lessons", 0) }} bài
       </li>
-      <li v-if="get(info, 'starttime_enable', false)">
-        <IconInsertComment class="icon" />
-        Bắt đầu: {{ get(info, "start_time", "") }}
-      </li>
-      <li v-if="get(info, 'endtime_enable', false)">
-        <IconInsertComment class="icon" />
-        Kết thúc: {{ get(info, "end_time", "") }}
-      </li>
       <li>
         <IconTimer class="icon" />
         Thời lượng:
         {{ get(info, "duration", "01:00") }}
+      </li>
+      <li v-if="get(info, 'starttime_enable', false)">
+        <IconPlayCirleWhite24px class="icon" />
+        Bắt đầu: {{ get(info, "start_time", "") | getDateTimeHH_MM_D_M_Y_DASH }}
+      </li>
+      <li v-else>
+        <IconPauseCircleOutline24px class="icon" />
+        Bắt đầu:
+        {{ get(info, "publish_date", "") | getDateTimeHH_MM_D_M_Y_DASH }}
+      </li>
+      <li v-if="get(info, 'endtime_enable', false)">
+        <IconPauseCircleOutline24px class="icon" />
+        Kết thúc: {{ get(info, "end_time", "") | getDateTimeHH_MM_D_M_Y_DASH }}
+      </li>
+      <li v-else>
+        <IconPauseCircleOutline24px class="icon" />
+        Kết thúc: không thời hạn
       </li>
       <li>
         <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,
@@ -128,9 +128,9 @@
     <app-divider class="elearning-right-side__divider my-0" />
 
     <div class="py-3 d-flex share-favourite">
-      <a class="text-info share">
+      <a class="text-info share favourite">
         <ShareNetwork
-          class="d-flex-center text-info"
+          class="d-flex-center text-info "
           network="facebook"
           :url="
             `https://schoolly.famtechvn.com/elearning/${get(
@@ -176,7 +176,6 @@
 <script>
 import { get } from "lodash";
 import qs from "qs";
-
 import IconShare from "~/assets/svg/icons/share.svg?inline";
 import IconFavoriteBorder from "~/assets/svg/v2-icons/favorite_border_24px.svg?inline";
 import IconFavorite from "~/assets/svg/v2-icons/favorite_24px.svg?inline";
@@ -187,6 +186,8 @@ import IconTimer from "~/assets/svg/v2-icons/timer_24px.svg?inline";
 import IconRemoveRedEye from "~/assets/svg/v2-icons/remove_red_eye_24px.svg?inline";
 import IconBxsShare from "~/assets/svg/icons/bxs-share.svg?inline";
 import IconDone24px from "~/assets/svg/v2-icons/done_24px.svg?inline";
+import IconPlayCirleWhite24px from "~/assets/svg/v2-icons/play_circle_filled_white_24px.svg?inline";
+import IconPauseCircleOutline24px from "~/assets/svg/v2-icons/pause_circle_outline_24px.svg?inline";
 import Favourite from "~/services/elearning/study/Favourite";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { createOrderPaymentReq } from "~/models/payment/OrderPaymentReq";
@@ -195,6 +196,8 @@ import { RESPONSE_SUCCESS } from "~/utils/config.js";
 import JoinService from "~/services/elearning/Join";
 import ElearningRequestCode from "~/components/page/elearning/ElearningRequestCode";
 import PaymentModal from "~/components/page/payment/PaymentModal";
+import { getLocalDateTime } from "~/utils/moment";
+import moment from "moment";
 
 export default {
   components: {
@@ -210,6 +213,8 @@ export default {
     PaymentModal,
     IconDone24px,
     ElearningRequestCode,
+    IconPlayCirleWhite24px,
+    IconPauseCircleOutline24px,
   },
 
   data() {
@@ -245,6 +250,7 @@ export default {
       if (get(this, "info.progress", "-1") >= 100) return true;
       return false;
     },
+
     description() {
       let html = get(this, "info.description", "");
       let div = document.createElement("div");
@@ -264,6 +270,18 @@ export default {
         default:
           break;
       }
+    },
+
+    noteElearningNotTimeYet() {
+      const start_time = get(this, "info.start_time", "");
+      const type = get(this, "info.type", "");
+      const start_time_format = getLocalDateTime(start_time).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      if (type === "LECTURE") {
+        return `Bài giảng sẽ bắt đầu vào lúc ${start_time_format}. Xin vui lòng quay lại sau !`;
+      }
+      return `Khoá học sẽ bắt đầu vào lúc ${start_time_format}. Xin vui lòng quay lại sau !`;
     },
   },
 
@@ -331,18 +349,38 @@ export default {
 
     async handleStudy() {
       const elearning_id = get(this, "info.id", "");
+      const starttime_enable = get(this, "info.starttime_enable", false);
+      const start_time = get(this, "info.start_time", "");
+      const is_private = get(this, "info.is_private", false);
+      const is_study = get(this, "info.is_study", false);
+      const free = get(this, "info.elearning_price.free", false);
 
-      if (get(this, "info.is_study", false)) {
+      if (starttime_enable) {
+        try {
+          const start_time_timestamp = moment(
+            getLocalDateTime(start_time)
+          ).format("x");
+          const now_timestamp = moment().format("x");
+          if (now_timestamp < start_time_timestamp) {
+            this.$toasted.error(this.noteElearningNotTimeYet);
+            return;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      if (is_study) {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }
 
-      if (get(this, "info.is_private", false)) {
+      if (is_private) {
         this.showRequestCode = true;
         return;
       }
 
-      if (get(this, "info.elearning_price.free", false)) {
+      if (free) {
         const payload = {
           elearning_id,
         };
@@ -364,6 +402,12 @@ export default {
         this.$router.push(`/elearning/${elearning_id}/study`);
         return;
       }
+
+      if (get(res, "code", "") === "SCLC_1245") {
+        this.$toasted.error(this.noteElearningNotTimeYet);
+        return;
+      }
+
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
 

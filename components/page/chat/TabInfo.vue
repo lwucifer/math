@@ -87,8 +87,10 @@
         <template #header>MỌI NGƯỜI</template>
 
         <template #button>
-          <IconAddGreen class="fill-primary mr-2 vertical-middle" width="14px" height="14px" />
-          <span class="text-primary">Thêm người</span>
+          <div @click="visibleAddMember = true">
+            <IconAddGreen class="fill-primary mr-2 vertical-middle" width="14px" height="14px" />
+            <span class="text-primary">Thêm người</span>
+          </div>
         </template>
 
         <template #body>
@@ -103,16 +105,25 @@
             </div>
 
             <div class="position text-disabled" v-if="item.creator">Người tạo</div>
+
+            <div v-else>
+              <v-popover placement="center">
+                <IconDots class="fill-gray" />
+
+                <template slot="popover">
+                  <p class="mb-3">
+                    <n-link to class="text-dark">Xem trang cá nhân</n-link>
+                  </p>
+                  <p class="mb-3">
+                    <n-link to class="text-dark">Nhắn tin</n-link>
+                  </p>
+                  <p @click.stop="handleRemoveMember(item)">
+                    <n-link to class="text-secondary">Xoá khỏi nhóm</n-link>
+                  </p>
+                </template>
+              </v-popover>
+            </div>
           </div>
-
-          <!-- <div class="d-flex justify-content-between align-items-center">
-              <div class="user-add d-flex align-items-center">
-                <img src="/images/tmp/user-photo.png" alt class="mr-3" />
-                <p>Albert Cooper</p>
-              </div>
-
-              <div class="position text-disabled">Người tạo</div>
-          </div>-->
         </template>
       </ListInfoBox>
 
@@ -128,14 +139,6 @@
             <IconFileBlank class="fill-info mr-2" />
             <span class="my-auto text-info">{{item && item.name ? item.name : "Lorem, ipsum."}}</span>
           </p>
-          <!-- <p class="mb-3 d-flex align-content-center">
-            <IconFileBlank class="fill-info mr-2" />
-            <span class="my-auto text-info">Lorem, ipsum.</span>
-          </p>
-          <p class="d-flex align-content-center">
-            <IconFileBlank class="fill-info mr-2" />
-            <span class="my-auto text-info">Lorem, ipsum.</span>
-          </p>-->
         </template>
       </ListInfoBox>
 
@@ -147,12 +150,6 @@
             <div class="col-4 px-1">
               <img :src="item && item.src ? item.src : '/images/tmp/user-photo.png'" alt />
             </div>
-            <!-- <div class="col-4 px-1">
-              <img src="/images/tmp/user-photo.png" alt />
-            </div>
-            <div class="col-4 px-1">
-              <img src="/images/tmp/user-photo.png" alt />
-            </div>-->
           </div>
         </template>
         <client-only>
@@ -161,86 +158,19 @@
           </infinite-loading>
         </client-only>
       </ListInfoBox>
-
-      <!-- <div class="message-info__box">
-        <h5 class="message-info__box__title">File chia sẻ</h5>
-        <div class="message-info__box__content attachment">
-          <ul class="list-unstyle" v-for="(item, index) in listFile" :key="index">
-            <li>
-              <a>{{ item.file_name_upload }}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="message-info__box">
-        <h5 class="message-info__box__title">Ảnh chia sẻ</h5>
-        <div class="message-info__box__content images-attachment" v-if="listImage.length > 0">
-          <ul class="list-unstyle">
-            <li v-for="(item, index) in listImage" :key="index">
-              <n-link to>
-                <img :src="item.img_url && item.img_url.low ? item.img_url.low : ''" />
-              </n-link>
-            </li>
-          </ul>
-        </div>
-        <div class="message-info__box__content" v-else></div>
-      </div>
-
-
-      <div class="message-info__box" v-if="!tabChat && typeRoom == 2">
-        <h5 class="message-info__box__title">Thành viên</h5>
-        <div
-          class="message-info__box__content"
-          v-if="memberList.listMember && memberList.listMember.length > 0"
-        >
-          <button class="d-flex-center mt-3 mb-3" @click="visibleAddMember = true">
-            <IconPlus height="20" width="20" class="mr-3" />Thêm người
-          </button>
-          <ul class="members">
-            <li v-for="(item, index) in memberListTab" :key="index" class="d-flex-center mb-3">
-              <app-avatar
-                :src="item.avatar && item.avatar.low ? item.avatar.low : ''"
-                :size="30"
-                class="mr-3"
-              />
-              <span>{{item.fullname}}</span>
-              <app-dropdown
-                position="right"
-                v-model="dropdownActions"
-                :content-width="'14rem'"
-                class="link--dropdown ml-auto pl-2"
-              >
-                <button slot="activator" type="button" class="link--dropdown__button">
-                  <IconDots class="fill-999" width="16" />
-                </button>
-                <div class="link--dropdown__content">
-                  <ul>
-                    <li>
-                      <a>Nhắn tin</a>
-                    </li>
-                    <li>
-                      <a>Xem trang cá nhân</a>
-                    </li>
-                    <li @click.stop="removeMember(item.id)">
-                      <a>Xoá khỏi nhóm</a>
-                    </li>
-                  </ul>
-                </div>
-              </app-dropdown>
-            </li>
-            <client-only>
-              <infinite-loading :identifier="infiniteId" @infinite="membersInfiniteHandler">
-                <template slot="no-more">Không còn thành viên.</template>
-              </infinite-loading>
-            </client-only>
-          </ul>
-        </div>
-      </div>-->
     </div>
 
     <!-- Modal add member -->
     <ModalAddMember @close="visibleAddMember = false" v-if="visibleAddMember" />
+
+    <app-modal-confirm
+      centered
+      v-if="showModal"
+      title
+      :description="'Bạn có chắc chắn muốn xoá ' + userName + ' ra khỏi nhóm?'"
+      @ok="removeMember"
+      @cancel="showModal = false"
+    />
   </div>
 </template>
 
@@ -284,26 +214,6 @@ export default {
   },
 
   props: {
-    // fileshare: {
-    //   type: Array,
-    //   default: () => [],
-    //   required: true
-    // },
-    // members: {
-    //   type: Array,
-    //   default: () => [],
-    //   required: true
-    // },
-    // imageshare: {
-    //   type: Array,
-    //   default: () => [],
-    //   required: true
-    // },
-    // isGroup: {
-    //   type: Boolean,
-    //   default: false,
-    //   required: true
-    // },
     noMessage: {
       type: Boolean,
       default: false
@@ -322,7 +232,11 @@ export default {
       },
       name: "",
       avatarSrc: "",
-      checkMemberList: false
+      checkMemberList: false,
+      showModal: false,
+      userName: "",
+      idUser: "",
+      avatarUrl: ""
     };
   },
   created() {
@@ -406,7 +320,13 @@ export default {
       "getGroupListDetail",
       "editAvatarGroup"
     ]),
-    ...mapActions("chat", ["changeRoomName", "getRoomDetail"]),
+    ...mapActions("chat", [
+      "changeRoomName",
+      "getRoomDetail",
+      "roomRemoveMember",
+      "uploadMedia",
+      "changeRoomAvatar"
+    ]),
     async membersInfiniteHandler($state) {
       // this.memberListQuery.room_id = this.$route.params.id;
       const { data: getData = {} } = this.$store.dispatch(
@@ -429,22 +349,6 @@ export default {
       } else {
         $state.complete();
       }
-    },
-    removeMember(id) {
-      const data = {
-        room_id: this.$route.params.id,
-        member_id: id
-      };
-      this.groupRemoveMember(data).then(result => {
-        const query = {
-          room_id: this.$route.params.id,
-          page: 1
-        };
-        if (result.success == true) {
-          this.infiniteId += 1;
-          this.getMemberList({ params: query });
-        }
-      });
     },
 
     saveNameGroup() {
@@ -472,24 +376,52 @@ export default {
         this.avatarSrc = src;
       });
       const body = new FormData();
-      body.append("room_avatar", fileList[0]);
-      body.append("room_id", this.$route.params.id);
-      console.log("[room_avatar]", fileList[0]);
+      body.append("media", fileList[0]);
+      body.append("target_id", this.$route.params.id);
+      body.append("target_type", "room");
+      body.append("target_sub", "avatar");
+      // console.log("[room_avatar]", fileList[0]);
+      await this.uploadMedia(body).then(result => {
+        if (result.data) {
+          debugger;
+          this.avatarUrl = result.data[0].path;
+          const data = {
+            id: this.$route.params.id,
+            payload: { avatar_url: result.data[0].path },
+            end: "avatar"
+          };
+          this.changeRoomAvatar(data).then(result => {
+            if (!result.error) {
+              setTimeout(() => {
+                this.$toasted.show("success");
+                this.getGroupListDetail({
+                  params: { room_id: this.$route.params.id }
+                });
+              }, 2500);
+            } else {
+              this.$toasted.error(result.message);
+            }
+          });
+        }
+      });
+    },
+    handleRemoveMember(item) {
+      this.showModal = true;
+      this.userName = item.first_name;
+      this.idUser = item.id;
+    },
+    removeMember() {
       const data = {
         id: this.$route.params.id,
-        payload: body.append("avatar", fileList[0]),
-        end: "avatar"
+        payload: { member_ids: [this.idUser] },
+        end: "members"
       };
-      this.changeRoomName(data).then(result => {
-        if (!result.error) {
-          setTimeout(() => {
-            this.$toasted.show("success");
-            this.getGroupListDetail({
-              params: { room_id: this.$route.params.id }
-            });
-          }, 2500);
-        } else {
-          this.$toasted.error(result.message);
+      this.roomRemoveMember(data).then(result => {
+        const query = {
+          room_id: this.$route.params.id
+        };
+        if (result.success == 1) {
+          this.showModal = false;
         }
       });
     }

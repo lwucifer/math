@@ -1,6 +1,9 @@
 <template>
   <div class="e-exercise-results">
-    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center">
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center" v-if="isTest">
+      {{ result.name }} - {{ result.type | getTestTypeText }}
+    </h1>
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4 text-center" v-else>
       {{ result.name }} - {{ result.type | getExerciseTypeText }}
     </h1>
 
@@ -18,7 +21,7 @@
         <span>
           Số lần làm còn lại:
           <span class="text-secondary">
-            {{ result.reworks - result.works }}
+            {{ reworksTransform }}
           </span>
         </span>
       </template>
@@ -32,7 +35,9 @@
     <div class="e-exercise-results__pane mb-4">
       <div class="row">
         <div class="col-5">Thời gian bắt đầu làm bài</div>
-        <div class="col-7">{{ result.start_time | getDateTimeFullText | capitalizeFirstLetter }}</div>
+        <div class="col-7">
+          {{ result.start_time | getDateTimeFullText | capitalizeFirstLetterOfString }}
+        </div>
       </div>
       <div class="row">
         <div class="col-5">Tổng thời gian làm bài</div>
@@ -62,11 +67,9 @@
         >{{ btnTextView }}</app-button
       >
       <app-button
-        v-else-if="
-          result.result === EXERCISE_STATUS.FAILED &&
-            result.reworks - result.works > 0
-        "
-        >Làm lại bài tập</app-button
+        v-else-if="(result.result === EXERCISE_STATUS.FAILED || result.result === EXERCISE_STATUS.NONE) && isReworkable"
+        @click.prevent="handleDoExercise"
+        >Làm lại {{ exerciseTextTransform }}</app-button
       >
     </div>
 
@@ -91,9 +94,9 @@
 </template>
 
 <script>
-import { EXERCISE_TYPES, EXERCISE_STATUS } from "~/utils/constants";
+import { EXERCISE_TYPES, EXERCISE_STATUS, STUDY_MODE } from "~/utils/constants";
 import { getExerciseResultText } from "~/plugins/filters";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 
 import { mapState } from "vuex";
 import { RESPONSE_SUCCESS } from "~/utils/config";
@@ -126,10 +129,11 @@ export default {
   },
 
   computed: {
-    ...mapState("elearning/study/study-exercise", ["result"]),
+    ...mapState("elearning/study/study-exercise", ["result", "currentLession"]),
 
     resultRate() {
-      return `${this.result.mark || 0}/${this.result.max_score || 0} (${getExerciseResultText(this.result.result)})`;
+      return `${this.result.mark || 0}/${this.result.max_score ||
+        0} (${getExerciseResultText(this.result.result)})`;
     },
 
     btnTextView() {
@@ -139,6 +143,29 @@ export default {
       } else if (exerciseType == EXERCISE_TYPES.ESSAY) {
         return "Xem nhận xét";
       }
+    },
+
+    isTest() {
+      return !this.currentLession;
+    },
+
+    exerciseTextTransform() {
+      if (this.isTest) {
+        return "bài kiểm tra";
+      } else {
+        return "bài tập";
+      }
+    },
+
+    reworksTransform() {
+      return this.result.reworks
+        ? `${this.result.reworks - this.result.works}/${this.result.reworks}`
+        : "Không giới hạn";
+    },
+
+    isReworkable() {
+      if (!this.result.reworks) return true;
+      return this.result.reworks > this.result.works;
     }
   },
 
@@ -149,6 +176,8 @@ export default {
     ...mapActions("elearning/study/study-exercise", [
       "elearningSudyExerciseQuestionList"
     ]),
+
+    ...mapMutations("event", ["setStudyMode"]),
 
     handleShowComment() {
       console.log("[handleShowComment]");
@@ -170,6 +199,12 @@ export default {
           }
         });
       });
+    },
+
+    handleDoExercise() {
+      console.log("[handleDoExercise]");
+      // show befor begin exercise
+      this.setStudyMode(STUDY_MODE.DO_EXERCISE_BEFORE_BEGIN);
     }
   }
 };

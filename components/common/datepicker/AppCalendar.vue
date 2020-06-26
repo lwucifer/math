@@ -6,10 +6,10 @@
         <IconCalendarArrowDown class="icon fill-opacity-1" />
       </div>
       <div class="app-calendar__nav-right">
-        <button class="app-calendar__nav-btn" @click="prevMonth">
+        <button class="app-calendar__nav-btn" @click="$_calendarMixin_prevMonth">
           <IconCalendarChevronLeft class="icon fill-opacity-1" />
         </button>
-        <button class="app-calendar__nav-btn" @click="nextMonth">
+        <button class="app-calendar__nav-btn" @click="$_calendarMixin_nextMonth">
           <IconCalendarChevronRight class="icon fill-opacity-1" />
         </button>
       </div>
@@ -19,20 +19,20 @@
       <app-calendar-date
         v-show="pickMode === PICK_MODES.DATE"
         :dates="dataDates"
-        :value="date"
-        :is-match-date="localValue.isSame(new Date(year, month, date), 'day')"
-        @change="handleChangeDate"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'month')"
+        :active-dates="[this.localValue.date()]"
+        @change="$_calendarMixin_handleChangeDate"
       />
       <app-calendar-month
         v-show="pickMode === PICK_MODES.MONTH"
         :value="month"
-        :is-match-date="localValue.isSame(new Date(year, month, date), 'month')"
-        @change="handleChangeMonth"
+        :is-match-date="localValue.isSame(new Date(year, month, date), 'year')"
+        @change="$_calendarMixin_handleChangeMonth"
       />
       <app-calendar-year
         v-show="pickMode === PICK_MODES.YEAR"
         :value="year"
-        @change="handleChangeYear"
+        @change="$_calendarMixin_handleChangeYear"
       />
     </div>
   </div>
@@ -40,30 +40,31 @@
 
 <script>
 import moment from "moment";
+import calendarMixin from "~/mixins/calendar";
 import IconCalendarChevronLeft from "~/assets/svg/icons/calendar-chevron-left.svg?inline";
 import IconCalendarChevronRight from "~/assets/svg/icons/calendar-chevron-right.svg?inline";
 import IconCalendarArrowDown from "~/assets/svg/icons/calendar-arrow-down.svg?inline";
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "Novemeber",
-  "Decemeber"
-];
-const DAYS = ["M", "T", "W", "Th", "F", "Sa", "S"];
-const PICK_MODES = {
-  DATE: "DATE",
-  MONTH: "MONTH",
-  YEAR: "YEAR"
-};
+// const MONTHS = [
+//   "January",
+//   "February",
+//   "March",
+//   "April",
+//   "May",
+//   "June",
+//   "July",
+//   "August",
+//   "September",
+//   "October",
+//   "Novemeber",
+//   "Decemeber"
+// ];
+// const DAYS = ["M", "T", "W", "Th", "F", "Sa", "S"];
+// const PICK_MODES = {
+//   DATE: "DATE",
+//   MONTH: "MONTH",
+//   YEAR: "YEAR"
+// };
 
 export default {
   components: {
@@ -72,135 +73,153 @@ export default {
     IconCalendarArrowDown
   },
 
-  model: {
-    prop: "value",
-    event: "change"
-  },
+  mixins: [calendarMixin],
 
-  props: {
-    value: {
-      type: Object,
-      default: () => moment(),
-      validator: value => value instanceof moment
-    },
-    format: {
-      type: String,
-      default: "DD/MM/YYYY"
-    }
-  },
+  // model: {
+  //   prop: "value",
+  //   event: "change"
+  // },
 
-  data() {
-    const initialValue =
-      this.value instanceof moment
-        ? this.value
-        : moment(new Date(), this.format);
+  // props: {
+  //   value: {
+  //     type: Object,
+  //     default: () => moment(),
+  //     validator: value => value instanceof moment
+  //   },
+  //   format: {
+  //     type: String,
+  //     default: undefined
+  //   }
+  // },
 
-    return {
-      month: initialValue.month(),
-      year: initialValue.year(),
-      date: initialValue.date(),
-      MONTHS: Object.freeze(MONTHS),
-      DAYS: Object.freeze(DAYS),
-      PICK_MODES: Object.freeze(PICK_MODES),
-      localValue: initialValue,
-      pickMode: PICK_MODES.DATE,
-      dataDates: []
-    };
-  },
+  // data() {
+  //   const initialValue =
+  //     this.value instanceof moment
+  //       ? this.value
+  //       : moment(new Date(), this.format);
 
-  created() {
-    this.getDays();
-  },
+  //   return {
+  //     month: initialValue.month(),
+  //     year: initialValue.year(),
+  //     date: initialValue.date(),
+  //     MONTHS: Object.freeze(MONTHS),
+  //     DAYS: Object.freeze(DAYS),
+  //     PICK_MODES: Object.freeze(PICK_MODES),
+  //     localValue: initialValue,
+  //     pickMode: PICK_MODES.DATE,
+  //     dataDates: []
+  //   };
+  // },
 
-  watch: {
-    month(newValue) {
-      this.getDays();
-    },
+  // created() {
+  //   this.getDays();
+  // },
 
-    year(newValue) {
-      this.getDays();
-    },
+  // watch: {
+  //   month(newValue) {
+  //     this.getDays();
+  //   },
 
-    value(newValue) {
-      this.localValue = newValue;
-    },
+  //   year(newValue) {
+  //     this.getDays();
+  //   },
 
-    localValue(newValue) {
-      this.$emit("change", newValue);
-    }
-  },
+  //   value(newValue) {
+  //     this.localValue = newValue;
+  //   },
 
-  methods: {
-    getDays() {
-      const firstDay = new Date(this.year, this.month, 1);
-      const lastDay = new Date(this.year, this.month + 1, 0);
-      let offset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-      let dayCount = -offset + 1;
-      let tmpDataDates = [];
+  //   localValue(newValue) {
+  //     this.$emit("change", newValue);
+  //   }
+  // },
 
-      for (let i = 0; i < 6; i++) {
-        tmpDataDates[i] = [];
+  // methods: {
+  //   getDays() {
+  //     const firstDay = new Date(this.year, this.month, 1);
+  //     const lastDay = new Date(this.year, this.month + 1, 0);
+  //     let offset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+  //     let dayCount = -offset + 1;
+  //     let tmpDataDates = [];
 
-        for (let j = 0; j < 7; j++) {
-          if (dayCount > 42) {
-            break;
-          }
-          tmpDataDates[i][j] = {
-            index: dayCount,
-            date: new Date(this.year, this.month, dayCount).getDate(),
-            current: dayCount > 0 && dayCount < lastDay.getDate()
-          };
-          dayCount++;
-        }
-      }
+  //     for (let i = 0; i < 6; i++) {
+  //       tmpDataDates[i] = [];
 
-      this.dataDates = tmpDataDates;
-    },
+  //       for (let j = 0; j < 7; j++) {
+  //         if (dayCount > 42) {
+  //           break;
+  //         }
+  //         tmpDataDates[i][j] = {
+  //           index: dayCount,
+  //           date: new Date(this.year, this.month, dayCount).getDate(),
+  //           current: dayCount > 0 && dayCount <= lastDay.getDate()
+  //         };
+  //         dayCount++;
+  //       }
+  //     }
 
-    nextMonth() {
-      if (this.month < 11) {
-        this.month += 1;
-      }
-      console.log("this.month", this.month);
-    },
+  //     this.dataDates = tmpDataDates;
+  //   },
 
-    prevMonth() {
-      if (this.month > 0) {
-        this.month -= 1;
-      }
-      console.log("this.month", this.month);
-    },
+  //   nextMonth() {
+  //     if (this.month < 11) {
+  //       this.month += 1;
+  //     } else {
+  //       this.year += 1;
+  //       this.month = 0;
 
-    nextYear() {
-      this.year += 1;
-    },
+  //       const currentPickMode = this.pickMode;
+  //       this.$nextTick(() => {
+  //         this.pickMode = currentPickMode;
+  //       })
+  //     }
 
-    prevYear() {
-      this.year -= 1;
-    },
+  //   },
 
-    handleChangeDate(index) {
-      const value = moment(new Date(this.year, this.month, index), this.format);
-      this.date = value.date();
-      this.month = value.month();
-      this.year = value.year();
-      this.localValue = value;
+  //   prevMonth() {
+  //     if (this.month > 0) {
+  //       this.month -= 1;
+  //     } else {
+  //       this.year -= 1;
+  //       this.month = 11;
 
-      this.$nextTick(() => {
-        this.pickMode = PICK_MODES.DATE;
-      });
-    },
+  //       const currentPickMode = this.pickMode;
+  //       this.$nextTick(() => {
+  //         this.pickMode = currentPickMode;
+  //       })
+  //     }
 
-    handleChangeMonth(month) {
-      this.month = month;
-      this.pickMode = PICK_MODES.DATE;
-    },
+  //   },
 
-    handleChangeYear(year) {
-      this.year = year;
-      this.pickMode = PICK_MODES.MONTH;
-    }
-  }
+  //   nextYear() {
+  //     this.year += 1;
+  //   },
+
+  //   prevYear() {
+  //     this.year -= 1;
+  //   },
+
+  //   handleChangeDate(index) {
+  //     const value = moment(new Date(this.year, this.month, index), this.format);
+  //     this.date = value.date();
+  //     this.month = value.month();
+  //     this.year = value.year();
+  //     this.localValue = value;
+
+  //     this.$nextTick(() => {
+  //       this.pickMode = PICK_MODES.DATE;
+  //     });
+  //   },
+
+  //   handleChangeMonth(month) {
+  //     this.month = month;
+  //     this.pickMode = PICK_MODES.DATE;
+  //   },
+
+  //   handleChangeYear(year) {
+  //     this.year = year;
+  //     this.pickMode = PICK_MODES.MONTH;
+  //   }
+  // }
 };
 </script>
 

@@ -1,6 +1,10 @@
 <template>
   <div class="e-exercise-before-begin text-center">
-    <h1 class="heading-3 text-dark-2 mt-3 mb-4">
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4" v-if="isTest">
+      {{ currentExercise.name }} -
+      {{ currentExercise.type | getTestTypeText }}
+    </h1>
+    <h1 class="heading-3 text-dark-2 mt-3 mb-4" v-else>
       {{ currentExercise.name }} -
       {{ currentExercise.type | getExerciseTypeText }}
     </h1>
@@ -9,9 +13,13 @@
         Số câu hỏi:
         <span class="text-secondary mr-6">{{ currentExercise.questions }}</span>
       </span>
-      <span>
+      <span v-if="currentExercise.required">
         Thời gian làm bài:
         <span class="text-secondary">{{ currentExercise.duration }} phút</span>
+      </span>
+      <span v-else>
+        Thời gian làm bài:
+        <span class="text-secondary">Không giới hạn</span>
       </span>
     </div>
 
@@ -41,7 +49,7 @@ import { fullDateTimeSlash } from "~/utils/moment";
 
 export default {
   computed: {
-    ...mapState("elearning/study/study-exercise", ["currentExercise"]),
+    ...mapState("elearning/study/study-exercise", ["currentExercise", "currentLession"]),
 
     isShowBtnStart() {
       if (!this.currentExercise.open_time) return true;
@@ -54,7 +62,12 @@ export default {
         new Date()
       );
       return new Date().getTime() >= new Date(openTime).getTime();
-    }
+    },
+
+    isTest() {
+      return !this.currentLession;
+    },
+
   },
 
   methods: {

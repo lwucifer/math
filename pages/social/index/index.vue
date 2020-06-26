@@ -15,8 +15,8 @@
       leave-active-class="animated faster fadeOut"
     >
       <Post
-        v-for="post in feeds && feeds.listPost ? feeds.listPost : []"
-        :key="post.post_id"
+        v-for="post in feeds"
+        :key="post.id"
         :post="post"
         class="mb-4"
         :show-menu-dropdown="post.author && post.author.id === userId"
@@ -146,6 +146,7 @@
       <infinite-loading @infinite="feedInfiniteHandler">
         <VclFacebook slot="spinner" class="bg-white" />
         <template slot="no-more">Không còn bài viết.</template>
+        <template slot="no-results">Chưa có bài viết.</template>
       </infinite-loading>
     </client-only>
 
@@ -660,12 +661,13 @@ export default {
      * Infinite scroll handler
      */
     async feedInfiniteHandler($state) {
+      const lastPostInFeed = this.feeds[this.feeds.length - 1]
+        ? this.feeds[this.feeds.length - 1].id
+        : null;
       const getData = await this.$store.dispatch(
         `social/${actionTypes.SOCIAL.GET_FEEDS_INFINITE}`,
         {
-          params: {
-            page: get(this, "feeds.page.number", 0) + 1
-          }
+          fromPostId: lastPostInFeed
         }
       );
 

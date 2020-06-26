@@ -68,7 +68,7 @@
             <label for class="form--normal__title">Tiểu sử</label>
           </div>
           <div class="col-md-9" v-if="isTeacherRole">
-            <div v-if="story == ''">
+            <div v-if="story == null || story == ''">
               <app-button
                 color="transparent"
                 flat
@@ -299,7 +299,7 @@ export default {
     },
     submitStory(_data) {
       const data = {
-        biography: removeTagHtml(_data)
+        biography: _data
       };
       this.accountBiographyAdd(data).then(result => {
         if (result.success) {
@@ -335,9 +335,7 @@ export default {
     ...mapState("auth", ["token"]),
     ...mapGetters("auth", ["isTeacherRole", "isStudentRole"]),
     filterAvatarSrc() {
-      return this.personalList && this.personalList.avatar
-        ? this.personalList.avatar.low
-        : "https://picsum.photos/170/170";
+      return this.personalList ? this.personalList.avatar_url : "";
     },
     filterLinkList() {
       return this.linkList.data && this.linkList.data.linked == true

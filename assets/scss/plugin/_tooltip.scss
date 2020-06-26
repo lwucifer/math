@@ -1,0 +1,22 @@
+.tooltip {
+    display: block !important;
+    z-index: 96;
+
+    &.popover {
+      &:focus, &:active {
+        outline: none;
+      }
+      .popover-inner {
+        background: $color-text-white !important;
+        color: $color-text-dark;
+        padding: 1rem !important;
+        border-radius: 2px;
+        border: 1px solid $color-border;
+        font-size: 1.2rem;
+
+        a {
+          text-decoration: none;
+        }
+      }
+    }
+  }

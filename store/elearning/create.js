@@ -18,7 +18,14 @@ const state = () => ({
 /**
  * initial getters
  */
-const getters = {};
+const getters = {
+  disabled_all(state) {
+    if (get(state, "progress.elearning_status", "") === "APPROVED") {
+      return true;
+    }
+    return false;
+  },
+};
 
 /**
  * initial actions

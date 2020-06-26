@@ -28,7 +28,7 @@ import IconLike from "~/assets/svg/icons/like.svg?inline";
 import IconCamera from "~/assets/svg/design-icons/camera.svg?inline";
 import { get } from "lodash";
 import { mapState } from "vuex";
-import StudyService from "~/services/elearning/study/Study";
+import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
 
 export default {
   components: {
@@ -83,7 +83,7 @@ export default {
         answer_id: get(this, "answer.id", ""),
       };
 
-      const res = await new StudyService(this.$axios)["likeAnswer"](payload);
+      const res = await new InteractiveAnswer(this.$axios)["likeAnswer"](payload);
 
       this.submit = true;
 

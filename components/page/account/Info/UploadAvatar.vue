@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { getBase64 } from "~/utils/common";
 
 export default {
   props: {
     avSrc: {
       type: String,
-      default: "https://picsum.photos/96/96"
+      default: ""
     }
   },
   data() {
@@ -43,29 +43,61 @@ export default {
       avatarSrc: this.avSrc
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters("auth", ["uuidUser"])
+  },
   methods: {
     ...mapActions("account", [
       "accountPersonalEditAvatar",
       "accountPersonalList"
     ]),
+    ...mapActions("chat", ["uploadMedia"]),
     ...mapMutations("auth", ["setTokenAvatar"]),
     async handleUploadAvatar(fileList, event) {
       this.avatar = Array.from(fileList);
+
       getBase64(this.avatar[0], src => {
         this.avatarSrc = src;
       });
       const body = new FormData();
-      body.append("avatar_images", fileList[0]);
-      console.log("[avatar_images]", fileList[0]);
-      this.accountPersonalEditAvatar(body).then(result => {
-        if (result.success) {
-          setTimeout(() => {
-            this.setTokenAvatar(result.data.avatar);
-          }, 1000);
+      body.append("media", fileList[0]);
+      body.append("target_id", this.uuidUser);
+      body.append("target_type", "user");
+      body.append("target_sub", "avatar");
+      // console.log("[room_avatar]", fileList[0]);
+      await this.uploadMedia(body).then(result => {
+        if (result.data) {
+          this.avatarUrl = result.data[0].full_path
+            ? result.data[0].full_path.low
+            : "";
+          const data = {
+            avatar_url: this.avatarUrl
+          };
+          console.log("avatar", data);
+          this.accountPersonalEditAvatar(data).then(result => {
+            if (result.data) {
+              this.setTokenAvatar(result.data[0].avatar_url);
+            }
+          });
         }
       });
     }
+    // async handleUploadAvatar(fileList, event) {
+    //   this.avatar = Array.from(fileList);
+    //   getBase64(this.avatar[0], src => {
+    //     this.avatarSrc = src;
+    //   });
+    //   const body = new FormData();
+    //   body.append("avatar_images", fileList[0]);
+    //   console.log("[avatar_images]", fileList[0]);
+    //   this.accountPersonalEditAvatar(body).then(result => {
+    //     if (result.success) {
+    //       setTimeout(() => {
+    //         this.setTokenAvatar(result.data.avatar);
+    //       }, 1000);
+    //     }
+    //   });
+    // }
   }
 };
 </script>

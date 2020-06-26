@@ -26,6 +26,10 @@
         &:hover {
             color: $color-primary;
         }
+        
+        &.active {
+          color: $color-primary;
+        }
     }
 
     &__more {
@@ -49,6 +53,11 @@
 
     &__right {
         margin-left: auto;
+    }
+
+    &__dropdown-content {
+        white-space: nowrap;
+        padding: 1rem 1.2rem;
     }
 }
 
@@ -85,7 +94,7 @@
 
                 &.active {
                     background-color: $color-primary;
-                    color: #fff;
+                    color: #fff !important;
                 }
 
                 &.disabled {
@@ -135,8 +144,8 @@
     }
 
     &__subtitle {
-        width: 40%;
-        flex: 0 0 40%;
+        width: 38%;
+        flex: 0 0 38%;
     }
 
     &__time {

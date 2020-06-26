@@ -7,7 +7,7 @@
       </div>
       <div class="col-md-9">
         <h5 class="page-title">
-          Phòng học online số 1
+          {{get(stateClassInfo, 'data.name', '')}}
         </h5>
         <div class="elearning-manager-content">
           <div class="elearning-manager-content__title">
@@ -15,10 +15,6 @@
               <a :class="tab == 1 ? 'active' : ''" @click="tab = 1">Danh sách đã mời</a>
               <a :class="tab == 2 ? 'active' : ''" @click="tab = 2">Danh sách điểm danh</a>
             </div>
-            <!-- <a class="btn btn--size-sm btn--color-info btn--square btn-right" @click="openModal = true">
-              <IconPlusCircle class="mr-2 "/>
-              <span class="color-white">Mời thêm học sinh</span>
-            </a> -->
           </div>
 
           <div class="elearning-manager-content__main pt-3">
@@ -39,9 +35,11 @@
 
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
+  import { get } from "lodash";
 
   const InvitedTab = () => import("./tabs/invited")
   const MusterTab = () => import("./tabs/muster")
+  const STORE_NAMESPACE = "elearning/teaching/olclass";
 
   export default {    
     layout: "manage",
@@ -60,8 +58,12 @@
         openModal: false,
       }
     },
+
     computed: {
       ...mapState("auth", ["loggedUser"]),
+      ...mapState(STORE_NAMESPACE, {
+        stateClassInfo: "OnlineClassInfo"
+      }),
       currentTabComponent: function() {
         // List of tabs
         const MATCHED_TABS = ['InvitedTab', 'MusterTab']
@@ -70,10 +72,19 @@
     },
 
     methods: {
-    }
+      get,
+      getClassInfo() {
+        this.$store.dispatch(`${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.INFO}`, this.$route.params.id)
+      }
+    },
+
+    created () {
+      this.getClassInfo();
+    },
   };
 </script>
 
 <style lang="scss">
   @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
+  @import "~/assets/scss/components/elearning/manager/_elearning-manager.scss";
 </style>

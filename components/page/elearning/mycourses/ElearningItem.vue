@@ -51,7 +51,7 @@
         <!--&gt;{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>-->
       </div>
 
-      <div v-if="isLearning">
+      <div>
         <div class="proccess-bar-study-border">
           <div
             class="percent-proccess"
@@ -100,6 +100,7 @@
                           <IconFacebook class="icon fill-info" />Chia sẻ qua
                           Facebook
                         </li>
+
                         <li @click.prevent="shareSchool(elearning)">
                           <IconSchooly class="icon fill-white" />Chia sẻ qua
                           Schoolly
@@ -133,12 +134,10 @@
                 </li>
 
                 <li
-                  v-else-if="elearning && !elearning.is_archive && tab === 5"
+                  v-else-if="elearning.is_archive && tab === 5"
                   @click.prevent="handleDeleteArchive(elearning.elearning_id)"
                 >
-                  <n-link to class="text-primary">
-                    <IconUnArchive class="icon" />Bỏ lưu trữ
-                  </n-link>
+                  <n-link to> <IconUnArchive class="icon" />Bỏ lưu trữ </n-link>
                 </li>
               </ul>
             </app-dropdown>
@@ -157,26 +156,28 @@
           </p>
 
           <div v-if="isPoint" class="popover-point">
-            <v-popover class="popover-detail" placement="right" trigger="hover">
+            <v-popover class="popover-detail" placement="right" trigger="click">
               <IconQuestionCircle
                 width="16px"
                 height="16px"
                 class="fill-base"
+                @click="handleShowDetailExams"
               />
 
               <template #popover>
                 <p class="font-weight-semi-bold mb-2">Điểm chi tiết</p>
 
-                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
-                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
-                <p>Bài kiểm tra số 1: <span class="text-primary">8.5</span></p>
+                <p class="mb-2" v-for="(srore, index) in scores" :key="index">
+                  {{ get(score, "name", "") }}:
+                  <span class="text-primary">{{ get(score, "score", 0) }}</span>
+                </p>
               </template>
             </v-popover>
           </div>
         </div>
       </div>
 
-      <div v-else>
+      <!-- <div v-else>
         <div class="d-flex justify-content-between align-items-center">
           <div class="rate-lesson">
             <app-stars class="d-inline-flex" :stars="4.5" />
@@ -282,7 +283,7 @@
             >Mua ngay</app-button
           >
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <ElearningItem2 v-else :elearning="elearning">
@@ -302,12 +303,12 @@ import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import IconFacebook from "~/assets/svg/design-icons/facebook.svg?inline";
 import IconSchooly from "~/assets/svg/icons/schooly.svg?inline";
 import IconQuestionCircle from "~/assets/svg/design-icons/question-circle.svg?inline";
-
 import { get } from "lodash";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import ElearningItem2 from "~/components/page/elearning/mycourses/ElearningItem2";
 import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown";
+
 export default {
   components: {
     IconDots,
@@ -337,6 +338,7 @@ export default {
       isPoint: true,
       isLearning: true,
       isFree: true,
+      scores: [],
     };
   },
   props: {
@@ -353,6 +355,21 @@ export default {
     }),
   },
   methods: {
+    async handleShowDetailExams() {
+      const params = {
+        elearning_id: get(this, "elearning.elearning_id", ""),
+      };
+      const { data } = await this.$axios({
+        url: "/elearning/study/elearning/score",
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params,
+      });
+      this.scores = get(data, "data.scores", []);
+    },
+
     handleFavourite(id) {
       this.menuDropdown = false;
       this.$emit("handleFavourite", id);

@@ -57,7 +57,7 @@ export default {
         };
       });
 
-      console.log("[mergeSubmissionQuestion]", tmp);
+      console.log("[mergeSubmissionQuestion]", tmp, this.questions, this.submissions);
       return tmp;
     }
   }

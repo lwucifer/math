@@ -45,7 +45,20 @@ const actions = {
         } catch (error) {
           console.log("[TEACHING_INTERACTIVE_ADD_ACCOUNCEMENT] add.error", error);
         }
-    }
+    },
+    async [actionTypes.TEACHING_INTERACTIVE_DELETE_ANNOUNCEMENT.DELETE](
+        { commit },
+        payload
+      ) {
+        try {
+          const result = await new InteractiveAnnouncement(this.$axios)[
+            actionTypes.BASE.DELETE
+          ](payload);
+          return result;
+        } catch (error) {
+          console.log("[Deleting repository] delete.error", error);
+        }
+      },
 };
 
 /**

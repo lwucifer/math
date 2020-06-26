@@ -17,6 +17,7 @@
                   @submitFilter="submitFilter"
                   @changedType="handleChangedType"
                   @changedRate="handleChangedRate"
+                  @changedOption="handleChangedOption"
                   @submitSearch="handleSubmitSearch"
                 />
                 <list-table
@@ -80,7 +81,7 @@
     computed: {
       ...mapState("auth", ["loggedUser"]),
       ...mapState(STORE_NAMESPACE, {
-        detailInfo: 'elearningExercises'
+        detailInfo: 'paginatedElearningExericses'
       }),
     },
     
@@ -93,10 +94,13 @@
         this.updateFilter({ type: val })
       },
       handleChangedRate(val) {
-        this.updateFilter({ rate: val })
+        this.updateFilter({ status: val })
       },
       handleSubmitSearch(val) {
         this.updateFilter({ query: val })
+      },
+      handleChangedOption(val) {
+        this.updateFilter({ required: val })
       },
       submitFilter(val) {
         this.updateFilter(val)
@@ -115,54 +119,8 @@
           await this.$store.dispatch(
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE}`, this.params
           )
-          this.list = this.get(this.detailInfo, 'data.content', [])
-          this.list = [
-            {
-              name: 'test01',
-              type: 'CHOICE',
-              expire: '20/10/2020',
-              rate: '24',
-              result: 'PASSED',
-              required: true,
-              deadline: '10/10/2020',
-              score: 5,
-              point: 10
-            },
-            {
-              name: 'test',
-              type: 'CHOICE',
-              expire: '10:00:00 20/10/2020',
-              rate: '24',
-              result: 'FAILED',
-              required: true,
-              deadline: '10/10/2020',
-              score: 5,
-              point: 10
-            },
-            {
-              name: 'test',
-              type: 'ESSAY',
-              expire: '20/10/2020',
-              rate: '24',
-              result: 'NONE',
-              required: false,
-              deadline: '10/10/2020',
-              score: 5,
-              point: 10
-            },
-            {
-              name: 'test',
-              type: 'ESSAY',
-              expire: '20/10/2020',
-              rate: '24',
-              result: 'PENDING',
-              required: true,
-              deadline: '10:00:00 10/10/2020',
-              score: 5,
-              point: 10
-            }
-          ]
-          this.pagination = { ...this.get(this.detailInfo, 'data.page', {}) }
+          this.list = this.get(this, 'detailInfo.content', [])
+          this.pagination = { ...this.get(this, 'detailInfo.page', {}) }
         } catch (e) {
           console.log('Get list exercise ', e)
         } finally {

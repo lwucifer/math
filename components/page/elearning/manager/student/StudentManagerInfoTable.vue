@@ -7,12 +7,12 @@
       :data="list"
       :loading="loading"
     >
-      <template v-slot:cell(action)>
+      <template v-slot:cell(action)="{row}">
         <td class="text-primary">
           <n-link
             class="text-decoration-none"
             title="Chi tiết"
-            :to="`/elearning/manager/students`"
+            :to="'/elearning/manager/exams/' + row.exercise_id + '/results?user_id=' + user_id + '&student_id=' + $route.params.id"
           >Xem chi tiết</n-link>
         </td>
       </template>
@@ -23,15 +23,15 @@
 
       <template v-slot:cell(mark)="{row}">
         <td style="width:25%">
-          <span v-if="!row.mark" class="text-warning">Chưa chấm điểm</span>
+          <span v-if="row.point < 0" class="text-warning">Chưa chấm điểm</span>
           <span
-            v-else-if="row.mark > 6"
+            v-else-if="row.point > 6"
             class="text-primary"
-          >{{ get(row, 'mark', '') }}/{{row.points}}</span>
+          >{{ get(row, 'point', '') }}/{{row.max_score}}</span>
           <span
-            v-else-if="row.mark < 6"
+            v-else-if="row.point < 6"
             class="text-secondary"
-          >{{ get(row, 'mark', '') }}/{{row.points}}</span>
+          >{{ get(row, 'point', '') }}/{{row.max_score}}</span>
         </td>
       </template>
     </app-table>
@@ -44,6 +44,7 @@ import { get } from "lodash";
 import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline";
 import RateStatus from "~/components/page/elearning/manager/exam/RateStatus";
 import { ELEARNING_TYPES } from "~/utils/constants";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -77,33 +78,23 @@ export default {
     loading: {
       type: Boolean,
       default: false
-    }
-  },
-
-  filters: {
-    exerciseTypeFilter: function(val) {
-      const MATCHED_DATA = {
-        [ELEARNING_TYPES.COURSE]: "Khóa học",
-        [ELEARNING_TYPES.LECTURE]: "Bài giảng"
-      };
-      if (MATCHED_DATA.hasOwnProperty(val)) return MATCHED_DATA[val];
-      return "-";
-    }
+    },
   },
 
   data() {
-    return {};
+    return {
+      user_id: this.get(this.$store.state.auth.token, 'id', '')
+    };
   },
 
-  computed: {},
+  computed: {
+    ...mapState("auth", ["loggedUser"]),
+  },
   methods: {
     onPageChange(e) {
-      this.$emit("changedPagination", e);
+      this.$emit("onPageChange", e);
     },
     get
   }
 };
 </script>
-
-<style lang="scss">
-</style>

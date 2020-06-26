@@ -1,9 +1,17 @@
 <template>
   <div class="wrap-general-exam-expiry">
       <h4 class="mb-4">Bài kiểm tra sắp hết hạn</h4>
-      <app-table :heads="heads" :data="deadline">
+      <app-table :heads="heads" :data="deadlineList">
+          <template v-slot:cell(date)="{ row }">
+              <td style="width:60%">{{row.title}}</td>
+          </template>
+          <template v-slot:cell(date)="{ row }">
+              <td style="width:25%">
+                  <span v-if="row.deadline">{{ row.deadline | moment("HH:mm") }} ngày {{ row.deadline | moment("DD/MM/YYYY") }}</span>
+              </td>
+          </template>
           <template v-slot:cell(status)="{ row }">
-              <td>
+              <td style="width:60%">
                   <span v-if="row.status == 1" class="text-primary">Đã nộp</span>
                   <span v-if="row.status == 0" >Chưa nộp</span>
               </td>
@@ -14,6 +22,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import moment from 'moment';
 const STORE_OVERVIEW = "elearning/study/study-overview";
 export default {
     data(){
@@ -36,10 +45,26 @@ export default {
     },
     computed: {
         ...mapState(STORE_OVERVIEW, ['deadline']),
+        deadlineList(){
+            const data = this.deadline.filter(item => item.category == "TEST");
+            return data
+        }
     },
 }
 </script>
 
-<style>
-
+<style lang="scss">
+.wrap-general-exam-expiry{
+    .app-table{
+        th:first-child{
+            width: 60%;
+        }
+        th:nth-child(2){
+            width: 25%;
+        }
+        th:nth-child(3){
+            width: 15%;
+        }
+    }
+}
 </style>

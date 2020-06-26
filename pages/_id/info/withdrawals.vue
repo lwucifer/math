@@ -30,18 +30,13 @@
                       class="filter-form__item"
                       style="min-width: 21rem;"
                     >
-                      <app-date-picker
-                        class="w-100"
+                      <app-range-calendar
+                        :placeholder="'DD/MM/YYYY - DD/MM/YYYY'"
                         v-model="dateDefault"
-                        square
-                        range
-                        size="sm"
-                        placeholder="DD/MM/YYYY - DD/MM/YYYY"
-                        :shortcuts="DATE_SHORTCUT"
-                        @input="handlerChangeDate"
-                        valueFormat="YYYY-MM-DD"
-                      >
-                      </app-date-picker>
+                        value-type="YYYY-MM-DD"
+                        bordered
+                        @change="handlerChangeDate"
+                        />
                     </div>
                     <div class="filter-form__item d-flex">
                       <filter-button
@@ -81,6 +76,7 @@
                   :header-ext-cls="{ 'table-header-border-0': true }"
                   :ext-table-cls="{ 'pt-3': true }"
                   :pagination-style="{ position: 'right' }"
+                  @sort="handleSortTable"
                 >
                   <template v-slot:cell(timestamp)="{row}">
                     <td>
@@ -96,7 +92,7 @@
                   </template>
                   <template v-slot:cell(amount)="{row}">
                     <td>
-                      {{ row.amount | toThousandFilter }} đ
+                      {{ row.amount | numeralFormat("0,0.00") }} đ
                     </td>
                   </template>
                 </app-table>
@@ -164,7 +160,8 @@ export default {
         to:"",
         page:"",
         size:"",
-        status:""
+        status:"",
+        sort:""
       },
       opt: "",
       statuses: [
@@ -212,11 +209,11 @@ export default {
   },
   methods: {
     getDateSelect(){
-      const firstday = moment().format("YYYY-MM-01");
-      const today = moment().format("YYYY-MM-DD");
+      const firstday = moment().startOf('month');
+      const today = moment();
       this.dateDefault = [firstday,today];
-      this.params.from = firstday;
-      this.params.to = today;
+      this.params.from = firstday.format("YYYY-MM-01");
+      this.params.to = today.format("YYYY-MM-DD");
     },
     fetchWithdrawals(){
       const payload = {
@@ -225,7 +222,8 @@ export default {
           from: this.params.from,
           size: this.params.size,
           page: this.params.page,
-          status: this.params.status
+          status: this.params.status,
+          sort: this.params.sort
         }
       }
       this.$store.dispatch(`account/${actionTypes.ACCOUNT_WITHDRAWALS.LIST}`,payload)
@@ -268,6 +266,18 @@ export default {
     },
     resetForm() {
       this.opt = null
+    },
+    handleSortTable(val){
+      if(val.sortBy=='timestamp'){
+        if(val.order=='asc'){
+          this.params.sort = 'created_at,asc'
+          this.fetchWithdrawals();
+        }
+        else if(val.order=='desc'){
+          this.params.sort = 'created_at,desc'
+          this.fetchWithdrawals();
+        }
+      }
     }
   }
 };

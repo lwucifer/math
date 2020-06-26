@@ -7,7 +7,7 @@
         :style="{
           'pointer-events': isLessonCompleted ? 'none' : 'inherit'
         }"
-        @change="isShowCompleteStudy = true"
+        @click="isShowCompleteStudy = true"
       />
     </div>
 
@@ -19,10 +19,26 @@
       <div class="e-program-item__bottom">
         <div class="e-program-item__time">
           <span
-            v-if="isShowVideoLesson"
+            v-if="lessonType == videoType"
             class="d-inline-flex align-items-center"
           >
             <IconSlowMotionVideo class="icon body-1 mr-1 text-primary" />
+            <span>{{ durationTimes }}</span>
+          </span>
+
+          <span
+            v-else-if="lessonType == audioType"
+            class="d-inline-flex align-items-center"
+          >
+            <IconHeadPhones class="icon body-1 mr-1 text-primary" />
+            <span>{{ durationTimes }}</span>
+          </span>
+
+          <span
+            v-else-if="lessonType == scormType"
+            class="d-inline-flex align-items-center"
+          >
+            <IconScorm class="icon body-1 mr-1 text-primary" />
             <span>{{ durationTimes }}</span>
           </span>
 
@@ -42,7 +58,7 @@
             @click.prevent="handleExitExercise"
           >
             <IconFileCheckAlt class="icon body-1 mr-1" />
-            <span>Bài tập({{ completeExecerciseRate }})</span>
+            <span>Bài tập ({{ completeExecerciseRate }})</span>
           </a>
         </div>
 
@@ -50,7 +66,7 @@
           <app-dropdown
             v-if="lesson_docs.length"
             class="e-program-item__download-tooltip"
-            position="topCenter"
+            position="topRight"
           >
             <span
               slot="activator"
@@ -68,7 +84,7 @@
                   target="_blank"
                 >
                   <IconFileDownloadAlt class="icon body-1 text-info mr-2" />
-                  {{ link.name }}
+                  {{ limitLetter(link.name, 40) }}
                 </a>
               </div>
             </template>
@@ -100,7 +116,7 @@
       v-if="isShowConfirmExit"
       title="Xác nhận thoát?"
       description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ đánh trượt bài làm của bạn."
-      @ok="handleGetExercises"
+      @ok="handleGetOkExercises"
       @cancel="isShowConfirmExit = false"
     />
 
@@ -109,10 +125,9 @@
       v-if="isShowConfirmExit2"
       title="Xác nhận thoát?"
       description="Bạn có chắc chắn muốn thoát? Hệ thống sẽ đánh trượt bài làm của bạn."
-      @ok="handleStudy"
+      @ok="handleOkStudy"
       @cancel="isShowConfirmExit2 = false"
     />
-
   </div>
 </template>
 
@@ -123,12 +138,14 @@ import {
   EXERCISE_CATEGORIES,
   STUDY_MODE,
   LESSION_STATUS,
-  LESSION_TYPE
+  LESSION_TYPE,
+  PAGE_SIZE
 } from "~/utils/constants";
 import {
   redirectWithParams,
   getParamQuery,
-  getCountdown_MM_SS
+  getCountdown_MM_SS,
+  limitLetter,
 } from "~/utils/common";
 import ProgressService from "~/services/elearning/study/Progress";
 import * as actionTypes from "~/utils/action-types";
@@ -139,9 +156,13 @@ const IconFileDownloadAlt = () =>
   import("~/assets/svg/design-icons/file-download-alt.svg?inline");
 import IconSlowMotionVideo from "~/assets/svg/v2-icons/slow_motion_video_24px.svg?inline";
 import IconEventNote from "~/assets/svg/v2-icons/event_note_24px.svg?inline";
+import IconScorm from "~/assets/svg/v2-icons/scorm.svg?inline";
+import IconHeadPhones from "~/assets/svg/v2-icons/headphones.svg?inline";
 
 import StudyService from "~/services/elearning/study/Study";
 import { ERRORS } from "../../../../utils/error-code";
+
+const parseManifest = require("xml-js");
 
 // (VIDEO | ARTICLE | IMAGE | DOCS)
 
@@ -150,7 +171,9 @@ export default {
     IconFileCheckAlt,
     IconSlowMotionVideo,
     IconFileDownloadAlt,
-    IconEventNote
+    IconEventNote,
+    IconScorm,
+    IconHeadPhones,
   },
 
   props: {
@@ -173,11 +196,14 @@ export default {
       lessonStatus: false,
       isShowConfirmExit: false,
       isShowConfirmExit2: false,
+      videoType: LESSION_TYPE.VIDEO,
+      audioType: LESSION_TYPE.AUDIO,
+      scormType: LESSION_TYPE.SCORM,
     };
   },
 
   created() {
-    console.log("[this.lesson]", this.lesson);
+    // console.log("[this.lesson]", this.lesson);
   },
 
   mounted() {
@@ -203,12 +229,18 @@ export default {
     failedExercise() {
       return get(this.lesson, "failed", 0);
     },
+    workingExercise() {
+      return get(this.lesson, "working", 0);
+    },
     exercises() {
       return get(this.lesson, "exercises", 0);
     },
     completeExecerciseRate() {
       const totalExDid =
-        this.passedExercise + this.pendingExercise + this.failedExercise;
+        this.passedExercise +
+        this.pendingExercise +
+        this.failedExercise +
+        this.workingExercise;
       return `${totalExDid}/${this.exercises}`;
     },
 
@@ -217,7 +249,7 @@ export default {
       // debugger;
       if (this.passedExercise == this.exercises) {
         return "primary";
-      } else if (this.failedExercise > 0) {
+      } else if (this.failedExercise > 0 || this.workingExercise > 0) {
         return "secondary";
       } else if (this.pendingExercise > 0) {
         return "warning";
@@ -226,8 +258,8 @@ export default {
       }
     },
 
-    isShowVideoLesson() {
-      return get(this.lesson, "type", "") == LESSION_TYPE.VIDEO;
+    lessonType() {
+      return get(this.lesson, "type", "");
     },
 
     durationTimes() {
@@ -246,6 +278,11 @@ export default {
   },
 
   methods: {
+    ...mapMutations("elearning/study/study", [
+      "setElearningStudyScormItems"
+    ]),
+    limitLetter,
+
     getProgress() {
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const options = {
@@ -295,7 +332,6 @@ export default {
     },
 
     async handleStudy() {
-
       this.isShowConfirmExit2 = false;
       redirectWithParams({ lesson_id: get(this.lesson, "id", "") });
 
@@ -334,6 +370,24 @@ export default {
         }
         this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
       }
+
+      if (get(this.lesson, "type", "") === "SCORM") {
+        this.setStudyMode(STUDY_MODE.SCORM);
+        // this.setPayload(this.lesson);
+        this.fetchScormItems(this.lesson.link, this.setExerciseLoading);
+        // this.setExerciseLoading(false); // turnoff loading
+        return;
+      }
+    },
+
+    handleOkStudy() {
+      this.getProgress();
+      this.handleStudy();
+    },
+
+    handleGetOkExercises() {
+      this.getProgress();
+      this.handleGetExercises();
     },
 
     handleExitExercise() {
@@ -355,7 +409,12 @@ export default {
       const elearning_id = get(this, "$router.history.current.params.id", "");
       const lesson_id = get(this, "lesson.id", "");
       const category = EXERCISE_CATEGORIES.EXERCISE;
-      const elearningReq = { elearning_id, lesson_id, category };
+      const elearningReq = {
+        elearning_id,
+        lesson_id,
+        category,
+        size: PAGE_SIZE.MAXIMIZE
+      };
 
       this.setStudyMode(STUDY_MODE.DO_EXERCISE); // change display exercise list instead of video_playing
       this.setStudyExerciseCurrentLession(this.lesson); // set current lesson to return list exercise after submission success
@@ -393,6 +452,42 @@ export default {
       this.lessonStatus = false;
       // this.$refs.completedCheckbox.checked = false;
       console.log("[closeConfirmCompleteStudy]", this.$refs);
+    },
+
+    fetchScormItems(_link, cb) {
+      // console.log("[fetchScormItems]", _link);
+      if(!_link) return;
+
+      const self = this;
+      const manifestUrl = `${_link}imsmanifest.xml`;
+      var xhr = new XMLHttpRequest();
+      xhr.withCredentials = false;
+      xhr.addEventListener("readystatechange", function() {
+        if (this.readyState === 4) {
+          // console.log(this.responseText);
+          const result = parseManifest.xml2js(this.responseText, { compact: true });
+          // console.log("[result]", result);
+          const item = result.manifest.organizations.organization.item;
+          // console.log("[item]", item);
+          const resource = result.manifest.resources.resource;
+          console.log("[resource]", resource);
+
+          // commit here
+          let lectures = [];
+          if(Array.isArray(resource)) {
+            lectures = resource.map(i => {
+              return `${_link}${i._attributes.href}`;
+            });
+          } else {
+            lectures = [`${_link}${resource._attributes.href}`];
+          }
+          self.setElearningStudyScormItems(lectures);
+
+          cb(false);
+        }
+      });
+      xhr.open("GET", manifestUrl);
+      xhr.send();
     }
   },
 
