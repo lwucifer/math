@@ -20,9 +20,7 @@ const getters = {};
 const actions = {
     async [actionTypes.ELEARNING_TEACHING_CLASS.LIST]({ commit }, payload) {
         try {
-            const result = await new Classes(this.$axios)[
-                actionTypes.BASE.LIST
-            ](payload);
+            const result = await new Classes(this.$axios)[actionTypes.BASE.LIST](payload);
             commit(
                 mutationTypes.ELEARNING_TEACHING_CLASS.SET_TEACHING_CLASS_LIST,
                 result.data
