@@ -81,7 +81,7 @@ const getters = {
         return !!state.token ? state.token.uuid : "";
     },
     organizationId(state) {
-        return !!state.token ? state.token.organization.id : "";
+        return !!state.token && state.token.organization ? state.token.organization.id : "";
     },
 };
 
