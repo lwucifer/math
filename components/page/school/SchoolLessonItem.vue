@@ -40,7 +40,7 @@
         </div>
         <div class="price-wrapper">
           <span v-if="get(lesson, 'original_price', 0) > 0" class="price">
-            {{ get(lesson, "original_price", 0) | toThousandFilter }}đ
+            {{ get(lesson, "original_price", 0) | numeralFormat("0,0") }}đ
           </span>
           <span v-else class="price price--free">
             Miễn phí

@@ -102,7 +102,7 @@ export default {
     },
     pushMycourses() {
       this.dropdownCourse = false;
-      this.$router.push("/elearning/mycourses");
+      this.$router.push("/elearning/mycourses/courses");
     },
     handleClickLink(){
       this.dropdownCourse = false;

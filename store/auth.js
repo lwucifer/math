@@ -77,6 +77,9 @@ const getters = {
     phonePass(state) {
         return state.phonePass;
     },
+    uuidUser(state) {
+        return !!state.token ? state.token.uuid : "";
+    },
 };
 
 /**
@@ -107,13 +110,13 @@ const actions = {
         console.log("VERIFY_WITH_PHONE", payload);
         return authFire
             .signInWithPhoneNumber(payload.phone, payload.appVerifier)
-            .then(function(confirmationResult) {
+            .then(function (confirmationResult) {
                 // SMS sent. Prompt user to type the code from the message, then sign the
                 // user in with confirmationResult.confirm(code).
                 window.confirmationResult = confirmationResult;
                 return confirmationResult;
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log("error", error);
                 return error;
             });
@@ -230,7 +233,7 @@ const mutations = {
         state.phoneSave = _phoneSave;
     },
     [mutationTypes.AUTH.SET_TOKEN_AVATAR](state, avatar) {
-        const renewToken = {...state.token, avatar };
+        const renewToken = { ...state.token, avatar };
         state.token = renewToken;
         setToken(renewToken);
     },

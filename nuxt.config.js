@@ -23,12 +23,13 @@ module.exports = {
       {
         rel: "icon",
         type: "image/x-icon",
-        href: "/favicon.ico",
+        href: "/favicon/favicon.svg",
       },
     ],
   },
 
   env: {
+    BASE_ORIGIN_LOCATION: process.env.BASE_ORIGIN_LOCATION,
     SOCKET_URI: process.env.SOCKET_URI,
     PAYMENT_REQ_URL: process.env.PAYMENT_REQ_URL,
     PAYMENT_RETURN_URL: process.env.PAYMENT_RETURN_URL,
@@ -82,12 +83,13 @@ module.exports = {
         { src: '@/plugins/v-scroll-lock.js', ssr: false },
         { src: '@/plugins/scrollTo.js', ssr: false },
         '~/plugins/vue-lazyload',
+        '~/plugins/vue-scrollto',
     ],
     /**
      * Global middleware
      */
     router: {
-        middleware: ["check-auth"]
+        middleware: ["check-auth", "watch-route"]
     },
 
   /*

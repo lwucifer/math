@@ -34,6 +34,15 @@ export default class Exercise extends BaseService {
     return data;
   }
 
+  async [ELEARNING_STUDY_EXERCISE.LIST_ELEARNING_EXERCISE_2](params) {
+    const { data } = await this.$axios.request({
+      url: APIs.STUDY_ELEARNING_EXERCISE_2,
+      method: "GET",
+      params,
+    });
+    return data;
+  }
+
 
 
 }

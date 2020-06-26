@@ -6,7 +6,7 @@
           <td
             v-for="year in row"
             :key="year"
-            :class="{ active: localValue === year }"
+            :class="{ active: value === year }"
             @click="chooseYear(year)"
           >
             <span>{{ year }}</span>
@@ -34,11 +34,6 @@ export default {
     IconCalendarChevronRight
   },
 
-  model: {
-    prop: "value",
-    event: "change"
-  },
-
   props: {
     value: {
       type: Number,
@@ -51,7 +46,6 @@ export default {
     const firstYear = this.value - offset;
 
     return {
-      localValue: this.value,
       firstYear,
       dataYears: []
     };
@@ -62,40 +56,12 @@ export default {
   },
 
   watch: {
-    value(newValue) {
-      this.localValue = newValue;
-    },
-
-    localValue(newValue) {
-      this.$emit("change", newValue);
-    },
-
     firstYear(newValue) {
       this.getYears()
     }
   },
 
   methods: {
-    // getYears() {
-    //   const offset = this.localValue % 10;
-    //   const lastYear = this.localValue - offset + 10;
-    //   let yearCount = this.localValue - offset;
-    //   let tmpDataYears = [];
-
-    //   for (let i = 0; i < 5; i++) {
-    //     tmpDataYears[i] = [];
-
-    //     for (let j = 0; j < 2; j++) {
-    //       tmpDataYears[i][j] = yearCount;
-    //       if (yearCount >= lastYear) {
-    //         break;
-    //       }
-    //       yearCount++;
-    //     }
-    //   }
-
-    //   this.dataYears = tmpDataYears;
-    // },
     getYears() {
       let yearCount = 0;
       let tmpDataYears = [];
@@ -116,11 +82,7 @@ export default {
     },
 
     chooseYear(year) {
-      this.localValue = year;
-
-      if (this.localValue === year) {
-        this.$emit("change", year);
-      }
+      this.$emit("change", year);
     },
 
     prevYearGroup() {

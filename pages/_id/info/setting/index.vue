@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="isTeacherRole">
     <div class="row">
       <div class="col-md-3">
         <SchoolAccountSide :active="6" />
@@ -21,9 +21,16 @@
               </template>
               <template v-slot:content>
                 <keep-alive>
-                  <div v-if="loading">Loading...</div>
+                  <div v-if="loading">
+                    <vcl-list />
+                    <vcl-list />
+                  </div>
                   <div v-else>
-                    <Notify v-if="tab === 'notify'" />
+                    <Notify
+                      v-if="tab === 'notify'"
+                      title-elearning="E-LEARNING - HỌC TẬP"
+                      title-social="MẠNG XÃ HỘI"
+                    />
                     <PaymentList v-if="tab === 'payment'" />
                   </div>
                 </keep-alive>
@@ -34,16 +41,20 @@
       </div>
     </div>
   </div>
+  <SettingRoleStudent v-else />
 </template>
 
 <script>
 import SchoolAccountSide from "~/components/page/school/SchoolAccountSide";
+import { VclList } from "vue-content-loading";
 import HeadTabs from "~/components/page/elearning/HeadTab";
 import * as actionTypes from "~/utils/action-types";
-import Notify from "~/components/page/profile/setting/tabs/Notify";
+import Notify from "~/components/page/profile/setting/tabs/notify";
 import PaymentList from "~/components/page/profile/setting/tabs/PaymentList";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { get } from "lodash";
+import SettingRoleStudent from "~/components/page/profile/setting/tabs/SettingRoleStudent";
+import { getParamQuery, redirectWithParams } from "~/utils/common";
 
 export default {
   layout: "account-info",
@@ -53,6 +64,8 @@ export default {
     Notify,
     PaymentList,
     HeadTabs,
+    VclList,
+    SettingRoleStudent,
   },
 
   data() {
@@ -74,13 +87,19 @@ export default {
   },
 
   async mounted() {
+    const tab = getParamQuery("tab");
+    if (tab) {
+      this.tab = tab;
+    }
     this.loading = true;
     await this.$store.dispatch(`setting/getSetting`);
     const options = {
       params: { token: "true" },
     };
     await this.$store.dispatch(`setting/getBanks`, options);
-    await this.$store.dispatch(`setting/getAccountBanks`);
+    await this.$store.dispatch(`setting/getAccountBanks`, {
+      params: { status: "ACTIVE" },
+    });
     this.loading = false;
   },
 
@@ -92,18 +111,29 @@ export default {
       };
       return MATCHED_TABS[this.tab];
     },
+    ...mapGetters("auth", ["isTeacherRole"]),
   },
 
   methods: {
     changeTab(key) {
       this.tab = key;
+      redirectWithParams({ tab: key });
+    },
+    getCurrentContent() {
+      const tab = get(this, "$route.query.tab", false);
+      if (tab && ["payment", "notify"].includes(tab)) {
+        this.tab = tab;
+      }
     },
     get,
+  },
+  created() {
+    this.getCurrentContent();
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~/assets/scss/components/elearning/manager/_elearning-manager-content.scss";
 @import "~/assets/scss/components/account/_account-info-setting.scss";
 </style>

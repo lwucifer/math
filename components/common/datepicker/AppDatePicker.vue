@@ -5,6 +5,7 @@
       v-bind="{ ...$attrs, ...$props }"
       v-model="text"
       @change="change()"
+      @clear="clear()"
       :format="valueFormat"
       :type="type"
       :placeholder="placeholder"
@@ -87,7 +88,7 @@ export default {
       type: String,
       default: "",
     },
-    clear: {
+    clearDate: {
       type: Boolean,
       default: false,
     },
@@ -101,9 +102,12 @@ export default {
 
   methods: {
     change: function() {
-      //if (this.clear) this.text = null;
       this.$emit("input", this.text);
-    }
+    },
+    clear: function() {
+      //this.text = null;
+      this.$emit("input", null);
+    },
   },
 
   computed: {
@@ -141,7 +145,7 @@ export default {
 
   watch: {
     value(newValue, oldValue) {
-      this.text = this.clear ? null : newValue;
+      this.text = this.clearDate ? null : newValue;
     },
   },
 };

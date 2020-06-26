@@ -87,6 +87,7 @@ export default {
       // videojs options
       playerOptions: {
         muted: false,
+        autoplay: true,
         fluid: true,
         // responsive: true,
         language: "vi",

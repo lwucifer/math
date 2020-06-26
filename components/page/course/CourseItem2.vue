@@ -3,6 +3,7 @@
     class="course-item-2"
     :class="{ 'course-item-2--size-sm': this.size === 'sm' }"
   >
+    <!-- <div class="course-item-2__overlay" v-if="!get(item, 'is_hidden', true)"></div> -->
     <div class="course-item-2__img">
       <n-link :to="`/elearning/${id}`">
         <img
@@ -30,7 +31,7 @@
           v-if="price.discount && price.price"
           class="course-item-2__discount"
         >
-          -{{ price.discount }}%
+          -{{ parseInt(price.discount) }}%
         </div>
       </n-link>
 
@@ -68,7 +69,7 @@
           :size="size === 'sm' ? 12 : 14"
         />
         <span class="text-dark">
-          <strong>{{ get(item, "voting.rate", 0) }}</strong>
+          <strong>{{ get(item, "voting.rate", 0) | numeralFormat("0.0") }}</strong>
           ({{ get(item, "voting.votes", 0) }})
         </span>
         <slot name="mycoursefavourite"></slot>
@@ -93,7 +94,7 @@
 </template>
 
 <script>
-import { assignIn, get } from "lodash";
+import { assignIn, get, parseInt } from "lodash";
 import numeral from "numeral";
 
 // import IconVideo3 from "~/assets/svg/icons/video3.svg?inline";
@@ -135,6 +136,7 @@ export default {
   methods: {
     get,
     numeral,
+    parseInt
   },
 };
 </script>

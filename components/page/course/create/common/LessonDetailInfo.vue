@@ -33,11 +33,8 @@
         </div>
       </div>
 
-      <div
-        class="clc-video__type text-dark mt-2"
-        v-if="get(lesson, 'type', '') === 'VIDEO'"
-      >
-        {{ get(lesson, "file_name", "") }}
+      <div class="clc-video__type text-dark mt-2" v-if="showFileName">
+        {{ get(lesson, "file_name", "").length > 60 ? (get(lesson, "file_name", "").slice(0, 60) + '...' +  get(lesson, "format", "").toLowerCase()) : get(lesson, "file_name", "")}}
       </div>
 
       <div class="clc-video__type text-dark mt-2" v-else>
@@ -55,7 +52,9 @@
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
+      title="Xác nhận"
       @cancel="handleCancelModal"
+      description="Bạn có chắc chắn muốn xóa bài học này?"
     />
   </div>
 </template>
@@ -65,7 +64,7 @@ import IconBorderColor24px from "~/assets/svg/v2-icons/border_color_24px.svg?inl
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
-
+import { mapState } from "vuex";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
 
@@ -88,10 +87,19 @@ export default {
   },
 
   computed: {
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     thumnail() {
       return get(this, "lesson.type", "") === "VIDEO"
         ? "/images/thumnail-video.png"
         : "/images/thumnail-doc.png";
+    },
+    showFileName() {
+      return (
+        get(this, "lesson.type", "") === "VIDEO" ||
+        get(this, "lesson.type", "") === "DOCS"
+      );
     },
   },
 
@@ -105,15 +113,18 @@ export default {
   methods: {
     handleEditLesson($event) {
       $event.preventDefault();
+      if (this.disabled_all) return;
       this.$emit("handleEditLesson", this.lesson);
     },
 
     async handleDeleteLesson($event) {
       $event.preventDefault();
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
 
     async handleOk() {
+      if (this.disabled_all) return;
       this.confirmLoading = true;
       const options = {
         data: {
@@ -137,6 +148,7 @@ export default {
     },
 
     handleCancelModal() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.confirmLoading = false;
     },

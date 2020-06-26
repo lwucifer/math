@@ -8,7 +8,8 @@ import Favourite from "~/services/elearning/study/Favourite";
  * initial state
  */
 const state = () => ({
-  studying: null,
+  unfinished_lecture: null,
+  finished_lecture: null,
   statistic: null,
   archive: null,
   favourite: null,
@@ -25,14 +26,32 @@ const getters = {};
 const actions = {
   async getStudying({ commit }, options = {}) {
     try {
-      const result = await new StudyStudent(this.$axios)["list"](options);
-      if (get(result, "success", false)) {
-        commit("studying", get(result, "data", null));
+      if (options.params.completed) {
+        const result = await new StudyStudent(this.$axios)["list"](options);
+        if (get(result, "success", false)) {
+          const data = get(result, "data", null);
+          commit("finished_lecture", data);
+          return;
+        }
+        commit("finished_lecture", null);
         return;
       }
-      commit("studying", null);
+
+      if (!options.params.completed) {
+        const payload = { ...options };
+        payload.is_archive = false;
+        const result = await new StudyStudent(this.$axios)["list"](payload);
+        if (get(result, "success", false)) {
+          const data = get(result, "data", null);
+          commit("unfinished_lecture", data);
+          return;
+        }
+        commit("unfinished_lecture", null);
+        return;
+      }
     } catch (error) {
-      commit("studying", null);
+      commit("finished_lecture", null);
+      commit("unfinished_lecture", null);
     }
   },
 
@@ -80,8 +99,11 @@ const actions = {
  * initial mutations
  */
 const mutations = {
-  studying(state, data) {
-    state.studying = data;
+  finished_lecture(state, data) {
+    state.finished_lecture = data;
+  },
+  unfinished_lecture(state, data) {
+    state.unfinished_lecture = data;
   },
   statistic(state, data) {
     state.statistic = data;

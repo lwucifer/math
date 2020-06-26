@@ -83,6 +83,10 @@ button {
   &[disabled] {
     pointer-events: none;
   }
+  &:focus,
+  &:active {
+    outline: none;
+  }
 }
 
 input {
@@ -204,7 +208,7 @@ input:-webkit-autofill:active {
   font-size: 1.2rem;
   display: block;
   width: 100%;
-  margin-top: 0.2rem;
+  margin-top: 0.5rem;
 }
 .form-control-error {
   border-color: $color-red;
@@ -515,6 +519,9 @@ input:-webkit-autofill:active {
 .w-80 {
   width: 8rem !important;
 }
+.w-90 {
+  width: 9rem !important;
+}
 .w-170 {
   width: 17rem !important;
 }
@@ -559,4 +566,8 @@ input:-webkit-autofill:active {
 
 .vs--disabled.app-vue-select .vs__dropdown-toggle {
   background-color: #f8f8f8;
+}
+
+.nowrap {
+  white-space: nowrap;
 }

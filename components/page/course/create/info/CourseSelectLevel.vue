@@ -1,23 +1,21 @@
 <template>
-  <div class="col-md-4">
-    <div
-      class="cgi-form-group mb-4 d-flex justify-content-start align-items-center"
+  <div
+    class="cgi-form-group d-flex justify-content-start align-items-center"
+  >
+    <h2 class="cgi-form-title heading-6 mr-4">Trình độ</h2>
+    <app-select
+      style="width: 60%"
+      class="cc-select"
+      :options="levelOpt"
+      placeholder="Chọn lớp"
+      @change="handleChangeLevel"
+      label="name"
+      :value="level && level.id"
     >
-      <h2 class="cgi-form-title heading-6 mr-4">Trình độ</h2>
-      <app-select
-        style="width: 60%"
-        class="cc-select"
-        :options="levelOpt"
-        placeholder="Chọn lớp"
-        @change="handleChangeLevel"
-        label="name"
-        :value="level && level.id"
-      >
-        <template slot="placeholder-icon">
-          <IconAngleDown class="icon" />
-        </template>
-      </app-select>
-    </div>
+      <template slot="placeholder-icon">
+        <IconAngleDown class="icon" />
+      </template>
+    </app-select>
   </div>
 </template>
 

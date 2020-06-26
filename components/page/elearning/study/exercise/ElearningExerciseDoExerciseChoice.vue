@@ -109,7 +109,8 @@
 import {
   EXERCISE_TYPES,
   STUDY_MODE,
-  EXERCISE_CATEGORIES
+  EXERCISE_CATEGORIES,
+  PAGE_SIZE
 } from "~/utils/constants";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
@@ -229,23 +230,21 @@ export default {
 
     handleQuestionSubmission() {
       console.log("[handleQuestionSubmission]", this.currentExerciseQuestion);
-      const durationCost = parseInt(
-        (new Date().getTime() - this.submission.start_time.getTime()) / 1000
-      ); // in seconds
 
       const submissionReq = createExerciseSubmissionReq({
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
         attachments: null,
-        // duration: durationCost, // in seconds
-        // start_time: fullUTCDateTimeSlash(this.submission.start_time)
       });
+
+      // const submissionForm = new FormData();
+      // submissionForm.append("exercise_id", this.submission.exercise_id);
+      // submissionForm.append("answers", JSON.stringify(this.submission.answers));
+      // submissionForm.append("attachments", null);
 
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
-        // duration: durationCost,
-        // start_time: fullUTCDateTimeSlash(this.submission.start_time)
       });
 
       this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
@@ -267,12 +266,14 @@ export default {
             exerciseReq = {
               elearning_id: this.progress.id,
               category: EXERCISE_CATEGORIES.EXERCISE,
-              lesson_id: this.currentLession.id
+              lesson_id: this.currentLession.id,
+              size: PAGE_SIZE.MAXIMIZE,
             };
           } else {
             exerciseReq = {
               elearning_id: this.progress.id,
-              category: EXERCISE_CATEGORIES.TEST
+              category: EXERCISE_CATEGORIES.TEST,
+              size: PAGE_SIZE.MAXIMIZE,
             };
           }
           console.log("[exerciseReq]", exerciseReq);

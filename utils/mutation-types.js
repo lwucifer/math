@@ -14,6 +14,7 @@ export const AUTH = {
     SET_TOKEN_AVATAR: "setTokenAvatar",
 };
 
+
 export const BASE = {
     RESET: "resetData",
 };
@@ -21,6 +22,11 @@ export const BASE = {
 export const PUBLIC = {
     SET_BANK_LIST: "setBankList",
 };
+
+export const PUBLIC_CATEGORY = {
+    SET_CATEGORY_LIST: "setPublicCategoryList",
+};
+
 
 export const SOCIAL = {
     SET_FEEDS: "setSocialFeeds",
@@ -175,6 +181,7 @@ export const TEACHING_OLCLASSES = {
     SET_TEACHING_OLCLASS_DELETE: "setTeachingOlclassDelete",
     SET_TEACHING_OLCLASS_BLOCK: "setTeachingOlclassBlock",
     SET_TEACHING_OLCLASS_UNBLOCK: "setTeachingOlclassUnBlock",
+    SET_TEACHING_OLCLASS_INFO: "setTeachingOlclassInfo",
 };
 
 export const TEACHING_OLCLASS_INVITES = {
@@ -261,6 +268,10 @@ export const ELEARNING_TEACHING_EXERCISE = {
     SET_TEACHING_EXERCISE_DETAIL: "setElearningTeachingExerciseDetail",
 };
 
+export const ANSWER = {
+    HIDE_FROM: "hideFrom"
+}
+
 export const ELEARNING_TEACHING_EXERCISE_PARTICIAPANT = {
     SET_TEACHING_EXERCISE_PARTICIPANT_LIST: "setElearningTeachingExerciseParticipantList",
 };
@@ -336,7 +347,22 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
     SET_SCHOOL_INFO: "setSchoolInfo",
+    SET_SCHOOL_ANNOUNCEMENT: "setSchoolAnnouncement",
+    SET_SCHOOL_ANNOUNCEMENT_DETAIL: "setSchoolAnnouncementDetail",
+    SET_SCHOOL_LINK_WEB: "setSchoolLinkWeb",
+    SET_SCHOOL_LINK_WEB_DETAIL: "setSchoolLinkWebDetail",
+    SET_SCHOOL_NEWS: "setSchoolNews",
+    SET_SCHOOL_ORG_INTRO: "setSchoolOrgIntro",
+    SET_SCHOOL_PROFESSIONS: "setSchoolProfessions",
+    SET_SCHOOL_PROFESSIONS_DETAIL: "setSchoolProfessionsDetail",
+    SET_SCHOOL_TIMETABLE: "setSchoolTimeTable",
+    SET_SCHOOL_TIMETABLE_DETAIL: "setSchoolTimeTableDetail",
 };
+
+export const SCHOOL_NEWS = {
+    SET_SCHOOL_NEWS : "setSchoolNews",
+    SET_SCHOOL_NEWS_DETAIL : "setSchoolNewsDetail"
+}
 
 export const SCHOOL_ELEARNING = {
     SET_SCHOOL_ELEARNING_SOURCE: "setSchoolElearningSource",
@@ -364,11 +390,16 @@ export const SCHOOL_TEACHERS = {
     SET_SCHOOL_TEACHERS_DELETE: "setSchoolTeachersDelete",
 };
 
+export const SCHOOL_ORGANIZATION = {
+    SET_SCHOOL_ORGANIZATION: "setSchoolOrganization",
+};
+
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
     SET_EXPAND: "setElearningStudyExpand",
-    SET_FULLSCREEN: "setElearningStudyFullScreen"
+    SET_FULLSCREEN: "setElearningStudyFullScreen",
+    SET_SCORM_ITEMS: "setElearningStudyScormItems",
 };
 
 export const ELEARNING_STUDY_OVERVIEW = {
@@ -419,6 +450,7 @@ export const ELEARNING_STUDY_EXERCISE = {
     SET_STUDY_EXERCISE_QUESTION_CURRENT: "setStudyExerciseQuestionCurrent",
     SET_STUDY_EXERCISE_AUTO_SUBMISSION: "setStudyExerciseAutoSubmission",
     SET_STUDY_EXERCISE_CURRENT_LESSION: "setStudyExerciseCurrentLession",
+    SET_STUDY_PAGINATED_ELEARNING_EXERCISE_LIST: "setStudyPaginatedElearningExerciseList"
 };
 
 export const ELEARNING_STUDY_PROGRESS = {
@@ -515,6 +547,15 @@ export const SOCIAL_NOTI = {
     COMMIT_NOTI_UNREAD: "commitNotiUnread",
 };
 
+export const HEADER_NOTI = {
+    SET_NOTIFICATIONS_ELEARNING_LIST: "setNotificationsElearning",
+    SET_NOTIFICATIONS_SOCIAL_LIST: "setNotificationsSocial",
+    SET_COUNT_NOTI_ELEARNING: "setCountNotiElearning",
+    SET_COUNT_NOTI_SOCIAL: "setCountNotiSocial",
+    SET_CHECK_FIREBASE: "setCheckFireBase",
+    SET_CHECK_TYPE_NOTI: "setCheckTypeNoti",
+};
+
 export const SOCIAL_FRIEND = {
     SET_SOCIAL_FRIEND_INVITE_LIST: "setFriendInviteList",
 };
@@ -532,6 +573,10 @@ export const TEACHING_STUDENT_PROGRESS = {
     SET_TEACHING_STUDENT_PROGRESS_LIST: "setTeachingStudentProgressList",
 };
 
+export const TEACHING_STUDENT_EXERCISES = {
+    SET_TEACHING_STUDENT_EXERCISES_LIST: "setTeachingStudentExercisesList",
+};
+
 export const TEACHING_ELEARNING_REQUESTS = {
     SET_TEACHING_ELEARNING_REQUESTS_LIST: "setTeachingStudentRequestList",
 };
@@ -542,6 +587,10 @@ export const TEACHING_ELEARNING_INVITES = {
 
 export const TEACHING_INTERACTIVE_LISTQUESTION = {
     SET_TEACHING_INTERACTIVE_LISTQUESTION_LIST: "setTeachingInteractiveListquestion",
+};
+
+export const TEACHING_INTERACTIVE_LISTANSWER = {
+    SET_TEACHING_INTERACTIVE_LISTANSWER_LIST: "setTeachingInteractiveListAnswer",
 };
 
 export const TEACHING_INTERACTIVE_ACCOUNCEMENT = {
@@ -566,6 +615,7 @@ export const TEACHING_STUDENTS_PRIVATE = {
 
 export const KEYWORD = {
     SEARCH_HEADER: "searchHeader",
+    CHECK_ROUTE_CLEAR_KEYWORK: "checkRouteCleaKeyword"
 };
 
 export const CHAT = {
@@ -578,5 +628,12 @@ export const CHAT = {
     SET_ON_MESSAGE: "setOnMessage",
     SET_RES_EMIT: "setResEmit",
     SET_IMAGE_LIST: "setImageList",
-    SET_FILE_LIST: "setFileList"
+    SET_FILE_LIST: "setFileList",
+    SET_FRIENDS_LIST: "setFriendsList",
+    SET_MESSAGE_LIST_FETCH: "setMessageListFetch"
 };
+
+export const TIMETABLE = {
+    SET_TIMETABLE_LIST: "setTimeTableList",
+    SET_STATE_TIMETABLE: "setStateTimeTable"
+}

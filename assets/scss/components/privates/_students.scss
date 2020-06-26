@@ -1,9 +1,6 @@
 .wrap_list-students{
     display: flex;
     align-items: center;
-    padding: 16px;
-    margin-top: 1.6rem;
-    background: #F9F9F9;
     .app-search{
         width: 459px;
         margin-right: 12px;
@@ -15,24 +12,32 @@
         margin-bottom: 0;
     }
 }
+.wrap-header-students{
+    background: #F9F9F9;
+    padding: 16px;
+    margin-top: 1.6rem;
+}
 .wrap-table{
-        background: #FFFFFF;
-        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
         .app-table{
-            padding: 2rem 0;
             font-size: 1.4rem;
             thead{
                 th{
                     font-weight: normal;
-                    color: #999999;
+                    color: #999999 !important;
                     border-top: none;
+                    font-size: 1.4rem;
                 }
             }
             td{
                 border-bottom: none;
             }
             .wrap-name__table{
-                width: 20%;
+                &:nth-child(5){
+                    white-space: nowrap;
+                    span{
+                        width:3.7rem
+                    }
+                }
             }
         }
     }
@@ -44,7 +49,6 @@
 }
 .wrap-name-class__table{
     color: $color-primary;
-    margin-left: 9.5rem;
     .tooltip-arrow{
         display: none;
     }

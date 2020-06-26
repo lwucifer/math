@@ -1,5 +1,11 @@
 <template>
-  <app-modal centered :width="420" :component-class="{ 'create-group-chat-modal': true }">
+  <app-modal
+    centered
+    :width="420"
+    :component-class="{ 'create-group-chat-modal': true }"
+    :header="false"
+    :footer="false"
+  >
     <div slot="content">
       <h5>Thêm bạn</h5>
       <app-search class="mb-0" />
@@ -78,8 +84,9 @@ export default {
     },
     hanldeAddMember() {
       const data = {
-        room_id: this.$route.params.id,
-        member_id: this.arrMember.toString()
+        id: this.$route.params.id,
+        member_id: this.arrMember.toString(),
+        end: "members"
       };
       // const params = {
       //   room_id: this.$route.params.id

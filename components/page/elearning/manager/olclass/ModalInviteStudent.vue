@@ -1,11 +1,17 @@
 <template>
-  <app-modal centered :width="600" :component-class="{ 'invite-student-modal': true }"
-     :footer="false" title="Mời thêm học sinh"
-     @close="close(false)"
+  <app-modal
+    centered
+    :width="600"
+    :component-class="{ 'invite-student-modal': true }"
+    :footer="false"
+    title="Gửi Email thông báo lịch học"
+    @close="close(false)"
   >
     <div slot="content">
       <div>
-        <p>Gửi lời mời tham gia <b>Phòng học online số 1</b> của bạn tới học sinh trong trường THCS Nguyễn Trãi</p>
+        <p>
+          Gửi thông báo lịch học của <b>{{title}}</b> tới học sinh của bạn.
+        </p>
         <div class="mt-4 d-flex-center">
           <strong class="pr-4">Chọn lớp</strong>
           <app-vue-select
@@ -24,21 +30,21 @@
 
       <div class="student-list">
         <div class="item">
-          <app-checkbox class="ml-auto" @change="handelAllCheckbox" />
-          <strong>Chọn tất cả danh sách</strong>
+          <app-checkbox class="ml-auto" @click="handleAllCheckbox" :checked="checkAll">
+            <strong>Chọn tất cả danh sách</strong>
+          </app-checkbox>
         </div>
         <div class="item" v-for="(item, index) in studentList ? studentList : []" :key="index">
           <app-checkbox
             class="ml-auto"
-            @change="handelCheckbox(item.id)"
+            @click="handleCheckbox(item.id)"
             :checked="arrMember.includes(item.id)"
-          />
-          <span>{{item.name}}</span>
+          >{{item.name}}</app-checkbox>
         </div>
       </div>
       <div class="text-center mt-4">
         <app-button color="white" class="mr-4 pl-5 pr-5" square @click="close(false)">Hủy</app-button>
-        <app-button square @click="hanldeInvate" class="pl-5 pr-5">Mời</app-button>
+        <app-button square @click="hanldeInvate" class="pl-5 pr-5">Gửi</app-button>
       </div>
     </div>
   </app-modal>
@@ -56,14 +62,20 @@ const STORE_SCHOOL_STUDENT = "elearning/school/school-student";
 
 export default {
   components: {},
+  props: {
+    title: {
+      type: String,
+      default: ""
+    }
+  },
 
   data() {
     return {
       arrMember: [],
-      name: "",
       classSelected: null,
       classList: [],
       studentList: [],
+      checkAll: false,
       invateStudent: {
         invitation_ids: ["string"],
         online_class_id: "string",
@@ -79,14 +91,16 @@ export default {
 
     arrayToStringIds(data) {
       return data.reduce((result, item) => {
-        const com = result ? '","' : '';
-        return result = result + com + item;
-      }, '')
+        const com = result ? '","' : "";
+        return (result = result + com + item);
+      }, "");
     },
 
     async hanldeInvate() {
       if (this.arrMember.length > 0) {
-        const online_class_id = this.$route.params.id ? this.$route.params.id : "";
+        const online_class_id = this.$route.params.id
+          ? this.$route.params.id
+          : "";
         let params = {
           online_class_id: online_class_id,
           student_ids: [...this.arrMember]
@@ -98,40 +112,55 @@ export default {
           );
         } catch (e) {
         } finally {
-          this.close(true)
+          this.close(true);
         }
       }
     },
 
     async handleChangedClass() {
+      this.checkAll = false;
       let params = {
         class_id: this.classSelected.value,
-        size: 999
+        size: 9999
       };
       try {
         await this.$store.dispatch(
           `${STORE_SCHOOL_STUDENT}/${actionTypes.SCHOOL_STUDENTS.LIST}`,
           params
         );
-        this.studentList = this.get(this.stateSchoolStudents, "data.content", []);
+        this.studentList = this.get(
+          this.stateSchoolStudents,
+          "data.content",
+          []
+        );
       } catch (e) {
       } finally {
       }
     },
 
-    handelAllCheckbox(checked) {
-      if (checked) {
-        this.arrMember = this.studentList.map(item => item.id);
-      } else {
-        this.arrMember = [];
-      }
+    handleAllCheckbox() {
+      this.checkAll = !this.checkAll;
+      this.$nextTick(() => {
+        if (this.checkAll) {
+          this.arrMember = this.studentList.map(item => item.id);
+        } else {
+          this.arrMember = [];
+        }
+      });
     },
-    handelCheckbox(_id) {
+
+    handleCheckbox(_id) {
       if (this.arrMember.includes(_id)) {
         this.arrMember = this.arrMember.filter(item => item !== _id);
       } else {
         this.arrMember.push(_id);
       }
+
+      this.checkAll && (this.checkAll = false);
+      this.$nextTick(() => {
+        this.arrMember.length === this.studentList.length &&
+          (this.checkAll = true);
+      });
     },
 
     async getSchoolClasses() {

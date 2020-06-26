@@ -34,7 +34,7 @@
             <app-input v-model="organization.address" disabled />
           </div>
           <div class="col-md-3">
-            <label for class="form--normal__title">Mã cán bộ</label>
+            <label for class="form--normal__title">Mã liên kết</label>
           </div>
           <div class="col-md-9">
             <app-input v-model="work.code" disabled />
@@ -123,7 +123,7 @@ export default {
   watch: {
     profileList: {
       handler: function() {
-        this.organization.code = get(this, "profileList.code", "");
+        this.organization.code = get(this, "profileList.organization.code", "");
         this.organization.name = get(this, "profileList.organization.name", "");
         this.organization.phone = get(
           this,

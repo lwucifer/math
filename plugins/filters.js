@@ -1,6 +1,6 @@
 import numeral from "numeral";
 import Vue from "vue";
-import { DATETIME_FULL_TEXT } from "~/utils/config";
+import { DATETIME_FULL_TEXT, DATE_BIRTHDAY, DATETIME_HH_MM_DD_MM_YY_DASH, DATETIME_FULL_DATE_TEXT } from "~/utils/config";
 import { EXERCISE_CATEGORIES, EXERCISE_STATUS, EXERCISE_TYPES, SUBMISSION_RESULTS, TRANSACTION_STATUSES, WITHDRAWAL_STATUSES } from "~/utils/constants";
 // const moment = require("moment");
 import { getLocalDateTime } from '~/utils/moment';
@@ -26,7 +26,7 @@ export function uppercaseFirst(string) {
 }
 
 /**
- * 10000 => "10.000" by numeral
+ * 10000 => 10,000, 10.000
  * @param {Number} num
  * @param {String} format
  */
@@ -254,6 +254,13 @@ export function getExerciseTypeText(type = "") {
   }
 }
 
+export function getTestTypeText(type = "") {
+  if (type === EXERCISE_TYPES.CHOICE) {
+    return "Bài kiểm tra trắc nghiệm";
+  } else if (type === EXERCISE_TYPES.ESSAY) {
+    return "Bài kiểm tra tự luận";
+  }
+}
 
 export function getQuestionNoText(_index = "") {
   let noText = '';
@@ -319,9 +326,22 @@ export function getDateTimeFullText(_utcDate = "") {
   if (!_utcDate) return;
   // const ts = moment.utc(_utcDate);
   const ts = getLocalDateTime(_utcDate);
-  return ts.format(DATETIME_FULL_TEXT);
+  return ts.format(DATETIME_FULL_DATE_TEXT);
 }
 
+export function getDateBirthday(_utcDate = "") {
+  if (!_utcDate) return;
+  // const ts = moment.utc(_utcDate);
+  const ts = getLocalDateTime(_utcDate);
+  return ts.format(DATE_BIRTHDAY);
+}
+
+export function getDateTimeHhMmDdMmYyDash(_utcDate = "") {
+  if (!_utcDate) return;
+  // const ts = moment.utc(_utcDate);
+  const ts = getLocalDateTime(_utcDate);
+  return ts.format(DATETIME_HH_MM_DD_MM_YY_DASH);
+}
 
 /**
  * convert seconds to text: hh giờ mm phút
@@ -352,6 +372,13 @@ export function capitalizeFirstLetter(s="") {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
+export function capitalizeFirstLetterOfString(s="") {
+  // console.log("[capitalizeFirstLetterOfString]", s);
+  const arr = s.split(" ");
+  const [first, second, ...third] = arr;
+  return [first, capitalizeFirstLetter(second), third.join(" ")].join(" ");
+}
+
 const filters = {
   toThousandFilter,
   uppercaseFirst,
@@ -365,12 +392,15 @@ const filters = {
   transactionStatus2Txt,
   convertBreadcrumText,
   getExerciseTypeText,
+  getTestTypeText,
   getQuestionNoText,
   getDateTimeFullText,
+  getDateBirthday,
   formatHour,
   resultFigureRate,
   formatMMSS,
   capitalizeFirstLetter,
+  capitalizeFirstLetterOfString,
 };
 
 // register global utility filters

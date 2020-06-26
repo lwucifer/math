@@ -4,7 +4,7 @@
       <n-link to class="post__avatar-wrapper">
         <app-avatar
           class="post__avatar"
-          :src="post.author && post.author.avatar ? post.author.avatar.medium : null"
+          :src="get(post, 'author.avatar', null)"
           :size="55"
         ></app-avatar>
       </n-link>
@@ -13,8 +13,8 @@
         <div class="post__title-row mb-2">
           <h5 class="post__name">
             <n-link
-              :to="`/account/${post.author.id}`"
-            >{{ post.author && post.author.fullname ? post.author.fullname : '' }}</n-link>
+              :to="`/account/${get(post, 'author.id', null)}`"
+            >{{ get(post, 'author.full_name', '') }}</n-link>
 
             <span v-if="post.label" class="font-weight-normal">
               cảm thấy {{ post.label.icon }}
@@ -57,7 +57,7 @@
     </div>
 
     <div class="post__post">
-      <div v-if="!checkEditorEmpty(post.content)" v-html="post.content" class="post__post-desc"></div>
+      <div v-if="!checkEditorEmpty(post.text)" v-html="post.text" class="post__post-desc"></div>
       <!-- <a href @click.prevent class="post__post-readmore">Xem thêm</a> -->
 
       <slot name="media-content" :link="testJSON(post.link)  ? JSON.parse(post.link) : null" />
@@ -69,18 +69,18 @@
       <div class="post__count">
         <div class="post__count-like">
           <IconFavorite class="icon heading-3 mr-3 color-primary fill-opacity-1" />
-          {{ post.total_like }} lượt thích
+          {{ get(post, 'counter.reaction', 0) }} lượt thích
         </div>
 
         <div>
-          <span class="post__count-comment">{{ post.total_comment }} bình luận</span>
-          <span>{{ post.total_share }} lượt chia sẻ</span>
+          <span class="post__count-comment">{{ get(post, 'counter.comment', 0) }} bình luận</span>
+          <span>{{ get(post, 'counter.share', 0) }} lượt chia sẻ</span>
         </div>
       </div>
 
       <app-divider class="mt-3 mb-0" />
 
-      <div class="post__actions my-3">
+      <div class="post__actions">
         <button
           class="post__button"
           :class="{ 'active': post.is_like }"
@@ -181,14 +181,6 @@ export default {
   props: {
     showMenuDropdown: Boolean,
     showComment: Boolean,
-    comments: {
-      type: Number,
-      default: 0
-    },
-    content: {
-      type: String,
-      default: ""
-    },
     post: {
       type: Object,
       default: () => ({
@@ -196,13 +188,12 @@ export default {
       }),
       validator: value =>
         [
-          "post_id",
+          "id",
           "author",
           "created_at",
-          "total_like",
-          "total_comment",
-          "content",
-          "privacy"
+          "counter",
+          "text",
+          "type",
         ].every(key => key in value)
     }
   },
@@ -241,6 +232,7 @@ export default {
 
   methods: {
     checkEditorEmpty,
+    get,
     testJSON,
 
     handleClickDelete() {

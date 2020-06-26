@@ -39,8 +39,8 @@
       </app-upload>
 
       <p class="text-base caption mt-2">
-        <span class="text-dark font-weight-semi-bold">Lưu ý:</span> Upload tài
-        liệu bổ trợ cho bài học của bạn, dung lượng không quá 50MB cho 1 file
+        <span class="text-dark font-weight-semi-bold">Lưu ý:</span> Upload bài
+        học định dạng văn bản, dung lượng không quá 50MB cho 1 file
       </p>
     </div>
 
@@ -56,6 +56,7 @@
 import DocumentSelectDoc from "~/components/page/course/create/common/DocumentSelectDoc";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
+import { get } from "lodash";
 
 export default {
   components: {
@@ -68,6 +69,14 @@ export default {
       tabDocument: "typing",
       article_content: "",
     };
+  },
+
+  props: {
+    lesson: {},
+  },
+
+  mounted() {
+    this.handleGetContentArticle();
   },
 
   watch: {
@@ -83,6 +92,21 @@ export default {
   },
 
   methods: {
+    handleGetContentArticle() {
+      if (get(this, "lesson.type", "") === "ARTICLE") {
+        let that = this;
+        const url = get(this, "lesson.link", "");
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        xhr.addEventListener("readystatechange", function() {
+          if (this.readyState === 4) {
+            that.article_content = this.responseText;
+          }
+        });
+        xhr.open("GET", url);
+        xhr.send();
+      }
+    },
     changeTabDocument(type) {
       this.$emit("handleReset");
       this.tabDocument = type;

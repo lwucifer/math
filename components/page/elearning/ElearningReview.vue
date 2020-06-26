@@ -6,19 +6,19 @@
         <div class="row items-center">
           <div class="col-md-6 col-sm-12">
             <div class="text-center d-inline-block">
-              <strong class="h1 color-primary">{{
-                numeral(get(info, "voting.average_rate", 0)).format("0,0.[0]")
-              }}</strong>
+              <h1 class="h1 color-primary">
+                {{
+                  numeral(get(info, "voting.average_rate", 0)).format("0,0.0")
+                }}
+              </h1>
               <app-stars
                 :stars="Math.ceil(get(info, 'voting.average_rate', 0))"
                 :size="16"
                 class="mt-2 mb-3"
               />
               <p>
-                ({{
-                  numeral(get(info, "voting.total_votes", 0)).format()
-                }}
-                người đánh giá)
+                ({{ numeral(get(info, "voting.total_votes", 0)).format() }}
+                đánh giá)
               </p>
             </div>
           </div>

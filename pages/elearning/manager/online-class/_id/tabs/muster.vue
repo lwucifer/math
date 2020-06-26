@@ -5,7 +5,7 @@
        <div class="filter-form__item top" @click="openModal = true">
         <app-button color="info" class="filter-form__item__btn" square :size="'sm'">
           <IconPlusCircle class="mr-2 fill-white"/>
-          <span class="color-white">Mời thêm học sinh</span>
+          <span class="color-white">Gủi thông báo lịch học</span>
         </app-button>
       </div>
     </div>
@@ -13,12 +13,12 @@
 
     <!--Info group-->
     <div class="class-info mb-4">
-      <strong>Tổng số học sinh đã mời: <span class="color-primary">{{summary.total_student}}</span></strong>
+      <strong>Tổng số học sinh đã tham gia bài giảng của bạn: <span class="color-primary">{{summary.total_student}}</span></strong>
       <div class="class-info-content mt-3">
-        <div class="item">Tỷ lệ có mặt: <strong class="color-primary">{{summary.attendant_rate}}%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt: <strong class="color-primary">{{summary.absence_rate}}%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt có phép: <strong class="color-primary">{{summary.absence_with_permission_rate}}%</strong></div>
-        <div class="item">Tỷ lệ vắng mặt không phép: <strong class="color-primary">{{summary.absent_without_permisson_rate}}%</strong></div>
+        <div class="item">Có mặt: <strong class="color-primary">{{summary.attendant_rate}}%</strong></div>
+        <div class="item">Đến muộn: <strong class="color-primary">{{summary.late_rate}}%</strong></div>
+        <div class="item">Vắng mặt có phép: <strong class="color-primary">{{summary.absence_with_permission_rate}}%</strong></div>
+        <div class="item">Vắng mặt không phép: <strong class="color-primary">{{summary.absent_without_permisson_rate}}%</strong></div>
       </div>
     </div>
     <!--end info group-->
@@ -31,7 +31,7 @@
             <app-search
               class
               :placeholder="'Nhập để tìm kiếm...'"
-              v-model="params.query"
+              v-model="query"
               :size="'sm'"
               @submit="submit"
               @keyup.enter.native="submit"
@@ -65,6 +65,10 @@
           ></app-vue-select>
         </div>
       </div>
+
+      <div class="text-right mb-3 mt-2">
+        <i>Thống kê tỷ lệ học sinh tham gia từng buổi học online của bạn.</i>
+      </div>
     </div>
     <!--End filter form-->
 
@@ -74,11 +78,12 @@
       :heads="heads"
       :pagination="pagination"
       @pagechange="onPageChange"
+      @sort="handleSort"
       :data="lessons"
     >
       <template v-slot:cell(start_time)="{row}">
         <td>
-          <div>
+          <div style="white-space: nowrap">
             {{getLocalTimeHH_MM_A(row.start_time)}} - {{getLocalTimeHH_MM_A(row.end_time)}}
           </div>
           <div>
@@ -102,7 +107,7 @@
     <!--End table-->
 
     <!-- Modal invite students -->
-    <ModalInviteStudent @close="openModal = false" v-if="openModal"/>
+    <ModalInviteStudent @close="closeModal" v-if="openModal" :title="get(stateClassInfo, 'data.name', '')"/>
     <!-- End -->
   </div>
 </template>
@@ -150,6 +155,7 @@ export default {
 
   data() {
     return {
+      query: null,
       allOpt: {
         value: null,
         text: 'Tất cả'
@@ -162,12 +168,10 @@ export default {
         {
           name: "online_class_name",
           text: "Phòng học",
-          sort: true
         },
         {
           name: "elearning_name",
           text: "Thuộc bài giảng/khóa học",
-          sort: true
         },
         {
           name: "lesson_index",
@@ -188,40 +192,7 @@ export default {
           text: ""
         }
       ],
-      indexs: [
-        {
-          value: '0',
-          text: '0'
-        },
-        {
-          value: '1',
-          text: '1'
-        },
-        {
-          value: '2',
-          text: '2'
-        },
-        {
-          value: '3',
-          text: '3'
-        },
-        {
-          value: '4',
-          text: '4'
-        },
-        {
-          value: '5',
-          text: '5'
-        },
-        {
-          value: '6',
-          text: '6'
-        },
-        {
-          value: '7',
-          text: '7'
-        },
-      ],
+      totalElements: 0,
       filterIndex: null,
       pagination: {
         total: 0,
@@ -236,8 +207,11 @@ export default {
         page: 1,
         size: 10,
         query: null,
+        sort: 'start_time,desc'
       },
       loading: false,
+      firstLoad: true,
+      checkFilter: false
     };
   },
   computed: {
@@ -247,14 +221,29 @@ export default {
       stateAttendantSummary: "AttendantSummary",
     }),
     indexOpts() {
-      return [this.allOpt, ...this.indexs]
-    }
+      let indexs = Array.from({ length: this.totalElements }).map((_, i) => {
+        return {value: i + 1, text: i + 1}
+      });
+      return [this.allOpt, ...indexs]
+    },
+  },
+
+  watch: {
+    query() {
+      this.checkFilter = true;
+    },
   },
 
   methods: {
     getDateBirthDay,
     getLocalTimeHH_MM_A,
 
+    handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
+    
     toggleFilter() {
       if (this.showFilter && this.filterIndex != null) {
         this.filterIndex = null;
@@ -274,7 +263,10 @@ export default {
       that.getList();
     },
     submit() {
-      this.getList();
+      if (this.checkFilter) {
+        this.getList();
+        this.checkFilter = false;
+      }
     },
     handleChangedIndex() {
       this.params.lesson_index = this.filterIndex.value;
@@ -286,6 +278,7 @@ export default {
         this.loading = true;
         const online_class_id = this.$route.params.id ? this.$route.params.id : "";
         this.params.online_class_id = online_class_id;
+        if (this.query != null) {this.params.query = this.query}
         let params = { ...this.params };
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSONS.LIST}`,
@@ -299,10 +292,12 @@ export default {
         this.pagination.total_pages = this.get(this.stateLessons, 'data.total_pages', 0)
         this.pagination.total_elements = this.get(this.stateLessons, 'data.total_elements', 0)
         this.pagination.number_of_elements = this.get(this.stateLessons, 'data.number_of_elements', 0)
+        if (this.firstLoad ) this.totalElements = this.get(this.stateLessons, 'data.total_elements', 0);
       } catch (e) {
 
       } finally {
-        this.loading = false
+        this.loading = false;
+        this.firstLoad = false;
       }
     },
     

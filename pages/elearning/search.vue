@@ -212,7 +212,7 @@ export default {
         level: null,
         free: null,
         page: 1,
-        size: PAGE_SIZE.DEFAULT,
+        limit: PAGE_SIZE.ELEARNING_12,
         sort: this.$route.query.sort
           ? this.$route.query.sort
           : null,
@@ -258,6 +258,7 @@ export default {
   },
 
   async created() {
+    this.payload.keyword = await this.keywordSearchHeader ? this.keywordSearchHeader : null;
     this.getLessons();
   },
 
@@ -267,7 +268,7 @@ export default {
     }),
 
     ...mapState("elearning/public/public-voted-subjects", ["votedSubjects"]),
-    ...mapState("keyword", ["keyword"]),
+    ...mapState("keyword", ["keywordSearchHeader"]),
 
     categoryOpts() {
       const alls = optionSelectSubject(this.levels);
@@ -300,7 +301,7 @@ export default {
   },
 
   watch: {
-    keyword(_newVal) {
+    keywordSearchHeader(_newVal) {
       this.payload.page = 1;
       this.payload.keyword = _newVal ? _newVal : null;
       this.getLessons();
@@ -308,7 +309,6 @@ export default {
   },
 
   beforeDestroy() {
-    console.log('[Clear Search Header]')
     this.searchHeader();
   },
 
@@ -400,7 +400,7 @@ export default {
     onPageChange(e) {
       console.log("[onPageChange]", e);
       this.payload.page = e.number + 1;
-      this.payload.size = PAGE_SIZE.DEFAULT;
+      this.payload.limit = PAGE_SIZE.ELEARNING_12;
 
       this.getLessons();
     },

@@ -18,19 +18,54 @@
             Tên phòng:
             <b>{{ get(data, "extra_info.online_class_name", "") }}</b>
           </p>
+          <p class="mb-3" v-if="isCanJoinRoom">
+            <span
+              >Đang diễn ra:
+              <b>Tiết học {{ get(activeSession, "position", "") }}</b
+              >:
+            </span>
+            <a
+              class="bold text-decoration-none text-secondary"
+              :href="activeSession.join_url"
+              target="_blank"
+              >{{ getLocalTimeHH_MM_A(activeSession.start_time, 0) }} -
+              {{
+                getLocalEndTime(
+                  activeSession.start_time,
+                  activeSession.duration,
+                  "minutes"
+                )
+              }}</a
+            >
+          </p>
           <p class="mb-3">
             Giáo viên:
             <b>{{ get(data, "extra_info.teacher_name", "") }}</b>
           </p>
-          <p class="mb-3">
+          <!-- <p class="mb-3">
             Giờ bắt đầu:
             <b>{{
               getLocalTimeHH_MM_A(get(data, "extra_info.start_time", ""))
             }}</b>
+          </p> -->
+          <p class="mb-3">
+            Giờ bắt đầu:
+            <b v-if="isCanJoinRoom">{{
+              get(data, "extra_info.start_time", "") | fullDateTimeSlash
+            }}</b>
+            <b v-else>{{ get(data, "next_time", "") | fullDateTimeSlash }}</b>
           </p>
-          <p>
+          <!-- <p>
             Thời lượng:
             <b>{{ get(data, "extra_info.duration", "") | formatHour }}</b>
+          </p> -->
+          <p v-if="isCanJoinRoom">
+            Thời lượng:
+            <b>{{ get(data, "extra_info.duration", 0) | formatHour }}</b>
+          </p>
+
+          <p v-if="!isCanJoinRoom">
+            <b>Phòng học chưa bắt đầu. Vui lòng quay lại sau.</b>
           </p>
         </div>
 
@@ -65,7 +100,7 @@
           </p>
           <div class="mb-4 mt-4 d-flex-center justify-content-center">
             <a
-              :href="activeSessionLink"
+              :href="activeSession.start_url"
               target="_blank"
               class="btn btn--color-primary btn--square mr-4 btn--size-lg"
               :v-if="data.is_started"
@@ -89,7 +124,10 @@
                   <span style="color: #222">Tiết học {{ index + 1 }}: </span>
                   <a
                     class="bold text-decoration-none"
-                    :class="{'text-secondary': activeSessionLink == item.start_url}"
+                    :class="{
+                      'text-secondary':
+                        activeSession.start_url == item.start_url
+                    }"
                     :href="item.start_url"
                     target="blank"
                     >{{ getLocalTimeHH_MM_A(item.start_time, 0) }} -
@@ -116,15 +154,15 @@
         description="Việc thoát khỏi phòng đợi sẽ gây ảnh hưởng đến buổi học online của bạn."
       /> -->
       <app-modal-confirm
-      v-if="showModalConfirm"
-      @ok="close()"
-      :width="550"
-      @cancel="showModalConfirm = false"
-      :footer="false"
-      :header="false"
-      title="Bạn có chắc chắn muốn thoát?"
-      description="Việc thoát khỏi phòng đợi sẽ gây ảnh hưởng đến buổi học online của bạn."
-    />
+        v-if="showModalConfirm"
+        @ok="close()"
+        :width="550"
+        @cancel="showModalConfirm = false"
+        :footer="false"
+        :header="false"
+        title="Bạn có chắc chắn muốn thoát?"
+        description="Việc thoát khỏi phòng đợi sẽ gây ảnh hưởng đến buổi học online của bạn."
+      />
     </div>
   </app-modal>
 </template>
@@ -134,6 +172,7 @@ import {
   getLocalEndTime,
   getLocalTimeHH_MM_A,
   getLocalDateTime,
+  addDurationToUTCDate,
 } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -162,8 +201,8 @@ export default {
       seconds: null,
       currentZoom: null,
       showModalConfirm: false,
-      activeSessionLink: "#",
-      activeSession: false
+      // activeSessionLink: "#",
+      activeSession: {}
     };
   },
 
@@ -189,7 +228,15 @@ export default {
           { params }
         );
 
-        self.data = self.get(self.stateClass, "data", []);
+        const data = self.get(self.stateClass, "data", {});
+        // console.log("[data]", data);
+        const sessionImpl = data.sessions.map(s => {
+          return {
+            ...s,
+            end_time: addDurationToUTCDate(s.start_time, s.duration, "m")
+          }
+        });
+        self.data = { ...data, sessions: sessionImpl };
         self.dataLength = self.get(self.stateClass, "data.sessions", []).length;
 
         this.setCountdown();
@@ -206,16 +253,18 @@ export default {
       console.log("[setActiveLinkSession]");
       // lessiong is living => open zoom
       // if (this.data.is_started == true) {
-      const sessions = this.data.sessions || [];
+      const sessions = get(this, "data.sessions", []);
 
       // calculate current session base on: start_time + duration vs new Date();
-      let activeSession = null;
+      // let activeSession = null;
       const now = new Date();
       for (let i = 0; i < sessions.length; i++) {
         const endTime = getLocalDateTime(sessions[i].end_time);
         if (now <= new Date(endTime)) {
-          activeSession = sessions[i];
-          this.activeSessionLink = activeSession.start_url;
+          // activeSession = sessions[i];
+          // this.activeSessionLink = activeSession.start_url;
+          this.activeSession = sessions[i];
+          // console.log("[activeSession]", this.activeSession);
           return;
         }
       }
@@ -252,7 +301,11 @@ export default {
     ...mapState("auth", ["loggedUser"]),
     ...mapState(STORE_NAMESPACE, {
       stateClass: "LessonSessions"
-    })
+    }),
+
+    isCanJoinRoom() {
+      return !!this.dataLength;
+    }
   },
 
   created() {

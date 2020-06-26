@@ -5,7 +5,7 @@
       :key="index"
     >
       <div class="item">
-        <label class="content-title">Câu hỏi {{ get(item, 'index', '*') }}</label>
+        <label class="content-title">Câu hỏi {{ get(item, 'index', '*') }} ({{ get(item, 'points', 0) }} điểm)</label>
         <div class="test-content" v-html="get(item, 'content', '')"></div>
       </div>
       <div class="item">
@@ -16,6 +16,13 @@
             <div v-else class="text-center caption text-gray-2">Chưa có câu trả lời</div>
           </div>
         </div>
+      </div>
+      <div class="item elearning-writing-test-result">
+        <attachment-assets
+          v-if="get(item, 'student.attachment', false)"
+          :link="get(item, 'student.attachment')"
+	  :title="get(item, 'student.attachment_name', '')"
+        />
       </div>
     </div>
     <div class="item" v-if="note">
@@ -30,8 +37,12 @@
 
 <script>
   import { get } from "lodash"
+  import AttachmentAssets from "~/components/page/elearning/manager/exam/AttachmentAssets"
   
   export default {
+    components: {
+      AttachmentAssets
+    },
     props: {
       contents: {
         type: Array,

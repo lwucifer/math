@@ -13,6 +13,7 @@
       :header-ext-cls="{ 'table-header-border-0': true }"
       :ext-table-cls="{ 'pt-3': true }"
       :pagination-style="{ position: 'right' }"
+      @sort="sortTable"
     >
       <template v-slot:cell(status)="{row}">
         <td v-if="row.status != statusPending">
@@ -30,19 +31,34 @@
           >{{ statusCancel | transactionStatus2Txt }}</span>
         </td>
       </template>
-      <template v-slot:cell(desc)="{row}">
+      <template v-slot:cell(elearning_name)="{row}">
         <td>
-          {{ row.desc | truncStrFilter(30) }}
+          <v-popover
+            trigger="hover"
+            popover-inner-class="tooltip-inner popover-inner dont-break-out"
+            popover-class="tooltip-account-info-table"
+          >
+            {{ row.elearning_name | truncStrFilter(30) }}
+            <template slot="popover">
+              {{ row.elearning_name}}
+            </template>
+          </v-popover>
         </td>
       </template>
       <template v-slot:cell(cost)="{row}">
         <td>
-          {{ row.cost | toThousandFilter }} đ
+          {{ row.cost | numeralFormat("0,0") }} đ
         </td>
       </template>
       <template v-slot:cell(timestamp)="{row}">
         <td>
           {{ row.timestamp | moment("DD-MM-YYYY") }}
+        </td>
+      </template>
+      <template v-slot:cell(method)="{row}">
+        <td>
+          <span v-if="row.method=='ATM'">ATM/Internet Banking</span>
+          <span v-else-if="row.method=='CREDIT'">Thẻ tín dung/Thẻ ghi nợ</span>
         </td>
       </template>
     </app-table>
@@ -104,7 +120,7 @@ export default {
           sort: true
         },
         {
-          name: "desc",
+          name: "elearning_name",
           text: "Sản phẩm",
         },
         {
@@ -220,6 +236,10 @@ export default {
       } else {
         return {};
       }
+    }
+    ,
+    sortTable(data) {
+        this.$emit('changedSort', data)
     }
   }
 };

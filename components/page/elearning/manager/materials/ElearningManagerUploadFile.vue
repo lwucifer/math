@@ -35,7 +35,7 @@
                   Tải lên thành công
                 </span>
               </p>
-              <p class="file-name text-center">{{ currentFile.name }}</p>
+              <p class="file-name text-center" :title="currentFile.name">{{ currentFile.name | truncStrFilter(35) }}</p>
             </div>
       
             <!--Button continue uploading-->
@@ -56,7 +56,7 @@
     
           <!--Uploading-->
           <div class="py-3" v-if="isUploading">
-            <p class="file-name mb-2"><b>{{ currentFile.name }}</b></p>
+            <p class="file-name mb-2" :title="currentFile.name"><b>{{ currentFile.name | truncStrFilter(35) }}</b></p>
             <div class="mb-2" style="padding-right: 2.7rem; position: relative">
               <div>
                 <app-progress
@@ -278,6 +278,8 @@
 
         let config = {
           onUploadProgress: progressEvent => {
+            console.log("[onUploadProgress]", progressEvent);
+            
             this.loadedPayload = progressEvent.loaded
             this.uploadTimestamp = progressEvent.timeStamp
             let totalPayload = progressEvent.total

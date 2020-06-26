@@ -34,8 +34,10 @@
           <IconClose class="icon" />
         </span>
       </div>
+      
       <!-- End Upload Image -->
     </div>
+    <app-button @click.prevent="submit" class="ml-10" size="sm">Gửi</app-button>
   </div>
 </template>
 
@@ -45,12 +47,10 @@ import { Placeholder, HardBreak, Mention, History } from "tiptap-extensions";
 import { EnterHandler } from "~/utils/tiptap-plugins";
 import { getBase64 } from "~/utils/common";
 import { get } from "lodash";
-import moment from "moment";
-import numeral from "numeral";
 import IconCameraAlt from "~/assets/svg/v2-icons/camera_alt_24px.svg?inline";
 const IconClose = () => import("~/assets/svg/icons/close.svg?inline");
-import { mapState } from "vuex";
-import StudyService from "~/services/elearning/study/Study";
+import { mapState, mapMutations } from "vuex";
+import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
 
 export default {
   components: {
@@ -115,6 +115,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations('elearning/teaching/interactive-answer', ['hideFrom']),
     reset() {
       this.editor.setContent("");
       this.payload.content = "";
@@ -151,11 +152,12 @@ export default {
 
     async submit() {
       this.payload.content = this.editor.getHTML().replace("<p></p>", "");
-      const res = await new StudyService(this.$axios)["addAnswerOfQuestion"](
+      const res = await new InteractiveAnswer(this.$axios)["addAnswerOfQuestion"](
         this.payload,
         this.image
       );
-      if (get(res, "success", false)) {
+      if (res.success == true) {
+        this.hideFrom();
         this.$toasted.success("Thành công");
         this.reset();
         const options = {
@@ -163,10 +165,13 @@ export default {
             elearning_id: get(this, "$route.params.id", ""),
           },
         };
-        this.$store.dispatch(
-          `elearning/study/detail/getListQuestion`,
-          options
-        );
+        setTimeout(() => {
+          this.$store.dispatch(
+            `elearning/study/detail/getListQuestion`,
+            options
+          );
+        }, 500);
+        
         return;
       }
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));

@@ -1,6 +1,5 @@
 .elearning-history__main {
-	background: #F9F9F9;
-	padding: 1rem 0;
+	background: #fff;
 
 	.elearning-history__table {
 		padding: 2rem 0;
@@ -166,3 +165,9 @@
 	  width: 100% !important;
 	}
   }
+.tooltip-account-info-table{
+	max-width: 33.4rem !important;
+	.tooltip-inner{
+		font-size: 1.4rem !important;
+	}
+}

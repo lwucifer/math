@@ -26,9 +26,45 @@
       </div>
     </div>
 
-    <label class="d-inline-block mb-3" for="question-editor"
+    <!-- <label class="d-inline-block mb-3" for="question-editor"
       >Nội dung câu hỏi</label
-    >
+    > -->
+    <div class="d-flex justify-content-between align-items-center">
+      <label class="mb-3 font-weight-semi-bold" for="question-editor"
+        >Nội dung câu hỏi</label
+      >
+      <!-- <app-upload
+        class="mr-auto text-primary"
+        style="display: inline-block; float: right;"
+        accept=".doc, .docx, .pdf, .rtf , .txt, .jpg, .jpeg, .jpg, .bmp, .png"
+        @change="handleUploadAnswer"
+      >
+        <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu
+        trả lời
+      </app-upload> -->
+
+      <!-- UI Upload File
+      <div v-if="isUpload" class="d-flex align-items-center">
+        <div>{{fileRaw.name}}</div>
+        <div class="text-sub ml-2" style="font-size: 11px;">{{ fileRaw.size | fileSizeFilter}}</div>
+        <button class="ml-2" @click="handleCloseUpload">
+          <IconCloseSquare/>
+        </button>
+      </div>
+      <app-upload
+        @change="handleUpload"
+        class="text-primary"
+        style="display: inline-block;"
+        :multiple="false"
+        v-else
+      >
+        <div class="d-flex align-items-center">
+          <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />
+          Tải lên câu hỏi
+        </div>
+      </app-upload>
+      -->
+    </div>
     <app-editor v-model="payload.content" />
 
     <!-- <label class="d-inline-block mb-3" for="question-editor"
@@ -36,8 +72,6 @@
     >
     <app-editor v-model="payload.answers[0].content" /> -->
 
-
-    
     <div class="d-flex justify-content-end mt-5 mb-4">
       <app-button
         class="font-weight-semi-bold mr-4 text-secondary"
@@ -55,18 +89,23 @@
         >Lưu câu hỏi</app-button
       >
     </div>
+
     <app-modal-confirm
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      description="Bạn có chắc chắn là muốn lưu thay đổi này?"
     />
   </div>
 </template>
 
 <script>
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
+import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg?inline";
+import IconCloseSquare from "~/assets/svg/icons/close-square.svg?inline";
+
 import CreateAnswerOfQuestion from "~/components/page/course/create/exercise/CreateAnswerOfQuestion";
 import { get } from "lodash";
 import * as actionTypes from "~/utils/action-types";
@@ -74,6 +113,11 @@ import { createPayloadQuestion } from "~/models/course/AddCourseNoAnswer";
 import { mapState } from "vuex";
 
 export default {
+  components: {
+    IconCloudDownload24px,
+    IconCloseSquare,
+  },
+
   props: {
     question: {
       type: Object,
@@ -101,6 +145,12 @@ export default {
         //   },
         // ],
       },
+      fileRaw: {
+        name: "",
+        size: "",
+        file: "",
+      },
+      isUpload: false,
     };
   },
   computed: {
@@ -139,14 +189,8 @@ export default {
       if (get(res, "success", false)) {
         this.$toasted.success("success");
         this.$emit("cancel");
-        // this.$store.dispatch(`elearning/create/getProgress`);
-
-        if (get(this, "exercise.category", "") === "TEST") {
-          this.$store.dispatch("elearning/create/getExams");
-        } else {
-          const lesson_id = get(this, "lesson.id", "");
-          this.$store.dispatch("elearning/create/getLesson", lesson_id);
-        }
+        const lesson_id = get(this, "lesson.id", "");
+        this.$store.dispatch("elearning/create/getLesson", lesson_id);
 
         return;
       }
@@ -157,6 +201,18 @@ export default {
       (this.showModalConfirm = false), (this.confirmLoading = false);
     },
 
+    handleUploadAnswer(file) {
+      console.log("[handleUploadAnswer]", file);
+    },
+    handleUpload(data) {
+      this.isUpload = true;
+      this.fileRaw.name = data[0].name;
+      this.fileRaw.size = data[0].size;
+    },
+    handleCloseUpload() {
+      this.isUpload = false;
+      this.fileRaw = {};
+    },
     get,
   },
 };

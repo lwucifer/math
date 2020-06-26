@@ -59,10 +59,7 @@
             outline
             ><IconSave class="mr-2" /> Lưu nháp</app-button
           > -->
-          <app-button
-            class="create-action__btn mr-4"
-            @click="handleNextStep"
-            :disabled="!isNextStep"
+          <app-button class="create-action__btn mr-4" @click="handleNextStep"
             ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
           >
         </div>
@@ -74,7 +71,8 @@
       :confirmLoading="false"
       @ok="handleOk"
       @cancel="handleCancel"
-      title="Xác nhận"
+      title="Bạn có muốn tiếp tục?"
+      description="Bạn có chắc chắn là đã hoàn thành xong nội dung học tập?"
     />
   </div>
 </template>
@@ -107,7 +105,7 @@ import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import CreateChapter from "~/components/page/course/create/course/CreateChapter";
 import ListChapter from "~/components/page/course/create/course/ListChapter";
-import EditCourseName from "~/components/page/course/create/common/EditCourseName";
+import EditCourseName from "~/components/page/course/create/course/EditCourseName";
 
 export default {
   components: {
@@ -141,20 +139,28 @@ export default {
     };
   },
 
-  // mounted() {
-  //   this.$store.dispatch(`elearning/create/getContent`);
-  // },
-
   computed: {
     ...mapState("elearning/create", {
       general: "general",
       progress: "progress",
       chapters: "chapters",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     isNextStep() {
       if (get(this, "progress.general_status", false) != 1) return false;
       if (get(this, "progress.content_status", false) != 1) return false;
-      return true;
+      let check = true;
+      get(this, "chapters", []).map((chapter) => {
+        if (!get(chapter, "lessons.length", 0)) check = false;
+      });
+      return check;
+    },
+    name() {
+      return get(this, "general.type", "") === "COURSE"
+        ? "khoá học"
+        : "bài giảng";
     },
   },
 
@@ -162,19 +168,30 @@ export default {
     get,
 
     handleNextStep() {
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
+      if (!this.isNextStep) {
+        this.$toasted.error(`Bạn chưa hoàn thiện hết nội dung ${this.name}`);
+        return;
+      }
       this.showModalConfirm = true;
     },
 
     handleCancel() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
     },
 
     handleOk() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.$emit("nextStep", "settings");
     },
 
     toggleAddChapter() {
+      if (this.disabled_all) return;
       this.isShowFormAddChapter = !this.isShowFormAddChapter;
     },
   },

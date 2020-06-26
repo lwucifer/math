@@ -15,7 +15,7 @@
     <IconStar class="star"
       :width="size"
       :height="size"
-      v-if="!halfStar && loopNumber > 0"
+      v-if="!halfStar && stars > 0"
     />
 
     <IconStarO class="star"

@@ -64,7 +64,13 @@
 }
 
 .eh-personal-box__desc {
+    @include set-line((
+        'lineClamp': 3,
+        'lineHeight': $line-height-base,
+    ));
+    max-height: unset;
     margin-bottom: 3rem;
+    word-break: break-word;
 }
 
 .eh-personal-box__bottom {

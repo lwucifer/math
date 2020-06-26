@@ -42,7 +42,7 @@
       </template>
     </div>
 
-    <app-button color="pink" size="sm">
+    <app-button color="pink" size="sm" @click.prevent="handleDeleteNotify">
       <IconDeleteForever class="icon body-1 mr-2" />Xoá
     </app-button>
 
@@ -54,23 +54,31 @@
         :data="list"
         multiple-selection
         @selectionChange="selectRow"
+        :loading="loading"
+        class="table-notify-interactive"
       >
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/manager/test/' + row.id">
-              <IconArrowForwardIos24pxOutlined />
-            </n-link>
+            <div @click="showDetialNotify(row.id)">
+              <n-link class title="Chi tiết" to>
+                <IconKeyboardArrowDown24px v-if="isDetail==row.id"/>
+                <IconKeyboardArrowRight24px v-else/>
+              </n-link>
+            </div>
           </td>
         </template>
 
         <template v-slot:cell(content)="{row}">
-          <td>
+          <td v-if="isDetail==row.id">
+            <span>{{get(row,"content","")}}</span>
+          </td>
+          <td v-else>
             <v-popover
               trigger="hover"
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
               popover-class="tooltip--eln-interactive"
             >
-              <span>{{get(row,"content","") | truncStrFilter(30)}}</span>
+              <span class="nowrap">{{get(row,"content","") | truncStrFilter(30)}}</span>
               <template slot="popover">
                 <span>{{row.content}}</span>
               </template>
@@ -79,13 +87,16 @@
         </template>
 
         <template v-slot:cell(title)="{row}">
-          <td>
+          <td v-if="isDetail==row.id">
+            <span>{{get(row,"title","")}}</span>
+          </td>
+          <td v-else>
             <v-popover
               trigger="hover"
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
               popover-class="tooltip--eln-interactive"
             >
-              <span>{{get(row,"title","") | truncStrFilter(30)}}</span>
+              <span class="nowrap">{{get(row,"title","") | truncStrFilter(30)}}</span>
               <template slot="popover">
                 <span>{{row.title}}</span>
               </template>
@@ -107,7 +118,7 @@
 <script>
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconArrowForwardIos24pxOutlined from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline";
+import IconKeyboardArrowRight24px from '~/assets/svg/v2-icons/keyboard_arrow_right_24px.svg?inline';
 import IconDeleteForever from "~/assets/svg/v2-icons/delete_forever_24px.svg?inline";
 
 import { mapState } from "vuex";
@@ -118,6 +129,8 @@ import { moment } from 'moment'
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 const STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENTS = "elearning/teaching/interactive-announcement";
 import AppSelectIneractiveElearning from "~/components/page/elearning/manager/interacts/AppSelectIneractiveElearning"
+import IconKeyboardArrowDown24px from '~/assets/svg/v2-icons/keyboard_arrow_down_24px.svg?inline';
+
 export default {
   layout: "manage",
 
@@ -125,13 +138,15 @@ export default {
     IconHamberger,
     IconSearch,
     IconDeleteForever,
-    IconArrowForwardIos24pxOutlined,
-    AppSelectIneractiveElearning
+    IconKeyboardArrowRight24px,
+    AppSelectIneractiveElearning,
+    IconKeyboardArrowDown24px
   },
   data() {
     return {
       currentQuestionIndex: null,
       tab: 1,
+      isDetail:'',
       heads: [
         {
           name: "",
@@ -191,8 +206,10 @@ export default {
         elearning_id:null,
         keyword:null,
         page:1,
-        size:10
-      }
+        size:10,
+      },
+      ids:[],
+      loading:false
     };
   },
   watch:{
@@ -268,6 +285,7 @@ export default {
       this.currentQuestionIndex = null;
     },
     fetchAnnouncement(){
+      this.loading = true;
       const payload = { 
         params:{
           elearning_id: this.params.elearning_id,
@@ -280,6 +298,7 @@ export default {
         `${STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENTS}/${actionTypes.TEACHING_INTERACTIVE_ANNOUNCEMENT.LIST}`,
         payload
       );
+      this.loading = false
     },
     clickFilter(){
       if (this.isFilter) {
@@ -296,7 +315,31 @@ export default {
       this.params.size=10;
     },
     selectRow(data){
-      console.log('select data',data)
+      this.ids = _.map(data, 'id');
+    },
+    async handleDeleteNotify(){
+      console.log('deleting')
+      let data = {
+          ids: this.ids
+        }
+      const res =await this.$store.dispatch(
+        `${STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENTS}/${actionTypes.TEACHING_INTERACTIVE_DELETE_ANNOUNCEMENT.DELETE}`,
+        {data}
+      );
+      if (get(res, "success", false)) {
+        this.$toasted.success(get(res, "success", false))
+        this.fetchAnnouncement();
+        return
+      }
+      this.$toasted.error(get(res, "message", "Có lỗi xảy ra"))
+      console.log(res)
+    },
+    showDetialNotify(val){
+      if(this.isDetail == val){
+        this.isDetail = ''
+      }else{
+        this.isDetail =val;
+      }
     },
     get
     /*

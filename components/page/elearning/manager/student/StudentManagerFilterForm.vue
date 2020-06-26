@@ -18,14 +18,14 @@
         ></app-search>
       </div>
       <div class="filter-form__item">
-        <filter-button @click="clickSubmit">Lọc kết quả</filter-button>
+        <filter-button @click="submitShowFilter" :color="showFilter ? 'primary' : 'default'" :outline="!showFilter">Lọc kết quả</filter-button>
       </div>
-      <div class="filter-form__item" v-if="filterSelect" style="min-width: 11rem;">
+     <div class="filter-form__item" v-if="showFilter" style="min-width: 11rem;" >
         <app-vue-select
           class="app-vue-select w-100"
           :options="filterSelectClass"
           :reduce="item => item.value"
-          v-model="filters.type"
+          v-model="filters.class"
           label="text"
           placeholder="Theo lớp"
           searchable
@@ -33,19 +33,6 @@
           @input="handleSelectType"
         />
       </div>
-      <!-- <div class="filter-form__item" v-if="filterSelect" style="min-width: 17rem;">
-        <app-vue-select
-          class="app-vue-select w-100"
-          :options="rates"
-          :reduce="item => item.value"
-          v-model="filters.rate"
-          label="text"
-          placeholder="Theo tiến độ hoàn thành"
-          searchable
-          clearable
-          @input="handleSelectRate"
-        />
-      </div>-->
     </div>
   </filter-form>
 </template>
@@ -64,47 +51,23 @@ export default {
     return {
       filterSelect: false,
       filters: {
-        type: null,
+        class: null,
         keyword: "",
-        rate: null
       },
-      types: [
-        {
-          value: ELEARNING_TYPES.LECTURE,
-          text: "Bài giảng"
-        },
-        {
-          value: ELEARNING_TYPES.COURSE,
-          text: "Khóa học"
-        }
-      ],
-      rates: [
-        {
-          value: ELEARNING_STATUSES.PASSED,
-          text: "Đạt"
-        },
-        {
-          value: ELEARNING_STATUSES.FAILED,
-          text: "Không đạt"
-        },
-        {
-          value: ELEARNING_STATUSES.PENDING,
-          text: "Chưa chấm điểm"
-        }
-      ],
       initStatus: true
     };
+  },
+  props:{
+    showFilter:{
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapState(STORE_SCHOOL_CLASSES, ["schoolClasses"]),
     ...mapState(STORE_PUBLIC_CLASSES, ["publicClassesList"]),
     filterSelectClass() {
       const dataFilter = this.publicClassesList ? this.publicClassesList : [];
-      // this.schoolClasses &&
-      // this.schoolClasses.data &&
-      // this.schoolClasses.data.content
-      //   ? this.schoolClasses.data.content
-      //   : [];
       const data = dataFilter.map(item => {
         return {
           value: item.id,
@@ -133,7 +96,9 @@ export default {
   },
   methods: {
     submit() {
-      this.$emit("submitFilter", this.filters);
+      if (this.filters.keyword != "") {
+        this.$emit("submitFilter", this.filters);
+      }
     },
     handleSelectRate(val) {
       this.$emit("changedRate", val);
@@ -143,22 +108,26 @@ export default {
     },
     handleChangedSearch(val) {
       this.$emit("changedQuery", val);
+      if (val == "") {
+        this.$emit("submitFilter", this.filters);
+      }
     },
     clickSubmit() {
-      if (this.filterSelect) {
-        this.resetForm();
-        this.filterSelect = false;
-        if (!this.initStatus) {
-          this.$emit("submitFilter", this.filters);
-        }
-      } else {
-        this.filterSelect = true;
+      debugger;
+      if (this.filters.keyword != "") {
+        this.$emit("changedQuery", this.filters.keyword);
       }
     },
     resetForm() {
-      this.filters.rate = null;
-      this.filters.type = null;
-      this.filters.query = "";
+      this.filters.class = null;
+      this.filters.keyword = "";
+    },
+    submitShowFilter(){
+      this.$emit('submitShowFilter',!this.showFilter);
+      if (this.filters.class != null) {
+        this.filters.class = null;
+        this.$emit("submitFilter", this.filters);
+      }
     }
   }
 };

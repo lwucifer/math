@@ -10,6 +10,8 @@ export const BASE = {
     DELETE_PAYLOAD: "deletePayload",
     EDIT_FORMDATA: "putWithFormData",
     GET_END: "getEnd",
+    PUT_END: "putEnd",
+    POST_END: "postEnd"
 };
 
 export const AUTH = {
@@ -57,6 +59,15 @@ export const SOCIAL_NOTIFICATIONS = {
     REGISTER_DEVICE: "registerDevice",
     READ_NOTIFICATION: "readNotification",
     GET_NOTI_UNREAD: "getNotiUnread",
+};
+
+export const HEADER_NOTIFICATIONS = {
+    LIST: "getNotifications",
+    LIST_SCROLL: "getNotificationsScroll",
+    LIST_COUNT: 'getCountNotifications',
+    DETAIL_LIST: "getDetailNotifications",
+    CHECK_IS_READ_NOTIFICATION: "checkIsReadNotifications",
+    DELETE: "deleteNotifications"
 };
 
 export const SOCIAL_CONFIG = {
@@ -219,6 +230,10 @@ export const ELEARNING_PUBLIC_NEWEST = {
     LIST_COURSE: "elearningPublicNewestCourse",
 };
 
+export const PUBLIC_CATEGORY = {
+    LIST: "publicCategoryList",
+};
+
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = {
     LIST: "elearningPublicHighlightTeachers",
 };
@@ -246,6 +261,7 @@ export const TEACHING_OLCLASSES = {
     LIST: "teachingOlclassesList",
     ADD: "teachingOlclassesAdd",
     EDIT: "teachingOlclassesEdit",
+    INFO: "teachingOlclassesInfo",
     DELETE: "teachingOlclassesDelete",
     BLOCK: "teachingOlclassesBlock",
     UNBLOCK: "teachingOlclassesUnBlock",
@@ -401,10 +417,25 @@ export const SCHOOL_CLASSES = {
 
 export const SCHOOL_INFO = {
     INFO: "schoolInfo",
+    ANNOUNCEMENT: "schoolAnnouncement",
+    ANNOUNCEMENT_DETAIL: "schoolAnnouncementDetail",
+    LINK_WEB: "schoolLinkWeb",
+    LINK_WEB_DETAIL: "schoolLinkWebDetail",
+    NEWS: "schoolNews",
+    ORG_INTRO: "schoolOrgIntro",
+    PROFESSIONS: "schoolProfessions",
+    PROFESSIONS_DETAIL: "schoolProfessionsDetail",
+    TIMETABLE: "schoolTimeTable",
+    TIMETABLE_DETAIL: "schoolTimeTableDetail",
 };
 
 export const SCHOOL_ELEARNING = {
     LIST: "schoolElearning",
+};
+
+
+export const SCHOOL_ORGANIZATION = {
+    LIST: "schoolOrganization",
 };
 
 export const SCHOOL_PROFESSIONAL = {
@@ -426,6 +457,11 @@ export const SCHOOL_TEACHERS = {
     ADD: "schoolTeachersAdd",
     EDIT: "schoolTeachersEdit",
     DELETE: "schoolTeachersDelete",
+};
+
+export const SCHOOL_NEWS = {
+    LIST: "schoolNewsList",
+    DETAIL: "schoolNewsDetail",
 };
 
 export const ELEARNING_STURY = {
@@ -467,6 +503,7 @@ export const ELEARNING_STUDY_EXERCISE = {
     LIST_QUESTION_START: "elearningSudyExerciseQuestionListStart",
     LIST_QUESTION: "elearningSudyExerciseQuestionList",
     LIST_ELEARNING_EXERCISE: "elearningSudyElearningExerciseList",
+    LIST_ELEARNING_EXERCISE_2: "elearningSudyElearningExerciseList2",
     LIST_RESULT: "elearningSudyExerciseResultList",
     LIST_SUBMISTION: "elearningSudyExerciseSubmissionList",
     ADD_SUBMISTION: "elearningSudyExerciseSubmissionAdd",
@@ -622,6 +659,10 @@ export const TEACHING_STUDENT_PROGRESS = {
     LIST: "teachingStudentProGressList",
 };
 
+export const TEACHING_STUDENT_EXERCISES = {
+    LIST: "teachingStudentExercisesList",
+};
+
 export const TEACHING_ELEARNING_REQUESTS = {
     LIST: "teachingElearningRequestsList",
 };
@@ -652,12 +693,22 @@ export const TEACHING_INTERACTIVE_LISTQUESTION = {
     ADD: "teachingInteractiveListquestionAdd"
 };
 
+export const TEACHING_INTERACTIVE_ANSWER = {
+    LIST: "teachingInteractiveListqAnswer",
+    ADD: "teachingInteractiveAnswer",
+    LIKE: "teachingInteractiveLikeAnswer"
+};
+
 export const TEACHING_INTERACTIVE_ANNOUNCEMENT = {
     LIST: "teachingInteractiveListAnnouncement",
 };
 
 export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = {
     ADD: "teachingInteractiveAnnouncementAdd",
+};
+
+export const TEACHING_INTERACTIVE_DELETE_ANNOUNCEMENT = {
+    DELETE: "teachingInteractiveAnnouncementDelete",
 };
 
 export const TEACHING_PUBLIC_LIST = {
@@ -683,5 +734,17 @@ export const CHAT = {
     ROOM_DETAIL: "getRoomDetail",
     MESSAGE_LIST_INFINITE: "getMessageListInfinite",
     CHANGE_ROOM_NAME: "changeRoomName",
-    IMAGE_LIST: "getImageList"
+    IMAGE_LIST: "getImageList",
+    ROOM_REMOVE_MEMBER: "roomRemoveMember",
+    ROOM_ADD_MEMBER: "roomAddMember",
+    UPLOAD_MEDIA: "uploadMedia",
+    CHANGE_ROOM_AVATAR: "changeRoomAvatar",
+    FRIENDS_LIST: "getFriendsList",
+    ROOM_LIST_FETCH: "getRoomListFetch",
+    MESSAGE_LIST_FETCH: "getMessageListFetch",
+    CREATE_ROOM: "createRoom"
 };
+
+export const TIMETABLE = {
+    TIMETABLE_LIST: "getTimeTableList"
+}

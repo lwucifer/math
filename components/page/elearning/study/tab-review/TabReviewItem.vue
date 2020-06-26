@@ -2,7 +2,7 @@
   <div class="tab-qa-comment-item" :class="classes">
     <app-avatar
       :size="level === 1 ? 40 : 30"
-      :src="get(review, 'creator.avatar.low', '')"
+        :src="$store.state.auth.token && $store.state.auth.token.avatar && $store.state.auth.token.avatar.low ? $store.state.auth.token.avatar.low : ''"
     />
 
     <div class="tab-qa-comment-item__right">
@@ -41,10 +41,8 @@
 import IconThumbUp from "~/assets/svg/v2-icons/thumb_up_24px.svg?inline";
 import IconAccessTime from "~/assets/svg/v2-icons/access_time_24px.svg?inline";
 import { get } from "lodash";
-import moment from "moment";
-import numeral from "numeral";
 import QuestionLikeService from "~/services/elearning/study/QuestionLike";
-import StudyService from "~/services/elearning/study/Study";
+import InteractiveAnswer from "~/services/elearning/study/InteractiveAnswer";
 
 export default {
   components: {
@@ -114,7 +112,7 @@ export default {
         answer_id: get(this, "question.id", ""),
       };
 
-      const res = await new StudyService(this.$axios)["likeAnswer"](payload);
+      const res = await new InteractiveAnswer(this.$axios)["likeAnswer"](payload);
 
       this.submit = true;
 
@@ -136,8 +134,6 @@ export default {
       this.$store.dispatch(`elearning/study/detail/getListQuestion`, options);
     },
     get,
-    moment,
-    numeral,
   },
 };
 </script>

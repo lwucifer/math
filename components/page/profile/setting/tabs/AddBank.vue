@@ -133,9 +133,14 @@ export default {
           },
         });
         if (get(res, "data.success", false)) {
-          this.$toasted.success("Thành công");
-          this.$emit('cancel')
-          this.$store.dispatch('setting/getAccountBanks');
+          this.$emit('addSuccess')
+          this.$toasted.success(
+            "Thêm tài khoản thành công, bạn vui lòng đăng nhập email để active tài khoản. Xin cảm ơn!"
+          );
+          this.$emit("cancel");
+          this.$store.dispatch("setting/getAccountBanks", {
+            params: { status: "ACTIVE" },
+          });
           return;
         }
         this.$toasted.error(get(res, "data.message", "Có lỗi xảy ra"));

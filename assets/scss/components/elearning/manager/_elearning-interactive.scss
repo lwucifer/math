@@ -172,5 +172,14 @@
 }
 
 .tooltip--eln-interactive{
-  max-width: 33.4rem;
+  max-width: 33.4rem !important;
+  .tooltip-inner{
+    font-size: 1.4rem !important;
+  }
+}
+
+.table-notify-interactive{
+  tr{
+    vertical-align: top;
+  }
 }

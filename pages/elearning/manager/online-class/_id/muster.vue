@@ -6,179 +6,178 @@
         <ElearningManagerSide active="5" />
       </div>
       <div class="col-md-9">
-        <h5 class="page-title">{{lessonInfo.name}}</h5>
-        <div class="elearning-manager-content">
-          <div class="elearning-manager-content__main pt-3">
-            <div class="elearning-wrapper">
-              <!--Info group-->
-              <h5 class="color-primary mb-15">{{lessonInfo.name}}</h5>
-              <div class="class-info mb-4 border">
-                <strong class="d-flex-center">
-                  <IconClock class="mr-3" />
-                  {{lessonInfo.start_time}} - {{lessonInfo.end_time}}
-                </strong>
-                <div class="class-info-content mt-3">
-                  <div class="item">
-                    Tỷ lệ có mặt:
-                    <strong
-                      class="color-primary"
-                    >{{summary.total_student_absent_allowed}}</strong>
-                  </div>
-                  <div class="item">
-                    Tỷ lệ vắng có mặt:
-                    <strong
-                      class="color-primary"
-                    >{{summary.total_student_absent_not_allowed}}</strong>
-                  </div>
-                  <div class="item">
-                    Tỷ lệ vắng mặt có phép:
-                    <strong
-                      class="color-primary"
-                    >{{get(summary,'total_student_late', 0)}}</strong>
-                  </div>
-                  <div class="item">
-                    Tỷ lệ vắng mặt không phép:
-                    <strong
-                      class="color-primary"
-                    >{{summary.total_student_present}}</strong>
+        <sub-block-section :title="'Điểm danh - ' + get(lessonInfo,'name','')" has-icon>
+          <template v-slot:content>
+            <div class="elearning-manager-content__main pt-3">
+              <div class="elearning-wrapper">
+                <!--Info group-->
+                <h5 class="color-primary mb-15">{{get(lessonInfo,'name','')}}</h5>
+                <div class="class-info mb-4 border">
+                  <strong class="d-flex-center">
+                    <IconClock class="mr-3" />
+                    {{getLocalTimeHH_MM_A(lessonInfo.start_time)}} - {{getLocalTimeHH_MM_A(lessonInfo.end_time)}},
+                    {{getDateBirthDay(lessonInfo.start_time)}}
+                  </strong>
+                  <div class="class-info-content mt-3">
+                    <div class="item">
+                      Vào muộn:
+                      <strong
+                        class="color-primary"
+                      >{{get(summary,'total_student_late', 0)}}</strong>
+                    </div>
+                    <div class="item">
+                      Không phép:
+                      <strong
+                        class="color-primary"
+                      >{{summary.total_student_absent_not_allowed}}</strong>
+                    </div>
+                    <div class="item">
+                      Có phép:
+                      <strong class="color-primary">{{summary.total_student_absent_allowed}}</strong>
+                    </div>
+                    <div class="item">
+                      Có mặt:
+                      <strong class="color-primary">{{summary.total_student_present}}</strong>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <!--end info group-->
+                <!--end info group-->
 
-              <!--Filter form-->
-              <div class="filter-form">
-                <div class="d-flex">
-                  <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
-                    <div style="width: 100%">
-                      <app-search
-                        class
-                        :placeholder="'Nhập để tìm kiếm...'"
-                        v-model="params.query"
+                <!--Filter form-->
+                <div class="filter-form">
+                  <div class="d-flex">
+                    <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
+                      <div style="width: 100%">
+                        <app-search
+                          class
+                          :placeholder="'Nhập để tìm kiếm...'"
+                          v-model="query"
+                          :size="'sm'"
+                          @submit="submit"
+                          @keyup.enter.native="submit"
+                          bordered
+                        ></app-search>
+                      </div>
+                    </div>
+
+                    <div class="filter-form__item">
+                      <app-button
+                        :color="showFilter ? 'primary' : 'white'"
+                        square
                         :size="'sm'"
-                        @submit="submit"
-                        @keyup.enter.native="submit"
-                        bordered
-                      ></app-search>
+                        @click="toggleFilter"
+                      >
+                        <IconHamberger
+                          :class="showFilter ? 'fill-white' : 'fill-primary'"
+                          class="mr-2"
+                        />
+                        <span>Lọc kết quả</span>
+                      </app-button>
                     </div>
-                  </div>
 
-                  <div class="filter-form__item">
-                    <app-button
-                      :color="showFilter ? 'primary' : 'white'"
-                      square
-                      :size="'sm'"
-                      @click="toggleFilter"
-                    >
-                      <IconHamberger
-                        :class="showFilter ? 'fill-white' : 'fill-primary'"
-                        class="mr-2"
-                      />
-                      <span>Lọc kết quả</span>
-                    </app-button>
-                  </div>
-
-                  <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
-                    <app-vue-select
-                      class="app-vue-select filter-form__item__selection"
-                      v-model="filterCourse"
-                      :options="courseOpts"
-                      label="text"
-                      placeholder="Lớp học"
-                      @input="handleChangedCourse"
-                      :all-opt="allOpt"
-                      has-border
-                    ></app-vue-select>
-                  </div>
-                  <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
-                    <app-vue-select
-                      class="app-vue-select filter-form__item__selection"
-                      v-model="filterStatus"
-                      :options="statusOpts"
-                      label="text"
-                      placeholder="Điểm danh"
-                      @input="handleChangedStatus"
-                      :all-opt="allOpt"
-                      has-border
-                    ></app-vue-select>
+                    <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
+                      <app-vue-select
+                        class="app-vue-select filter-form__item__selection"
+                        v-model="filterCourse"
+                        :options="courseOpts"
+                        label="text"
+                        placeholder="Lớp học"
+                        @input="handleChangedCourse"
+                        :all-opt="allOpt"
+                        has-border
+                      ></app-vue-select>
+                    </div>
+                    <div class="filter-form__item" style="min-width: 13rem" v-if="showFilter">
+                      <app-vue-select
+                        class="app-vue-select filter-form__item__selection"
+                        v-model="filterStatus"
+                        :options="statusOpts"
+                        label="text"
+                        placeholder="Điểm danh"
+                        @input="handleChangedStatus"
+                        :all-opt="allOpt"
+                        has-border
+                      ></app-vue-select>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <!--End filter form-->
+                <!--End filter form-->
 
-              <div class="d-flex-center mb-15">
-                <button class="color-primary bold d-flex-center" @click="getList">
-                  <IconRefresh class="fill-primary mr-2" />Cập nhật kết quả điểm danh
-                </button>
-                <i
-                  class="ml-auto"
-                >*Kết quả điểm danh được cập nhật lần cuối vào lúc {{formatAMPM(currentTime, true)}}</i>
+                <div class="d-flex-center mb-15">
+                  <button class="color-primary bold d-flex-center" @click="getList">
+                    <IconRefresh class="fill-primary mr-2" />Cập nhật kết quả điểm danh
+                  </button>
+                  <i
+                    class="ml-auto"
+                  >*Kết quả điểm danh được cập nhật lần cuối vào lúc {{getLocalTimeHH_MM_A(currentTime) + ', ' + getDateBirthDay(currentTime)}}</i>
+                </div>
+                <!--Table-->
+                <app-table
+                  :heads="heads"
+                  :pagination="pagination"
+                  @pagechange="onPageChange"
+                  @sort="handleSort"
+                  :data="lessons"
+                  :loading="loading"
+                >
+                  <template v-slot:cell(attendance_status)="{row, index}">
+                    <td>
+                      <div class="div-table">
+                        <app-checkbox
+                          label="M"
+                          :checked="row.attendance_status == 'M'"
+                          @change="updateStatus(row.online_attendance_id, 'M', index)"
+                        />
+                        <app-checkbox
+                          label="K"
+                          :checked="row.attendance_status == 'K'"
+                          @change="updateStatus(row.online_attendance_id, 'K', index)"
+                        />
+                        <app-checkbox
+                          label="P"
+                          :checked="row.attendance_status == 'P'"
+                          @change="updateStatus(row.online_attendance_id, 'P', index)"
+                        />
+                        <app-checkbox
+                          label="C"
+                          :checked="row.attendance_status == 'C'"
+                          @change="updateStatus(row.online_attendance_id, 'C', index)"
+                        />
+                      </div>
+                    </td>
+                  </template>
+                  <template v-slot:cell(attendance_point)="{row}">
+                    <td class="text-center">{{row.attendance_point}}%</td>
+                  </template>
+                </app-table>
+                <!--End table-->
               </div>
-              <!--Table-->
-              <app-table
-                :heads="heads"
-                :pagination="pagination"
-                @pagechange="onPageChange"
-                :data="lessons"
-                :loading="loading"
-              >
-                <template v-slot:cell(attendance_status)="{row, index}">
-                  <td>
-                    <div class="div-table">
-                      <app-checkbox
-                        label="M"
-                        :checked="row.attendance_status == 'M'"
-                        @change="updateStatus(row.online_attendance_id, 'M', index)"
-                      />
-                      <app-checkbox
-                        label="K"
-                        :checked="row.attendance_status == 'K'"
-                        @change="updateStatus(row.online_attendance_id, 'K', index)"
-                      />
-                      <app-checkbox
-                        label="P"
-                        :checked="row.attendance_status == 'P'"
-                        @change="updateStatus(row.online_attendance_id, 'P', index)"
-                      />
-                      <app-checkbox
-                        label="C"
-                        :checked="row.attendance_status == 'C'"
-                        @change="updateStatus(row.online_attendance_id, 'C', index)"
-                      />
-                    </div>
-                  </td>
-                </template>
-                <template v-slot:cell(attendance_point)="{row}">
-                  <td class="text-center">{{row.attendance_point}}%</td>
-                </template>
-              </app-table>
-              <!--End table-->
-            </div>
 
-            <div class="bottom-content">
-              <div class="top">
-                <i>
-                  *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia
-                  <b>{{lessonInfo.name}}</b> theo yêu cầu của giáo viên
-                </i>
-              </div>
-              <div class="bottom">
-                <p>
-                  <strong class="color-primary">M</strong> = Đi muộn
-                </p>
-                <p>
-                  <strong class="color-primary">K</strong> = Không phép
-                </p>
-                <p>
-                  <strong class="color-primary">P</strong> = Có phép
-                </p>
-                <p>
-                  <strong class="color-primary">C</strong> = Có mặt
-                </p>
+              <div class="bottom-content">
+                <div class="top">
+                  <i>
+                    *Điểm chuyên cần của học sinh được tính dựa trên tỷ lệ tham gia
+                    <b>{{get(lessonInfo,'name','')}}</b> theo yêu cầu của giáo viên
+                  </i>
+                </div>
+                <div class="bottom">
+                  <p>
+                    <strong class="color-primary">M</strong> = Đi muộn
+                  </p>
+                  <p>
+                    <strong class="color-primary">K</strong> = Không phép
+                  </p>
+                  <p>
+                    <strong class="color-primary">P</strong> = Có phép
+                  </p>
+                  <p>
+                    <strong class="color-primary">C</strong> = Có mặt
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </template>
+        </sub-block-section>
       </div>
     </div>
   </div>
@@ -197,9 +196,8 @@ import IconLockOpenAlt from "~/assets/svg/design-icons/lock-open-alt.svg?inline"
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconRefresh from "~/assets/svg/v2-icons/refresh_24px.svg?inline";
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
-
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
-
+import { getDateBirthDay, getLocalTimeHH_MM_A } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
@@ -226,6 +224,7 @@ export default {
 
   data() {
     return {
+      query: null,
       allOpt: {
         value: null,
         text: "Tất cả"
@@ -248,8 +247,7 @@ export default {
         {
           name: "attendance_status",
           text: "Điểm danh",
-          sort: true
-        },
+        }
       ],
       summary: {
         total_student_absent_allowed: 0,
@@ -292,7 +290,8 @@ export default {
         size: 10,
         class_id: null,
         attendance_status: null,
-        query: null
+        query: null,
+       // sort: 'student_name,asc'
       },
       loading: false
     };
@@ -316,9 +315,27 @@ export default {
     }
   },
 
+  watch: {
+    query() {
+      this.checkFilter = true;
+    },
+  },
+
   methods: {
+    getDateBirthDay,
+    getLocalTimeHH_MM_A,
+
+    handleSort(e) {
+      const sortBy = e.sortBy + ',' + e.order;
+      this.params = {...this.params, sort: sortBy};
+      this.getList();
+    },
+
     toggleFilter() {
-      if (this.showFilter && (this.filterCourse != null || this.filterStatus != null) ) {
+      if (
+        this.showFilter &&
+        (this.filterCourse != null || this.filterStatus != null)
+      ) {
         this.filterCourse = null;
         this.filterStatus = null;
         this.params = {
@@ -339,8 +356,10 @@ export default {
       that.getList();
     },
     submit() {
-      this.params = { ...this.params };
-      this.getList();
+      if (this.checkFilter) {
+        this.getList();
+        this.checkFilter = false;
+      }
     },
     handleChangedCourse(val) {
       this.params.class_id = this.filterCourse.value;
@@ -354,19 +373,6 @@ export default {
     handleBlurSearchInput() {},
     handleSearch() {},
 
-    formatAMPM(date, year = false) {
-      let hours = date.getHours();
-      let minutes = date.getMinutes();
-      let ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      let strTime = hours + ":" + minutes + " " + ampm;
-      let strDate =
-        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-      let str = year ? strTime + " " + strDate : strTime;
-      return str;
-    },
     async getLessonInfo() {
       try {
         this.loading = true;
@@ -376,11 +382,6 @@ export default {
           lesson_id
         );
         this.lessonInfo = this.get(this.stateLessonInfo, "data", []);
-        this.lessonInfo = {
-          ...this.lessonInfo,
-          start_time: this.formatAMPM(new Date(this.lessonInfo.start_time)),
-          end_time: this.formatAMPM(new Date(this.lessonInfo.end_time), true)
-        };
       } catch (e) {
       } finally {
         this.loading = false;
@@ -392,12 +393,12 @@ export default {
         this.loading = true;
         const lesson_id = this.$route.params.id ? this.$route.params.id : "";
         let params = { ...this.params };
+        if (this.query != null) {params.query = this.query}
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.LIST}`,
           { params, id: lesson_id, after: "attendances" }
         );
         this.currentTime = new Date();
-        console.log('xxxxxxxxxx', this.stateAttendances)
         this.lessons = this.get(
           this.stateAttendances,
           "data.attendance_list.content",
@@ -469,17 +470,18 @@ export default {
       list[index] = { ...list[index], attendance_status: status };
       this.lessons = list;
       try {
-        let attendances = { 
-          attendances:
-          [{
+        let attendances = {
+          attendances: [
+            {
               attendance_id: id,
               attendance_status: status
-          }],
+            }
+          ],
           online_lesson_id: this.$route.params.id
         };
         await this.$store.dispatch(
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASS_LESSON_ATTENDANCES.EDIT}`,
-          attendances 
+          attendances
         );
       } catch (e) {
       } finally {
@@ -523,13 +525,14 @@ export default {
 
 .class-info {
   margin: 0;
-  padding: 1rem 1.5rem 1.5rem;
+  padding: 1rem 1.5rem;
   background: #f8f8f8;
   .class-info-content {
-    display: table;
+    display: flex;
+    justify-content: space-between;
     width: 100%;
     .item {
-      display: table-cell;
+      display: inline-block;
     }
   }
 }
@@ -580,7 +583,7 @@ export default {
   width: 100%;
   text-align: left;
   .app-checkbox {
-    + .app-checkbox { 
+    + .app-checkbox {
       margin-left: 2.5rem;
     }
     align-items: center;

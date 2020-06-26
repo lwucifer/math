@@ -14,10 +14,7 @@
               <div class="elearning-manager-content__main py-2">
                 <filter-form
                   @submitFilter="submitFilter"
-                  @changedCmt="handleChangedCmt"
-                  @changedRate="handleChangedRate"
-                  @changedClass="handleChangedClass"
-                  @changedElearning="handleChangedElearning"
+                  @changedType="handleChangedType"
                   @submitSearch="handleSubmitSearch"
                 >
                 </filter-form>
@@ -43,6 +40,7 @@
   import ListTable from "~/components/page/elearning/mycourses/tables/ExerciseElearning"
   import MyCourseSide from "~/components/page/elearning/mycourses/MyCourseSide"
   import FilterForm from "~/components/page/elearning/mycourses/forms/ExerciseElearningFilter"
+  import { EXERCISE_CATEGORIES } from '~/utils/constants'
 
   import {mapState} from "vuex"
   import { useEffect, getParamQuery } from "~/utils/common"
@@ -71,6 +69,7 @@
         params: {
           page: 1,
           size: 10,
+          category: EXERCISE_CATEGORIES.EXERCISE,
         },
         list: [],
         loading: false
@@ -89,17 +88,8 @@
       submitFilter(val) {
         this.updateFilter(val)
       },
-      handleChangedCmt(val) {
-        this.updateFilter({ has_cmt: val })
-      },
-      handleChangedRate(val) {
-        this.updateFilter({ rate: val })
-      },
-      handleChangedClass(val) {
-        this.updateFilter({ class_id: val })
-      },
-      handleChangedElearning(val) {
-        this.updateFilter({ elearning_id: val })
+      handleChangedType(val) {
+        this.updateFilter({ type: val })
       },
       handleChangedSort(val) {
         if (val.sortBy == 'created_at') {
@@ -127,7 +117,14 @@
             `${STORE_NAMESPACE}/${actionTypes.ELEARNING_STUDY_EXERCISE_ELEARNING.LIST}`, { params }
           )
           this.list = this.get(this.detailInfo, 'content', [])
-          this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
+          this.pagination.size = this.get(this.detailInfo, 'size', 10)
+          this.pagination.first = this.get(this.detailInfo, 'first', 1)
+          this.pagination.last = this.get(this.detailInfo, 'last', 1)
+          this.pagination.number = this.get(this.detailInfo, 'number', 0)
+          this.pagination.total_pages = this.get(this.detailInfo, 'total_pages', 0)
+          this.pagination.total_elements = this.get(this.detailInfo, 'total_elements', 0)
+          this.pagination.number_of_elements = this.get(this.detailInfo, 'number_of_elements', 0)
+          // this.pagination = { ...this.get(this.detailInfo, 'page', {}) }
         } catch (e) {
         } finally {
           this.loading = false

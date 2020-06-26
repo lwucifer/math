@@ -1,26 +1,35 @@
 <template>
     <div class="data-school">
         <div class="data-school__item">
-            <span>500</span>Giáo viên
+            <span>{{get(this,"school.teacher_number",0)}}</span>Giáo viên
         </div>
 
         <div class="data-school__item">
-            <span>4500</span>Học sinh
+            <span>{{get(this,"school.student_number",0)}}</span>Học sinh
         </div>
 
         <div class="data-school__item">
-            <span>52</span>Bài giảng
+            <span>{{get(this,"school.lession_number",0)}}</span>Bài giảng
         </div>
 
         <div class="data-school__item">
-            <span>13</span>Khoá học
+            <span>{{get(this,"school.elearning_number",0)}}</span>Khoá học
         </div>
     </div>
 </template>
 
 <script>
+import {get} from "lodash"
 export default {
-
+    props:{
+        school:{
+            type: Object,
+            default: ()=>{}
+        }
+    },
+    methods:{
+        get
+    }
 }
 </script>
 

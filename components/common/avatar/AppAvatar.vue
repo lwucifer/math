@@ -23,7 +23,8 @@ export default {
       default: "default" // default | xs | sm | lg | css value
     },
     src: {
-      type: String
+      type: String,
+      default: ""
     },
     srcSet: {
       type: String
@@ -57,16 +58,16 @@ export default {
       style: typeof ctx.props.size === "number" ? `width: ${ctx.props.size}px; height: ${ctx.props.size}px` : '',
       on: ctx.$listeners
     },
-    [ctx.props.src ? h('img', {
+    [h('img', {
       attrs: {
-        src: ctx.props.src,
+        src: ctx.props.src || require("~/assets/svg/images/default-avatar.svg?data"), //require("~/assets/svg/images/default-avatar.svg?data")
         srcset: ctx.props.srcSet,
         alt: ctx.props.alt,
       },
       on: {
         error: ctx.props.loadError
       }
-    }) : null]
+    })]
     );
   }
 };

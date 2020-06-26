@@ -25,20 +25,40 @@
     </div>
 
     <!--slide-->
-    <div v-if="pageLoading" class="container">
+    <div v-if="pageLoading || elearningLoading" class="container">
       <div class="row">
-        <div v-for="i in 4" :key="i" class="col-md-3 mb-6">
+        <div v-for="i in 12" :key="i" class="col-md-3 mb-6">
           <div class="bg-white py-6 px-3">
             <VclList/>
           </div>
         </div>
       </div>
     </div>
-    <ProfileSliderTab
-      v-else
+
+    <div v-else>
+      <div class="mb-3">
+        <h5>Bài giảng và khóa học ({{ totalElearnings }})</h5>
+      </div>
+      <div class="row">
+        <div
+          class="col-md-3 teacher-elearnings"
+          v-for="(item, index) in list"
+          :key="index"
+        >
+          <CourseItem2 class="my-0" :item="item" :size="'sm'" />
+        </div>
+      </div>
+      <app-pagination
+          :pagination="pagination"
+          @pagechange="onPageChange"
+          class="mt-3"
+        />
+    </div>
+    
+    <!-- <ProfileSliderTab
       :items="get(elearnings, 'content', [])"
       :name="`Bài học và khóa giảng (${get(elearnings, 'page.total_elements', 0)})`"
-    />
+    /> -->
   </div>
 </template>
 
@@ -50,14 +70,40 @@
   import {mapState} from "vuex";
   import * as actionTypes from "~/utils/action-types";
   import {get} from "lodash"
+  import {
+    PAGE_SIZE,
+    SORT_ELEARNING
+  } from "~/utils/constants"
+import { getParamQuery } from '~/utils/common';
 
   export default {
     // layout:"backhome",
     data() {
       return {
         pageLoading: true,
-        courseLoading: false,
+        elearningLoading: false,
         lengthDescription: 300,
+        totalElearnings: 0,
+        list: [],
+        pagination: {
+          first: true,
+          last: false,
+          number: 0,
+          number_of_elements: 0,
+          size: 10,
+          total_elements: 0,
+          total_pages: 0
+        },
+        payload: {
+          page: 1,
+          size: PAGE_SIZE.ELEARNING_12,
+          teacher_id: null,
+          // sort: this.$route.query.sort
+            // ? this.$route.query.sort
+            // : null,
+          // keyword: null,
+          // hidden: false
+        },
       }
     },
     async fetch({params, query, store}) {
@@ -72,21 +118,21 @@
           }
         );
 
-      const getElearnings = () =>
-        store.dispatch(
-          `elearning/public/public-teacher-els/${actionTypes.ELEARNING_PUBLIC_TEACHER_ELS.LIST}`,
-          {
-            params: {
-              teacher_id: userId,
-              size: 16,
-              page: 1
-            }
-          }
-        );
+      // const getElearnings = () =>
+      //   store.dispatch(
+      //     `elearning/public/public-teacher-els/${actionTypes.ELEARNING_PUBLIC_TEACHER_ELS.LIST}`,
+      //     {
+      //       params: {
+      //         teacher_id: userId,
+      //         size: PAGE_SIZE.ELEARNING_12,
+      //         page: 1
+      //       }
+      //     }
+      //   );
 
       return await Promise.all([
         getProfile(),
-        getElearnings()
+        // getElearnings()
       ])
     },
     components: {
@@ -124,11 +170,44 @@
       handleCompact() {
         this.lengthDescription = 300;
       },
+      async getElearnings() {
+        try {
+          this.elearningLoading = true
+          const userId = getParamQuery('user_id')
+          this.payload.teacher_id = userId
+          const res = await this.$store.dispatch(
+            `elearning/public/public-teacher-els/${actionTypes.ELEARNING_PUBLIC_TEACHER_ELS.LIST}`, { params: this.payload }
+          );
+          this.totalElearnings = get(res, 'data.page.total_elements', 0)
+          this.list = get(res, "data.content", [])
+          this.pagination = {
+            total_pages: get(res, "data.page.total_pages", 0),
+            size: get(res, "data.page.size", 10),
+            total_elements: get(res, "data.page.total_elements", 0),
+            first: get(res, "data.page.first", false),
+            last: get(res, "data.page.last", false),
+            number: get(res, "data.page.number", 0)
+          }
+        } catch(error) {
+
+        } finally {
+          this.elearningLoading = false
+        }
+      },
+      onPageChange(e) {
+        this.payload.page = e.number + 1;
+        this.payload.size = PAGE_SIZE.ELEARNING_12;
+
+        this.getElearnings();
+      },
       get
     },
     mounted() {
       this.pageLoading = false;
     },
+    async created() {
+      await this.getElearnings()
+    }
   }
 </script>
 

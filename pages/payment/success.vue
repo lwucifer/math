@@ -1,13 +1,13 @@
 <template>
   <div class="wrap-success_payment">
-      <IconCheckCircle1/>
-      <h3 class="my-4">Thanh toán thành công</h3>
-      <app-button square class="mb-4" nuxt to="/elearning/mycourses">Góc học tập</app-button>
-      <div style="margin-bottom:36px">
-          <n-link class="text-decoration-none" to="/elearning">Tiếp tục mua sắm</n-link>
+      <IconCheckCircle1 class="mt-2"/>
+      <h3 class="my-4">Thanh toán thành công!</h3>
+      <app-button style="width:155px;"  class="mb-4" nuxt to="/elearning/mycourses">Góc học tập</app-button>
+      <div>
+          <n-link class="text-decoration-none mt-3" to="/elearning">Tiếp tục mua sắm</n-link>
       </div>
       <div>
-          <PaymentSuccessFooter/>
+          <PaymentSuccessFooter class="mt-5"/>
       </div>
   </div>
 </template>

@@ -54,12 +54,15 @@
         :pagination="filterPagination"
         @pagechange="onPageChange"
         :data="filterListQuestions"
+         :loading="loading"
       >
         <template v-slot:cell(action)="{row}">
           <td>
-            <n-link class title="Chi tiết" :to="'/elearning/' + row.elearning_id">
-              <IconArrowForwardIos24pxOutlined />
-            </n-link>
+            <div @click="showDetialQuestion(row)">
+              <n-link class title="Chi tiết" to>
+                <IconKeyboardArrowRight24px/>
+              </n-link>
+            </div>
           </td>
         </template>
         <template v-slot:cell(content)="{row}">
@@ -69,7 +72,9 @@
               popover-class="tooltip--eln-interactive"
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
             >
-              <div>{{ get(row,"content","") | truncStrFilter(30)}}</div>
+              <span>
+                 {{ get(row,"content","") | truncStrFilter(30)}}
+              </span>
               <template slot="popover">
                 <div>{{get(row,"content","")}}</div>
               </template>
@@ -83,7 +88,7 @@
               popover-inner-class="tooltip-inner popover-inner dont-break-out"
               popover-class="tooltip--eln-interactive"
             >
-              <div>{{get(row,"elearning_name","") | truncStrFilter(30)}}</div>
+              <div class="nowrap">{{get(row,"elearning_name","") | truncStrFilter(30)}}</div>
               <template slot="popover">
                 <div>{{get(row,"elearning_name","")}}</div>
               </template>
@@ -91,19 +96,25 @@
           </td>
         </template>
         <template v-slot:cell(status)="{row}">
-          <td v-if="row.status=='ANSWER'">Đã trả lời</td>
+          <td v-if="row.status=='ANSWERED'" class="text-primary">Đã trả lời</td>
           <td v-else class="status-not-reply">Chưa trả lời</td>
         </template>
       </app-table>
     </div>
+    <ModalQA 
+      v-if="isDetailQuestion"
+      @close="closeModal"
+      :question="question"
+      @refreshListQuestion="refreshListQuestion"
+    />
   </div>
 </template>
 
 <script>
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
 import IconSearch from "~/assets/svg/icons/search.svg?inline";
-import IconArrowForwardIos24pxOutlined from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline";
-
+import IconKeyboardArrowRight24px from '~/assets/svg/v2-icons/keyboard_arrow_right_24px.svg?inline';
+import IconKeyboardArrowDown24px from '~/assets/svg/v2-icons/keyboard_arrow_down_24px.svg?inline';
 import { mapState, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { QUESTIONS } from "~/server/fakedata/elearning/materials";
@@ -112,18 +123,30 @@ const STORE_NAME_INTERACTS = "elearning/teaching/interactive-listquestion";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 import AppSelectIneractiveElearning from "~/components/page/elearning/manager/interacts/AppSelectIneractiveElearning"
+import { redirectWithParams } from "~/utils/common";
+import ModalQA from "~/components/page/elearning/manager/interacts/ModalQA"
 export default {
   layout: "manage",
 
   components: {
     IconHamberger,
     IconSearch,
-    IconArrowForwardIos24pxOutlined,
-    AppSelectIneractiveElearning
+    IconKeyboardArrowRight24px,
+    IconKeyboardArrowDown24px,
+    AppSelectIneractiveElearning,
+    ModalQA
+  },
+  props:{
+    loading:{
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
       tab: 1,
+      isDetailQuestion:false,
+      question:null,
       heads: [
         {
           name: "content",
@@ -148,7 +171,7 @@ export default {
         {
           name: "status",
           text: "Trạng thái",
-          sort: true
+          sort: false
         },
         {
           name: "action",
@@ -172,7 +195,7 @@ export default {
       ],
       results: [
         {
-          value: "ANSWER",
+          value: "ANSWERED",
           label: "Đã trả lời"
         },
         {
@@ -359,6 +382,19 @@ export default {
     resetForm(){
       this.filters.lesson = null,
       this.filters.result = null
+    },
+    showDetialQuestion(val){
+      this.isDetailQuestion = true
+      this.question = val
+    },
+    closeModal(val){
+      this.isDetailQuestion = val;
+    },
+    refreshListQuestion(){
+      const query = {
+        params: { ...this.listQuery }
+      };
+      this.teachingInteractiveListquestion(query);
     },
     get
   },

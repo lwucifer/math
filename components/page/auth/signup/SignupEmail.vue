@@ -255,11 +255,11 @@ export default {
             "Invalid parameter. Required: email or phone, g_recaptcha_response, password. verify_token is required if register by phone number";
           break;
         case ERRORS.REGISTER.EMAIL_PHONE_USED:
-          message = "Email or phone has been used";
+          message = "Tài khoản đã tồn tại";
           break;
         case ERRORS.REGISTER.PASSWORD_LEAST:
           message =
-            "Invalid password. Password must at least 8 characters, include lowercase, uppercase and number";
+            "Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái in hoa, thường và 1 chữ số";
           break;
         default:
           message = "Đã có lỗi xảy ra. Vui lòng thử lại sau";

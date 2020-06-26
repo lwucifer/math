@@ -10,11 +10,13 @@
             <span class="h4">{{ get(info, 'name', '') }}</span>
           </div>
           <div>
-            <span>{{ get(info, 'school_name', '') }}</span>
+	    <n-link class="text-decoration-none text-base" :to="`/school/${get(info, 'school_id', '')}`" target="_blank">
+            	<span>{{ get(info, 'school_name', '') }}</span>
+            </n-link>
           </div>
           <div class="">
             <app-stars class="d-inline-block mr-3" :stars="get(info, 'rate', 1)" :size="20"/>
-            <strong>{{ get(info, 'rate', 0) | numeralFormat('0.00') }}</strong>
+            <strong>{{ get(info, 'rate', 0) | numeralFormat('0.0') }}</strong>
             <!--<span> ({{ get(info, 'rate_total', 0) }})</span>-->
           </div>
           <div class="d-flex align-items-center">
@@ -33,14 +35,14 @@
           <div>
             <div class="icon-label"><IconLaptop /></div>
             <div class="figure-detail">
-              <p><span class="figure-num">{{ get(info, 'elearning_total', 0) | toThousandFilter }}</span></p>
+              <p><span class="figure-num">{{ get(info, 'lecture_total', 0) | toThousandFilter }}</span></p>
               <p><span class="figure-label">Bài giảng</span></p>
             </div>
           </div>
           <div>
             <div class="icon-label"><IconCollectionBookmark /></div>
             <div class="figure-detail">
-              <p><span class="figure-num">{{ get(info, 'lesson_total', 0) | toThousandFilter }}</span></p>
+              <p><span class="figure-num">{{ get(info, 'course_total', 0) | toThousandFilter }}</span></p>
               <p><span class="figure-label">Khóa học</span></p>
             </div>
           </div>

@@ -31,6 +31,7 @@ const actions = {
           .SET_ELEARNING_PUBLIC_SCHOOL_YEAR_LIST,
         get(result, 'data', [])
       );
+      return result
     } catch (error) {
       console.log("[Elearning School Year] list.error", error);
     }

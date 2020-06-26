@@ -13,96 +13,108 @@
             <div class="d-flex mb-4">
               <div class="elearning-manager-content__title__nav">
                 <!-- <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a> -->
-                <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''"
-                  >Đang theo học ({{
-                    numeral(get(statistic, "total_elearnings", 0)).format()
-                  }})</a
-                >
-                <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''"
-                  >Đã hoàn thành ({{
-                    numeral(get(statistic, "total_elearnings", 0)).format()
-                  }})</a
-                >
+                <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">
+                  Đang theo học ({{
+                  numeral(get(statistic, "total_elearnings", 0)).format()
+                  }})
+                </a>
+                <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">
+                  Đã hoàn thành ({{
+                  numeral(get(statistic, "total_completed", 0)).format()
+                  }})
+                </a>
 
-                <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''"
-                  >Yêu thích ({{
-                    numeral(get(statistic, "total_favourites", 0)).format()
-                  }})</a
-                >
+                <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''">
+                  Yêu thích ({{
+                  numeral(get(statistic, "total_favourites", 0)).format()
+                  }})
+                </a>
 
-                <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''"
-                  >Lưu trữ ({{
-                    numeral(get(statistic, "total_archieves", 0)).format()
-                  }})</a
-                >
+                <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">
+                  Lưu trữ ({{
+                  numeral(get(statistic, "total_archieves", 0)).format()
+                  }})
+                </a>
               </div>
             </div>
 
             <div class="d-flex align-items-center search-field">
-              <div class="search__mycourses  mr-4">
+              <div class="search__mycourses mr-4">
                 <app-search
                   class="mb-0"
                   size="sm"
                   placeholder="Tìm kiếm"
                   v-model="params.keyword"
                   bordered
-                  @submit="handleSubmitSearch"
                 />
               </div>
 
-              <div class="filter-form__item">
+              <div class="filter-form__item my-0">
                 <app-button
                   :color="showFilter ? 'primary' : 'white'"
                   square
                   :size="'sm'"
                   @click="toggleFilter"
                 >
-                  <IconHamberger
-                    :class="showFilter ? 'fill-white' : 'fill-primary'"
-                    class="mr-2"
-                  />
+                  <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
                   <span>Lọc kết quả</span>
                 </app-button>
               </div>
 
               <div class="d-flex-center ml-3" v-if="showFilter">
-                <div class="filter-form__item">
+                <div class="filter-form__item my-0">
                   <app-vue-select
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
-                    v-model="selectType"
                     label="text"
                     placeholder="Thể loại"
                     has-border
+                    :value="params.type"
+                    :reduce="(item) => item.value"
+                    @input="handleChangeType"
+                    :options="[
+                      { text: 'Tất cả', value: 'ALL' },
+                      { text: 'Bài giảng', value: 'LECTURE' },
+                      { text: 'Khoá học', value: 'COURSE' },
+                    ]"
                   ></app-vue-select>
                 </div>
-                <div class="filter-form__item">
+                <div class="filter-form__item my-0">
                   <app-vue-select
-                    style="width: 11rem"
+                    style="width: 14rem"
                     class="app-vue-select filter-form__item__selection"
                     v-model="selectPrivacy"
                     label="text"
-                    placeholder="Hiển thị"
+                    placeholder="Môn học"
+                    :value="params.privacy"
+                    :reduce="(item) => item.value"
+                    @input="handleChangePrivacy"
+                    :options="subjectsOpt"
                     has-border
                   ></app-vue-select>
                 </div>
-                <div class="filter-form__item">
+                <div class="filter-form__item my-0">
                   <app-vue-select
                     style="width: 11rem"
                     class="app-vue-select filter-form__item__selection"
                     v-model="selectFree"
                     label="text"
                     placeholder="Học phí"
+                    :value="params.free"
+                    :reduce="(item) => item.value"
+                    @input="handleChangeFree"
+                    :options="[
+                      { text: 'Tất cả', value: '' },
+                      { text: 'Miễn phí', value: true },
+                      { text: 'Có phí', value: false },
+                    ]"
                     has-border
                   ></app-vue-select>
                 </div>
               </div>
             </div>
 
-            <ElearningList
-              :elearningList="get(list, 'content', [])"
-              :col="'col-md-4'"
-            >
+            <ElearningList :elearningList="get(list, 'content', [])" :col="'col-md-4'">
               <ElearningItem
                 slot-scope="{ item }"
                 :elearning="item"
@@ -149,7 +161,7 @@ const STORE_NAME_FAVOURITE = "elearning/study/study-favourite";
 const STORE_NAME_ARCHIVE = "elearning/study/study-archive";
 import numeral from "numeral";
 import IconHamberger from "~/assets/svg/icons/hamberger.svg?inline";
-import { useEffect } from "../../../../utils/common";
+import { useEffect } from "~/utils/common";
 
 export default {
   middleware: ["authenticated"],
@@ -160,7 +172,7 @@ export default {
     ElearningItem,
     MenuDropDown,
     ShareElearningModal,
-    IconHamberger,
+    IconHamberger
   },
   data() {
     return {
@@ -168,71 +180,57 @@ export default {
         type: "ALL",
         size: 12,
         page: 1,
-        keyword: "",
+        keyword: null,
+        completed: null,
+        privacy: null,
+        free: null,
+        is_archive: false,
+        is_hidden: true
       },
-      // params: {
-      //   keyword: null,
-      // },
       tab: 2,
-      // list: [],
-      total: {
-        elearnings: null,
-        courses: null,
-        lectures: null,
-        favourites: null,
-        archieves: null,
-      },
-      pagination: {
-        // total_elements: 103,
-        // last: false,
-        // total_pages: 222,
-        // size: 10,
-        // number: 2,
-        // first: true,
-        // number_of_elements: 10
-      },
       checkModalShare: false,
       dataModal: {},
       showFilter: false,
       selectType: null,
       selectPrivacy: null,
-      selectFree: null,
+      selectFree: null
     };
   },
+
   mounted() {
     useEffect(this, this.getData.bind(this), ["params", "tab"]);
     this.$store.dispatch("elearning/study-space/getStatistic");
-    // this.fetchElearningList();
-    // this.fetchElearningStatisticList();
-    // this.fetchElearningFavourite();
-    // this.fetchElearningArchive();
+    this.$store.dispatch(
+      `elearning/public/public-subject/${actionTypes.ELEARNING.SUBJECT}`
+    );
   },
-  computed: {
-    // ...mapState("elearning/study/study-student", {
-    //   elearningStudyStudent: "elearningStudyStudent",
-    // }),
-    // ...mapState("elearning/study/study-student", {
-    //   elearningStudyStatistic: "elearningStudyStatistic",
-    // }),
-    // ...mapState("elearning/study/study-student", {
-    //   elearningStudyArchive: "elearningStudyArchive",
-    // }),
-    // ...mapState("elearning/study/study-student", {
-    //   elearningStudyFavourite: "elearningStudyFavourite",
-    // }),
 
+  computed: {
     ...mapState("elearning/study-space", {
-      studying: "studying",
+      finished_lecture: "finished_lecture",
+      unfinished_lecture: "unfinished_lecture",
       statistic: "statistic",
       archive: "archive",
-      favourite: "favourite",
+      favourite: "favourite"
     }),
+    ...mapState("elearning/public/public-subject", {
+      subjects: "subjects"
+    }),
+
+    subjectsOpt() {
+      return this.subjects.map(item => ({
+        ...item,
+        value: item.id,
+        text: item.name
+      }));
+    },
+
     list() {
       if (this.tab === 2) {
-        return this.studying;
+        return this.unfinished_lecture;
       }
       if (this.tab === 3) {
-        return this.studying;
+        return this.finished_lecture;
       }
       if (this.tab === 4) {
         return this.favourite;
@@ -240,74 +238,26 @@ export default {
       if (this.tab === 5) {
         return this.archive;
       }
-      return this.studying;
-    },
-  },
-
-  watch: {
-    // elearningStudyStatistic: {
-    //   handler: function() {
-    //     this.total.elearnings = get(
-    //       this,
-    //       "elearningStudyStatistic.total_elearnings",
-    //       0
-    //     );
-    //     this.total.courses = get(
-    //       this,
-    //       "elearningStudyStatistic.total_courses",
-    //       0
-    //     );
-    //     this.total.lectures = get(
-    //       this,
-    //       "elearningStudyStatistic.total_lectures",
-    //       0
-    //     );
-    //     this.total.favourites = get(
-    //       this,
-    //       "elearningStudyStatistic.total_favourites",
-    //       0
-    //     );
-    //     this.total.archieves = get(
-    //       this,
-    //       "elearningStudyStatistic.total_archieves",
-    //       0
-    //     );
-    //   },
-    // },
-    // elearningStudyStudent: {
-    //   handler: function() {
-    //     this.list = get(this, "elearningStudyStudent.content", []);
-    //     this.pagination = get(this, "elearningStudyStudent.page", {});
-    //   },
-    // },
-    // elearningStudyFavourite: {
-    //   handler: function() {
-    //     this.list = get(this, "elearningStudyFavourite.content", []);
-    //     this.pagination = get(this, "elearningStudyFavourite.page", {});
-    //   },
-    // },
-    // elearningStudyArchive: {
-    //   handler: function() {
-    //     this.list = get(this, "elearningStudyArchive.content", []);
-    //     this.pagination = get(this, "elearningStudyArchive.page", {});
-    //   },
-    // },
-    tab(_tab) {},
-    pagination(_newVal) {
-      this.pagination.size = _newVal.size;
-      this.pagination.first = _newVal.first;
-      this.pagination.last = _newVal.last;
-      this.pagination.number = _newVal.number;
-      this.pagination.total_pages = _newVal.total_pages;
-      this.pagination.total_elements = _newVal.total_elements;
-      this.pagination.number_of_elements = _newVal.number_of_elements;
-    },
+      return this.unfinished_lecture;
+    }
   },
 
   methods: {
+    handleChangeType(type) {
+      this.params.type = type;
+    },
+
+    handleChangePrivacy(privacy) {
+      this.params.privacy = privacy;
+    },
+
+    handleChangeFree(free) {
+      this.params.free = free;
+    },
+
     getData() {
       const payload = {
-        params: this.params,
+        params: this.params
       };
       if (this.tab === 2) {
         this.$store.dispatch("elearning/study-space/getStudying", payload);
@@ -325,271 +275,109 @@ export default {
 
     ...mapActions(STORE_NAME_FAVOURITE, [
       "elearningStudyFavouriteAdd",
-      "elearningStudyFavouriteDelete",
+      "elearningStudyFavouriteDelete"
     ]),
+
     ...mapActions(STORE_NAME_ARCHIVE, [
       "elearningStudyArchiveAdd",
-      "elearningStudyArchiveDelete",
+      "elearningStudyArchiveDelete"
     ]),
+
     changeTab(tab) {
       this.tab = tab;
+      if (tab == 2) {
+        this.params.completed = null;
+        this.params.is_archive = false;
+      }
+      if (tab == 3) {
+        this.params.completed = true;
+        this.params.is_archive = null;
+      }
+      if (tab == 4) {
+        this.params.completed = null;
+        this.params.is_archive = null;
+      }
+      if (tab == 5) {
+        this.params.completed = null;
+        this.params.is_archive = null;
+      }
       this.params.page = 1;
-      this.params.keyword = "";
-      const payload = {
-        params: this.params,
-      };
-      // this.params.size = 8;
-      // if (tab === 1) {
-      //   this.params.type = "ALL";
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (tab === 2) {
-      //   this.params.type = "LECTURE";
-      //   this.params.page = 1;
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (tab === 3) {
-      //   this.params.type = "COURSE";
-      //   this.params.page = 1;
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (tab === 4) {
-      //   this.fetchElearningFavourite();
-      //   this.list = get(this, "elearningStudyFavourite.content", []);
-      //   this.pagination = get(this, "elearningStudyFavourite.page", {});
-      // } else if (tab === 5) {
-      //   this.fetchElearningArchive();
-      //   this.list = get(this, "elearningStudyArchive.content", []);
-      //   this.pagination = get(this, "elearningStudyArchive.page", {});
-      // }
-    },
-
-    fetchElearningList() {
-      const payload = {
-        params: {
-          type: this.params.type,
-          size: 8,
-          page: this.params.page,
-          keyword: this.params.keyword,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STUDENT.LIST}`,
-        payload
-      );
-    },
-
-    fetchElearningStatisticList() {
-      this.$store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STUDY_STATISTIC.LIST}`
-      );
-    },
-
-    fetchElearningArchive() {
-      const payloadArchive = {
-        params: {
-          size: 8,
-          page: this.params.page,
-          keyword: this.params.keyword,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STURY_ARCHIVE.LIST}`,
-        payloadArchive
-      );
-    },
-
-    fetchElearningFavourite() {
-      const payloadFavour = {
-        params: {
-          size: 8,
-          page: this.params.page,
-          keyword: this.params.keyword,
-        },
-      };
-      this.$store.dispatch(
-        `elearning/study/study-student/${actionTypes.ELEARNING_STURY_FAVOURITE.LIST}`,
-        payloadFavour
-      );
+      this.params.keyword = null;
     },
 
     handleFavourite(id) {
       const query = {
-        elearning_id: id,
+        elearning_id: id
       };
-      this.elearningStudyFavouriteAdd(query).then((result) => {
+      this.elearningStudyFavouriteAdd(query).then(result => {
         if (result.success == true) {
-          if (this.tab === 4) {
-            // this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            // this.fetchElearningFavourite();
-          }
+          this.getData();
+          this.$store.dispatch("elearning/study-space/getStatistic");
         }
       });
     },
 
     handleDeleteFavourite(id) {
       const query = {
-        elearning_ids: [id],
+        elearning_ids: [id]
       };
-      this.elearningStudyFavouriteDelete(query).then((result) => {
+      this.elearningStudyFavouriteDelete(query).then(result => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page,
-          },
+            page: this.params.page
+          }
         };
         if (result.success == true) {
-          if (this.tab === 4) {
-            // this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-            // this.fetchElearningFavourite();
-          }
+          this.getData();
+          this.$store.dispatch("elearning/study-space/getStatistic");
         }
       });
     },
 
     handleArchive(id) {
       const query = {
-        elearning_id: id,
+        elearning_id: id
       };
-      this.elearningStudyArchiveAdd(query).then((result) => {
+      this.elearningStudyArchiveAdd(query).then(result => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page,
-          },
+            page: this.params.page
+          }
         };
         if (result.success == true) {
-          if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else if (this.tab === 4) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-          }
+          this.getData();
+          this.$store.dispatch("elearning/study-space/getStatistic");
         }
       });
     },
 
     handleDeleteArchive(id) {
       const query = {
-        elearning_ids: [id],
+        elearning_ids: [id]
       };
-      this.elearningStudyArchiveDelete(query).then((result) => {
+      this.elearningStudyArchiveDelete(query).then(result => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page,
-          },
+            page: this.params.page
+          }
         };
         if (result.success == true) {
-          if (this.tab === 5) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningArchive();
-          } else if (this.tab === 4) {
-            this.fetchElearningStatisticList();
-            this.fetchElearningFavourite();
-          } else {
-            this.fetchElearningList();
-            this.fetchElearningStatisticList();
-          }
+          this.getData();
+          this.$store.dispatch("elearning/study-space/getStatistic");
         }
       });
     },
+
     onPageChange(e) {
-      console.log(e);
-      this.pagination = { ...this.pagination, ...e };
-      this.params.size = this.pagination.size;
-      this.params.page = this.pagination.number + 1;
-      this.fetchElearningList();
+      this.params.page = get(e, "number", 0) + 1;
     },
-    handleSubmitSearch(e) {
-      // console.log(this.params.keyword)
-      // console.log(e)
-      // console.log(this.params)
-      // this.params.page = 1;
-      // if (this.tab === 1) {
-      //   this.params.type = "ALL";
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (this.tab === 2) {
-      //   this.params.type = "LECTURE";
-      //   // this.params.page = 1;
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (this.tab === 3) {
-      //   this.params.type = "COURSE";
-      //   // this.params.page = 1;
-      //   this.fetchElearningList();
-      //   this.list = get(this, "elearningStudyStudent.content", []);
-      //   this.pagination = get(this, "elearningStudyStudent.page", {});
-      // } else if (this.tab === 4) {
-      //   this.fetchElearningFavourite();
-      //   this.list = get(this, "elearningStudyFavourite.content", []);
-      //   this.pagination = get(this, "elearningStudyFavourite.page", {});
-      // } else if (this.tab === 5) {
-      //   this.fetchElearningArchive();
-      //   this.list = get(this, "elearningStudyArchive.content", []);
-      //   this.pagination = get(this, "elearningStudyArchive.page", {});
-      // }
-    },
-    hanldeInputSearch(val) {
-      // if (val == "") {
-      //   this.params.page = 1;
-      //   if (this.tab === 1) {
-      //     this.params.type = "ALL";
-      //     this.fetchElearningList();
-      //     this.list = get(this, "elearningStudyStudent.content", []);
-      //     this.pagination = get(this, "elearningStudyStudent.page", {});
-      //   } else if (this.tab === 2) {
-      //     this.params.type = "LECTURE";
-      //     // this.params.page = 1;
-      //     this.fetchElearningList();
-      //     this.list = get(this, "elearningStudyStudent.content", []);
-      //     this.pagination = get(this, "elearningStudyStudent.page", {});
-      //   } else if (this.tab === 3) {
-      //     this.params.type = "COURSE";
-      //     // this.params.page = 1;
-      //     this.fetchElearningList();
-      //     this.list = get(this, "elearningStudyStudent.content", []);
-      //     this.pagination = get(this, "elearningStudyStudent.page", {});
-      //   } else if (this.tab === 4) {
-      //     this.fetchElearningFavourite();
-      //     this.list = get(this, "elearningStudyFavourite.content", []);
-      //     this.pagination = get(this, "elearningStudyFavourite.page", {});
-      //   } else if (this.tab === 5) {
-      //     this.fetchElearningArchive();
-      //     this.list = get(this, "elearningStudyArchive.content", []);
-      //     this.pagination = get(this, "elearningStudyArchive.page", {});
-      //   }
-      // }
-    },
+
     shareFb(id) {
       const url =
         "https://facebook.com/sharer.php?display=popup&u=" +
@@ -597,21 +385,12 @@ export default {
         `elearning/${id}`;
       window.open(url, "sharer", "_blank");
     },
+
     async shareSchool(item) {
       this.checkModalShare = true;
       this.dataModal = item;
-      // const link = window.origin + `/elearning/${id}`;
-      // const doAdd = await this.$store.dispatch(
-      //   `social/${actionTypes.SOCIAL.ADD_POST}`,
-      //   { link: link }
-      // );
-      // if (doAdd.success) {
-      //   this.menuDropdown = false;
-      //   this.$toasted.show("Đã chia sẻ thành công.");
-      // } else {
-      //   this.$toasted.error(doAdd.message);
-      // }
     },
+
     async handleShareSchoolly(_content) {
       console.log("_content", _content);
       const link = window.origin + `/elearning/${this.dataModal.elearning_id}`;
@@ -626,6 +405,7 @@ export default {
         this.$toasted.error(doAdd.message);
       }
     },
+
     cancel() {
       this.checkModalShare = false;
     },
@@ -643,8 +423,8 @@ export default {
       this.params.type = this.selectType.value;
     },
     get,
-    numeral,
-  },
+    numeral
+  }
 };
 </script>
 

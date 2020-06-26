@@ -12,12 +12,16 @@
             @change="handleChangedQuestionNumber"
           />
         </div>
-        <a
-          href
-          class="text-decoration-none"
-          @click.prevent="handleShowListQuestion"
-          >Xem danh sách câu hỏi</a
-        >
+        <div class="d-flex justify-content-end align-items-center">
+          <!-- <a href class="d-flex text-decoration-none mr-3">
+            <IconCloudDownload24px class="icon fill-opacity-1 body-1 mr-2" />Tải
+            câu hỏi</a
+          > -->
+          <IconFormatListNumbered24px
+            class="ext-decoration-none text-clickable"
+            @click.prevent="handleShowListQuestion"
+          />
+        </div>
       </div>
 
       <div
@@ -26,28 +30,39 @@
       ></div>
     </div>
 
-    <div class="mb-15">
+    <div class="mb-10">
       <label class="d-inline-block mb-2" for="essay-answer">Câu trả lời</label>
       <app-upload
         class="mr-auto text-primary"
         style="display: inline-block; float: right;"
+        accept=".doc, .docx, .pdf, .rtf , .txt, .csv, .xls, .xlsx, .ppt, .pptx, .zip"
         @change="handleUploadAnswer"
       >
         <IconCloudUpload class="icon fill-opacity-1 body-1 mr-2" />Tải lên câu
         trả lời
       </app-upload>
 
-      <!-- <app-input
-        id="essay-answer"
-        placeholder="Nhập câu trả lời"
-        textarea
-        v-model="answer"
-      ></app-input> -->
       <app-editor class="mb-4" id="essay-answer" v-model="answer" />
-
+    </div>
+    <div
+      class="d-flex mt-15 justify-content-start"
+      v-if="currentUploadAnswered"
+    >
+      <div class="e-exercise-essay__attachment">
+        <span class="mr-2 font-weight-medium">{{
+          currentUploadAnswered.name
+        }}</span>
+        <span class="mr-2 e-exercise-essay__attachment__weight"
+          >{{ currentUploadAnswered.size }} KB</span
+        >
+      </div>
+      <IconClose
+        class="fill-white e-exercise-essay__icon text-clickable"
+        @click.prevent="removeUploadFile"
+      />
     </div>
 
-    <div class="e-exercise-essay__bottom d-flex">
+    <div class="e-exercise-essay__bottom d-flex mt-15">
       <div class="d-flex mr-auto">
         <app-button
           size="sm"
@@ -70,7 +85,7 @@
       <app-button
         size="sm"
         color="info"
-        @click.prevent="modalConfirmSubmit = true"
+        @click.prevent="modalConfirmSubmit = true; confirmLoading = false;"
       >
         <!-- <app-button size="sm" color="info" @click="modalConfirmSubmit = true"> -->
         <IconSend class="icon body-1 mr-2" />Nộp bài
@@ -94,6 +109,7 @@
       v-if="modalConfirmSubmit"
       title="Xác nhận nộp bài"
       description="Bạn có chắc chắn muốn nộp bài?"
+      :confirmLoading="confirmLoading"
       @cancel="modalConfirmSubmit = false"
       @ok="handleQuestionSubmission"
       @close="modalConfirmSubmit = false"
@@ -114,6 +130,10 @@ import IconCloudUpload from "~/assets/svg/v2-icons/cloud_upload_24px.svg?inline"
 import IconSend from "~/assets/svg/v2-icons/send_24px.svg?inline";
 import IconArrowBack from "~/assets/svg/v2-icons/arrow_back_24px.svg?inline";
 import IconArrowForward from "~/assets/svg/v2-icons/arrow_forward_24px.svg?inline";
+import IconClose from "~/assets/svg/v2-icons/close_24px.svg?inline";
+import IconFormatListNumbered24px from "~/assets/svg/v2-icons/format_list_numbered_24px.svg?inline";
+import IconCloudDownload24px from "~/assets/svg/v2-icons/cloud_download_24px.svg?inline";
+
 import ElearningExerciseListQuestions from "~/components/page/elearning/study/exercise/ElearningExerciseListQuestions";
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
@@ -123,7 +143,8 @@ import { RESPONSE_SUCCESS } from "~/utils/config";
 import {
   QUESTION_NAV,
   STUDY_MODE,
-  EXERCISE_CATEGORIES
+  EXERCISE_CATEGORIES,
+  PAGE_SIZE
 } from "~/utils/constants";
 import { EXERCISE_TYPES } from "~/utils/constants";
 
@@ -133,7 +154,10 @@ export default {
     IconCloudUpload,
     IconArrowForward,
     IconArrowBack,
-    ElearningExerciseListQuestions
+    IconClose,
+    ElearningExerciseListQuestions,
+    IconFormatListNumbered24px,
+    IconCloudDownload24px
   },
 
   props: {
@@ -150,6 +174,7 @@ export default {
       answer: null,
       questionNo: this.questionId,
       modalListQuestions: false,
+      confirmLoading: false,
       notify: {
         type: "",
         description: "",
@@ -180,6 +205,26 @@ export default {
       "numOfQuestion"
     ]),
 
+    currentUploadAnswered() {
+      if (
+        !this.submission ||
+        !this.submission.attachments ||
+        !this.submission.attachments.length
+      )
+        return "";
+      const currentAttachment = this.submission.attachments.find(
+        a => a.question_id == this.currentExerciseQuestion.id
+      );
+      const currFile = currentAttachment ? currentAttachment.file : null;
+      if (currFile) {
+        return {
+          name: currFile.name,
+          size: parseFloat(currFile.size / 1000).toFixed(1),
+          question_id: currentAttachment.question_id
+        };
+      }
+    },
+
     isDisableBack() {
       return this.currentQuestionIndex < 1;
     },
@@ -207,32 +252,27 @@ export default {
     ]),
 
     handleQuestionSubmission() {
-      console.log("[handleQuestionSubmission]", this.currentExerciseQuestion);
+      console.log("[handleQuestionSubmission] bf", this.submission);
 
-      // this.modalConfirmSubmit = false;
-      // const durationCost = parseInt(
-      //   (new Date().getTime() - this.submission.start_time.getTime()) / 1000
-      // ); // in seconds
+      const attachments = this.submission.attachments.filter(f => f.file).map(m => m.file);
+      
 
-      const attachments = this.submission.attachments.map(m => m.file);
-
-      const submissionReq = createExerciseSubmissionReq({
-        exercise_id: this.submission.exercise_id,
-        answers: this.submission.answers,
-        attachments: attachments,
-        // duration: durationCost, // in seconds
-        // start_time: fullDateTimeSlash(this.submission.start_time)
-      });
+      const submissionForm = new FormData();
+      submissionForm.append("exercise_id", this.submission.exercise_id);
+      submissionForm.append("answers", JSON.stringify(this.submission.answers));
+      attachments.map(singleFile => {
+        submissionForm.append("attachments", singleFile);
+      })
 
       console.log("[handleQuestionSubmission] submissionReq", {
         exercise_id: this.submission.exercise_id,
         answers: this.submission.answers,
-        attachments: attachments,
-        // duration: durationCost,
-        // start_time: fullDateTimeSlash(this.submission.start_time)
+        attachments: attachments
       });
 
-      this.elearningSudyExerciseSubmissionAdd(submissionReq).then(res => {
+      this.confirmLoading = true;
+
+      this.elearningSudyExerciseSubmissionAdd(submissionForm).then(res => {
         // renew list progress
         if (res.success == RESPONSE_SUCCESS) {
           this.modalConfirmSubmit = false;
@@ -252,13 +292,15 @@ export default {
             exerciseReq = {
               elearning_id: this.progress.id,
               category: EXERCISE_CATEGORIES.EXERCISE,
-              lesson_id: this.currentLession.id
+              lesson_id: this.currentLession.id,
+              size: PAGE_SIZE.MAXIMIZE,
             };
           } else {
             // list test
             exerciseReq = {
               elearning_id: this.progress.id,
-              category: EXERCISE_CATEGORIES.TEST
+              category: EXERCISE_CATEGORIES.TEST,
+              size: PAGE_SIZE.MAXIMIZE,
             };
           }
           console.log("[exerciseReq]", exerciseReq);
@@ -271,6 +313,16 @@ export default {
             isShowNotify: true
           };
         }
+
+        this.confirmLoading = false;
+      });
+    },
+
+    removeUploadFile() {
+      console.log("[removeUploadFile]", this.currentExerciseQuestion);
+      this.setStudyExerciseSubmission({
+        file: null,
+        question_id: this.currentExerciseQuestion.id
       });
     },
 
@@ -296,7 +348,7 @@ export default {
 
     handleUploadAnswer(file) {
       console.log("[handleUploadAnswer]", file);
-      this.$toasted.success("Tải câu trả lời lên thành công");
+      // this.$toasted.success("Tải câu trả lời lên thành công");
       const fileUploaded = file ? file[0] : null;
       this.setStudyExerciseSubmission({
         file: fileUploaded,

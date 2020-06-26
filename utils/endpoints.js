@@ -11,7 +11,7 @@ export const CHECK_PHONE = `/user/public/validate`;
 export const FORGOT_PASSWORD = `/user/public/resetpwd`;
 export const RESET_PASSWORD_REQUEST = `/user/public/resetpwd/request`;
 export const CHANGE_PASSWORD = `/user/account/changepwd`;
-export const ACCOUNT_PERSONAL = `/social/api/user/profile`;
+export const ACCOUNT_PERSONAL = `/social/profile`;
 export const ACCOUNT_PROFILE = `/user/account/profile`;
 export const ACCOUNT_LINK = `/user/account/link`;
 export const ACCOUNT_PHONE = `/account/phone`;
@@ -32,8 +32,8 @@ export const ACCOUNT_PROFILE_BIOGRAPHY = `/user/account/profile/biography`;
 /**
  * SOCIALS
  */
-export const FEED = `/social/api/feed`;
-export const POSTS = `/social/api/post`;
+export const FEED = `/social/news-feed`;
+export const POSTS = `/social/posts`;
 export const LIKES = `/social/api/like`;
 export const SHARES = `/social/api/share`;
 export const COMMENTS = `/social/api/comment`;
@@ -49,6 +49,12 @@ export const SOCIAL_FOLLOW = `/social/api/follow`;
 export const SOCIAL_SCRAPER = `/social/api/openGraphScraper`;
 export const REGISTER_DEVICE = `/social/api/device`;
 export const NOTIFICATION_UNREAD = `chat/social/api/notification/unRead`;
+
+/**
+ * NOTIFICATION
+ */
+export const NOTIFICATIONS_HEADER = `/notification/notifications`;
+export const COUNT_NOTIFICATIONS_HEADER = `/notification/notifications/counting`;
 
 /**
  * ELEARNING
@@ -68,6 +74,7 @@ export const ELEARNING_CREATING_ANSWERS = `/elearning/creating/answers`;
 export const ELEARNING_CREATING_CHAPTERS = `/elearning/creating/chapters`;
 export const ELEARNING_CREATING_DOCS = `/elearning/creating/docs`;
 export const ELEARNING_CREATING_EXERCISES = `/elearning/creating/exercises`;
+export const ELEARNING_CREATING_TEST = `/elearning/creating/test`;
 export const ELEARNING_CREATING_GENERAL = `/elearning/creating/general`;
 export const ELEARNING_CREATING_LESSONS = `/elearning/creating/lessons`;
 export const ELEARNING_CREATING_QUESTIONS = `/elearning/creating/questions`;
@@ -96,6 +103,9 @@ export const ELEARNING_PUBLIC_VOTED_SUBJECTS = `/elearning/public/voted_subjects
 export const ELEARNING_PUBLIC_NEWEST = `/elearning/public/newest`;
 export const ELEARNING_PUBLIC_HIGHLIGHT_TEACHERS = `/elearning/public/highlight_teachers`;
 export const ELEARNING_PUBLIC_ELEARNING = `/elearning/public/list`;
+export const ELEARNING_STUDY_TIMETABLE = `/elearning/study/timetable`;
+export const ELEARNING_NOTIFICATION = `/elearning/notifications`;
+export const PUBLIC_CATEGORY = `/elearning/public/category`;
 
 /**
  * ONLINE CLASS
@@ -127,23 +137,27 @@ export const STUDY_INTERACTIVE_QUESTION_ADD = `/elearning/study/interactive/ques
 export const STUDY_ELEARNING_PROGRESS = `/elearning/study/elearning/progress`;
 export const STUDY_QUESTION_LIKE = `/elearning/study/interactive/question/like`;
 export const STUDY_QUESTION_ADD_ANSWER = `/elearning/study/interactive/answer`;
+export const STUDY_QUESTION_ANSWERS = `/elearning/study/interactive/answers`;
 export const STUDY_QUESTION_LIKE_ANSWER = `/elearning/study/interactive/answer/like`;
 export const STUDY_LESSON = `/streaming/video`;
 export const STUDY_INTERACTIVE_NOTIFICATION = `/elearning/study/interactive/announcements`;
-export const STUDY_OVERVIEW = `/study/overview`;
-export const STUDY_OVERVIEW_TIME_TABLE = ` /study/timetable`;
-export const STUDY_OVERVIEW_DEADLINE = `/study/deadline`;
+export const STUDY_OVERVIEW = `/elearning/study/overview`;
+export const STUDY_OVERVIEW_TIME_TABLE = `/elearning/study/timetable`;
+export const STUDY_OVERVIEW_DEADLINE = `/elearning/study/deadline`;
 
 export const STUDY_EXERCISE_START = `/elearning/study/exercise/start`;
 export const STUDY_EXERCISE_QUESTIONS = `/elearning/study/exercise/questions`;
 export const STUDY_EXERCISE_RESULT = `/elearning/study/exercise/result`;
 export const STUDY_EXERCISE_SUBMISSION = `/elearning/study/exercise/submission`;
 export const STUDY_ELEARNING_EXERCISE = `/elearning/study/elearning/exercises`;
+export const STUDY_ELEARNING_EXERCISE_2 = `/elearning/study/elearning/exercise_list`;
 export const STUDY_EXERCISE_ELEARNING = `/elearning/study/ex_elearnings`;
 
 export const STUDY_OLCLASS_TIMETABLE = `/elearning/study/olclass/timetable`;
 export const STUDY_OLCLASS_LESSON_SESSIONS = `/elearning/study/olclasses/lesson/sessions`;
 export const STUDY_OLCLASS_LESSION_ATTENDANCE = `/elearning/study/olclass/attendance`;
+
+export const STUDY_ELEARNING_NOTIFICATIONS = `/study/elearning/announcements`;
 
 /**
  * SCHOOL
@@ -157,6 +171,12 @@ export const SCHOOL_ELEARNING = `/elearning/school/elearnings`;
 export const SCHOOL_PROFESSIONAL = `/elearning/school/admin/professional`;
 export const SCHOOL_STUDENT = `/elearning/school/admin/students`;
 export const SCHOOL_TEACHER = `/elearning/school/admin/teachers`;
+export const SCHOOL_ANNOUCEMENTS = `/elearning/school/announcements`;
+export const SCHOOL_LINKWEBS = `/elearning/school/linkwebs`;
+export const SCHOOL_NEWS = `/elearning/school/news`;
+export const SCHOOL_ORG_INTRO = `/elearning/school/organization`;
+export const SCHOOL_PROFESSION = `/elearning/school/professions`;
+export const SCHOOL_TIMETABLE = `/elearning/school/timetable`;
 
 /**
  * MESSAGE
@@ -177,7 +197,6 @@ export const MESSAGE_TYPE = `chat/social/api/message/getViaRoomType`;
 export const MESSAGE_SEND_FILE = `chat/social/api/message/uploadFile`;
 
 export const ROOM = `chat/rooms`;
-export const CHAT = `chat`;
 
 /**
  * TEACHING
@@ -195,10 +214,14 @@ export const TEACHING_VOTES = `/elearning/teaching/votes`;
 export const TEACHING_ELEARNING_PARTICIPANT = `/elearning/teaching/elearning/participants`;
 export const TEACHING_ELEARNING_BANNED = `/elearning/teaching/elearning/banned`;
 export const TEACHING_STUDENT_PROGESS = `/elearning/teaching/student/progress`;
+export const TEACHING_STUDENT_EXERCISES = `/elearning/teaching/student/exercises`;
 export const TEACHING_ELEARNING_REQUESTS = `/elearning/teaching/elearning/requests`;
 export const TEACHING_ELEARNING_ACCEPT = `/elearning/teaching/elearning/accept`;
 export const TEACHING_ELEARNING_INVITES = `/elearning/teaching/elearning/invite`;
 export const TEACHING_INTERACTIVE_LISTQUESTION = `/elearning/teaching/interactive/list-questions`;
+export const TEACHING_INTERACTIVE_LISTANSWER = `/elearning/teaching/interactive/answers`;
+export const TEACHING_INTERACTIVE_ANSWER = `/elearning/teaching/interactive/answer`;
+export const TEACHING_INTERACTIVE_LIKEANSWER = `/elearning/teaching/interactive/answer/like`;
 export const TEACHING_INTERACTIVE_ANNOUNCEMENTS = `/elearning/teaching/interactive/announcements`;
 export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = `/elearning/teaching/interactive/announcement`;
 export const TEACHING_PUBLIC_LIST = `/elearning/public/list`;
@@ -230,3 +253,10 @@ export const ACCOUNT_BANK_VALIDATE = `/user/account/banks/validate`;
 export const ACCOUNT_BALANCE = `/user/account/balance`;
 export const ACCOUNT_WITHDRAW = `/user/account/withdraw`;
 export const INFO_SUPPORT = `user/account/help`;
+
+/**
+ * SOCIAL
+ */
+export const MEDIA = `media`;
+export const SOCIAL_FRIENDS = `social/friends`
+export const PROFILE_AVATAR = `social/profile/avatar`;

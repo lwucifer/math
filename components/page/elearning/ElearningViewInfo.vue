@@ -15,7 +15,7 @@
           :size="14"
         />
         <strong class="ml-3">{{
-          numeral(get(info, "voting.average_rate", 0)).format("0,0.[0]")
+          numeral(get(info, "voting.average_rate", 0)).format("0,0.0")
         }}</strong
         >&nbsp;
         <span class="font-13px"

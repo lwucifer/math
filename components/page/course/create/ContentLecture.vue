@@ -10,7 +10,7 @@
       <div class="cc-box">
         <div class="cc-box__head">
           <div class="cc-box__head-left flex-grow">
-            <EditCourseName :defaultName="get(this, 'general.name', '')" />
+            <EditLectureName :defaultName="get(this, 'general.name', '')" />
           </div>
 
           <div class="cc-box__head-right">
@@ -44,7 +44,7 @@
         </div>
 
         <div class="cc-box__body" style="border-top: 1px solid #E0E0E0">
-          <CreateLessonOfElearning
+          <AddLesson
             v-if="!get(this, 'lessons.length', 0)"
             @toggleShowAddLesson="toggleShowAddLesson"
             :lesson="lesson"
@@ -70,10 +70,7 @@
         <app-button class="mr-4" color="primary" outline
           ><IconSave class="mr-2" /> Lưu nháp</app-button
         > -->
-        <app-button
-          class="create-action__btn mr-4"
-          :disabled="!isNextStep"
-          @click="handleNextStep"
+        <app-button class="create-action__btn mr-4" @click="handleNextStep"
           ><Forward class="mr-2" /> Lưu & Tiếp tục</app-button
         >
       </div>
@@ -85,6 +82,7 @@
       @ok="handleOk"
       @cancel="handleCancel"
       title="Xác nhận"
+      description="Bạn có chắc chắn là đã hoàn thành xong nội dung học tập?"
     />
   </div>
 </template>
@@ -110,14 +108,14 @@ import IconSave from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import Forward from "~/assets/svg/v2-icons/forward_2.svg?inline";
 
 import CreateAction from "~/components/page/course/create/common/CreateAction";
-import CreateLessonOfElearning from "~/components/page/course/create/lecture/CreateLessonOfElearning";
+import AddLesson from "~/components/page/course/create/lecture/AddLesson";
 import LessonDetail from "~/components/page/course/create/common/LessonDetail";
 import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
 import { createPayloadAddCourse } from "~/models/course/AddCourse";
-import EditCourseName from "~/components/page/course/create/common/EditCourseName";
+import EditLectureName from "~/components/page/course/create/lecture/EditLectureName";
 
 export default {
   components: {
@@ -132,9 +130,9 @@ export default {
     IconCheck,
     IconTimes,
     CreateAction,
-    CreateLessonOfElearning,
+    AddLesson,
     LessonDetail,
-    EditCourseName,
+    EditLectureName,
     IconAngleUp,
     IconAdd,
     IconDelete,
@@ -184,10 +182,18 @@ export default {
       lessons: "lessons_lecture",
       progress: "progress",
     }),
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
     isNextStep() {
       if (get(this, "progress.general_status", false) != 1) return false;
       if (get(this, "progress.content_status", false) != 1) return false;
       return true;
+    },
+    name() {
+      return get(this, "general.type", "") === "COURSE"
+        ? "khoá học"
+        : "bài giảng";
     },
   },
 
@@ -195,19 +201,30 @@ export default {
     get,
 
     handleCancel() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
     },
 
     handleOk() {
       this.showModalConfirm = false;
+      if (this.disabled_all) return;
       this.$emit("nextStep", "settings");
     },
 
     handleNextStep() {
+      if (this.disabled_all) {
+        this.$toasted.error(`${this.name} đã đăng, không được phép sửa`);
+        return;
+      }
+      if (!this.isNextStep) {
+        this.$toasted.error(`Bạn chưa hoàn thiện hết nội dung ${this.name}`);
+        return;
+      }
       this.showModalConfirm = true;
     },
 
     async handleSaveCourseName() {
+      if (this.disabled_all) return;
       const data = {
         name: this.courseNameModel,
         elearning_id: getParamQuery("elearning_id"),
@@ -233,10 +250,12 @@ export default {
     },
 
     handleHideEditNameCourse() {
+      if (this.disabled_all) return;
       this.isShowButtonEditNameCourse = false;
     },
 
     handleShowEditNameCourse() {
+      if (this.disabled_all) return;
       this.isShowButtonEditNameCourse = true;
     },
 
@@ -245,11 +264,13 @@ export default {
     },
 
     handleEditLesson(lesson) {
+      if (this.disabled_all) return;
       this.isShowDetailLesson = false;
       this.lesson = lesson;
     },
 
     handleUploadChange(event) {
+      if (this.disabled_all) return;
       this.avatar = Array.from(event.target.files);
 
       getBase64(this.avatar[0], (src) => {
@@ -258,22 +279,27 @@ export default {
     },
 
     removeAvatar() {
+      if (this.disabled_all) return;
       this.avatar = [];
     },
 
     changeTabType(type) {
+      if (this.disabled_all) return;
       this.tabType = type;
     },
 
     changeTabVideo(type) {
+      if (this.disabled_all) return;
       this.tabVideo = type;
     },
 
     changeTabDocument(type) {
+      if (this.disabled_all) return;
       this.tabDocument = type;
     },
 
     changeTabAddDocument(type) {
+      if (this.disabled_all) return;
       this.tabAddDocument = type;
     },
 
@@ -282,6 +308,7 @@ export default {
     // },
 
     toggleShowAddLesson() {
+      if (this.disabled_all) return;
       const elearning_id = getParamQuery("elearning_id");
       if (elearning_id && get(this, "lessons.length", 0)) {
         this.isShowDetailLesson = true;
@@ -291,6 +318,7 @@ export default {
     },
 
     editCourseName() {
+      if (this.disabled_all) return;
       this.isEditCourseName = true;
       this.courseNameModel = get(this.general, "name", "");
 

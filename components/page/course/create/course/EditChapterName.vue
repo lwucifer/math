@@ -1,7 +1,7 @@
 <template>
   <div class="ce-item__left d-flex align-items-center">
     <div class="mr-3 d-flex align-items-center">
-      <strong>Chương {{ index + 1 }}:</strong> 
+      <strong>Chương {{ index + 1 }}:</strong>
       <input
         v-if="isEditChaperName"
         v-model="chaperNameModel"
@@ -69,10 +69,11 @@ import IconBorderColor24px from "~/assets/svg/v2-icons/border_color_24px.svg?inl
 import IconTrashAlt from "~/assets/svg/icons/trash-alt.svg?inline";
 import IconSave24px from "~/assets/svg/v2-icons/save_24px.svg?inline";
 import IconClose24px from "~/assets/svg/v2-icons/close_24px.svg?inline";
-
+import { mapState } from "vuex";
 import { useEffect, getParamQuery } from "~/utils/common";
 import * as actionTypes from "~/utils/action-types";
 import { createPayloadAddContentCourse } from "~/models/course/AddCourse";
+
 export default {
   components: {
     IconBorderColor24px,
@@ -95,22 +96,33 @@ export default {
       confirmLoading: false,
     };
   },
+
+  computed: {
+    disabled_all() {
+      return this.$store.getters["elearning/create/disabled_all"];
+    },
+  },
+
   mounted() {
     useEffect(this, this.handleChangeDefaultName.bind(this), ["chapter"]);
   },
+
   methods: {
     get,
     handleChangeDefaultName() {
       this.chaperNameModel = this.chapter.name;
     },
     async handleDeleteChapter() {
+      if (this.disabled_all) return;
       this.showModalConfirm = true;
     },
     async handleCancelModal() {
+      if (this.disabled_all) return;
       this.showModalConfirm = false;
       this.confirmLoading = false;
     },
     async handleOk() {
+      if (this.disabled_all) return;
       this.confirmLoading = true;
       const payload = {
         id: get(this, "chapter.id", ""),
@@ -131,6 +143,7 @@ export default {
       this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
     },
     editChaperName() {
+      if (this.disabled_all) return;
       this.isEditChaperName = true;
       const timeout = setTimeout(() => {
         this.$refs.inputChaperName.focus();
@@ -138,9 +151,11 @@ export default {
       });
     },
     cancelEditChapterName() {
+      if (this.disabled_all) return;
       this.isEditChaperName = false;
     },
     async handleEditChaperName() {
+      if (this.disabled_all) return;
       const data = {
         id: get(this, "chapter.id", ""),
         name: this.chaperNameModel,

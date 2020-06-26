@@ -16,6 +16,7 @@ import OlSchedules from "~/services/elearning/teaching/OlclassSchedules";
  */
 const state = () => ({
   OnlineClass: [],
+  OnlineClassInfo: {},
   Attendances: [],
   AttendantSummary: [],
   Invites: [],
@@ -49,18 +50,6 @@ const actions = {
     }
   },
 
-  async [actionTypes.TEACHING_OLCLASSES.DETAIL]({ commit }, class_id) {
-    try {
-      const result = await new OlClass(this.$axios)[actionTypes.BASE.DETAIL](
-        class_id
-      );
-      return result;
-    } catch (error) {
-      console.log("[TEACHING Olclass] list.error", error);
-    }
-    return null;
-  },
-
   async [actionTypes.TEACHING_OLCLASSES.ADD]({ commit }, payload) {
     try {
       const result = await new OlClass(this.$axios)["postWithRawJson"](payload);
@@ -88,6 +77,22 @@ const actions = {
       return result;
     } catch (error) {
       console.log("[TEACHING Olclass] delete.error", error);
+    }
+  },
+
+  async [actionTypes.TEACHING_OLCLASSES.INFO]({ commit }, id) {
+    try {
+      const result = await new OlClass(this.$axios)[actionTypes.BASE.DETAIL](
+        id
+      );
+      commit(
+        mutationTypes.TEACHING_OLCLASSES
+          .SET_TEACHING_OLCLASS_INFO,
+        result
+      );
+      return result;
+    } catch (error) {
+      console.log("[TEACHING Olclass] list.error", error);
     }
   },
 
@@ -249,9 +254,7 @@ const actions = {
     }
   },
 
-
   // Students
-
   async [actionTypes.TEACHING_OLCLASS_STUDENTS.LIST]({ commit }, options) {
     try {
       const result = await new OlStudents(this.$axios)[actionTypes.BASE.LIST](
@@ -287,6 +290,9 @@ const actions = {
 const mutations = {
   [mutationTypes.TEACHING_OLCLASSES.SET_TEACHING_OLCLASS_LIST](state, _OnlineClass) {
     state.OnlineClass = _OnlineClass;
+  },
+  [mutationTypes.TEACHING_OLCLASSES.SET_TEACHING_OLCLASS_INFO](state, _OnlineClass) {
+    state.OnlineClassInfo = _OnlineClass;
   },
   [mutationTypes.TEACHING_OLCLASS_INVITES.SET_TEACHING_OLCLASS_INVITES_LIST](state, _Invites) {
     state.Invites = _Invites;
