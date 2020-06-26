@@ -1,18 +1,11 @@
 <template>
   <div class="cc-panel__body">
     <div class="mb-4">
-      <label for="title" class="heading-5 font-weight-bold mb-2 d-inline-block"
-        >Tiêu đề bài kiểm tra
-        <span class="caption text-base font-weight-normal"
-          >(Tối đa 60 ký tự)</span
-        ></label
-      >
-      <app-input
-        id="title"
-        :counter="60"
-        v-model="payload.title"
-        @input="checkTitle()"
-      />
+      <label for="title" class="heading-5 font-weight-bold mb-2 d-inline-block">
+        Tiêu đề bài kiểm tra
+        <span class="caption text-base font-weight-normal">(Tối đa 60 ký tự)</span>
+      </label>
+      <app-input id="title" :counter="60" v-model="payload.title" @input="checkTitle()" />
       <app-error :error="get(error, 'title', '')" />
     </div>
 
@@ -26,15 +19,13 @@
           class="mr-4"
           :checked="payload.type === 'CHOICE'"
           @click="handleChangeType('CHOICE')"
-          >Trắc nghiệm</app-radio
-        >
+        >Trắc nghiệm</app-radio>
         <app-radio
           name="group2"
           value="ESSAY"
           :checked="payload.type === 'ESSAY'"
           @click="handleChangeType('ESSAY')"
-          >Tự luận</app-radio
-        >
+        >Tự luận</app-radio>
       </app-radio-group>
       <app-error :error="get(error, 'type', '')" />
     </div>
@@ -50,21 +41,16 @@
           name="caculate-point"
           :disabled="disabledType"
           :class="{ 'mr-6': true, 'disabled-input': disabledType }"
-          >Theo hệ số
+        >
+          Theo hệ số
           <v-popover placement="right" trigger="hover" class="d-inline-block">
-            <IconQuestionCircle
-              width="12px"
-              height="12px"
-              class="fill-gray vertical-middle"
-            />
+            <IconQuestionCircle width="12px" height="12px" class="fill-gray vertical-middle" />
 
             <template #popover>
               <p>Các bài kiểm tra được cài đặt theo hệ số 1 hoặc hệ số 2</p>
-              <p class="mb-3">
-                để làm cơ sở tính điểm trung bình cho học sinh.
-              </p>
+              <p class="mb-3">để làm cơ sở tính điểm trung bình cho học sinh.</p>
 
-              <a href="">Xem chi tiết</a>
+              <a href>Xem chi tiết</a>
             </template>
           </v-popover>
         </app-radio>
@@ -76,30 +62,22 @@
           @click="handleSelectType"
           name="caculate-point"
           :class="{ 'disabled-input': disabledType }"
-          >Theo trọng số
+        >
+          Theo trọng số
           <v-popover placement="right" trigger="hover" class="d-inline-block">
-            <IconQuestionCircle
-              width="12px"
-              height="12px"
-              class="fill-gray vertical-middle"
-            />
+            <IconQuestionCircle width="12px" height="12px" class="fill-gray vertical-middle" />
 
             <template #popover>
               <p>Các bài kiểm tra được cài đặt theo trọng số, tính theo %.</p>
-              <p class="mb-3">
-                Tổng trọng số của tất cả các bài kiểm tra là 100%.
-              </p>
+              <p class="mb-3">Tổng trọng số của tất cả các bài kiểm tra là 100%.</p>
 
-              <a href="">Xem chi tiết</a>
+              <a href>Xem chi tiết</a>
             </template>
           </v-popover>
         </app-radio>
       </div>
 
-      <div
-        class="d-flex align-items-center mb-5"
-        v-if="typeRadio == 'coefficient'"
-      >
+      <div class="d-flex align-items-center mb-5" v-if="typeRadio == 'coefficient'">
         <p class="mr-3">Chọn hệ số:</p>
 
         <app-select
@@ -127,7 +105,7 @@
         <p class="mr-3">Nhập trọng số:</p>
 
         <app-input
-          class="mr-3 mb-0 w-90 pr-3"
+          class="mr-3 mb-0 w-90 pr-3 input--modifer"
           size="sm"
           @onFocus="(event) => event.target.select()"
           v-model="payload.weight"
@@ -148,9 +126,7 @@
 
     <div class="row align-items-center mb-4" v-show="payload.required">
       <div class="col-12 col-md-4">
-        <label for="time" class="heading-5 font-weight-bold"
-          >Thời gian làm bài</label
-        >
+        <label for="time" class="heading-5 font-weight-bold">Thời gian làm bài</label>
 
         <app-input
           type="text"
@@ -184,9 +160,7 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <label for="count" class="heading-5 font-weight-bold"
-          >Số lần làm bài tối đa</label
-        >
+        <label for="count" class="heading-5 font-weight-bold">Số lần làm bài tối đa</label>
 
         <app-input
           type="text"
@@ -205,10 +179,10 @@
     <div class="setup-time mt-5 mb-6">
       <h5 class="mb-4">
         Cài đặt thời gian
-        <span class="text-base font-weight-normal"
-          >(Không bắt buộc)
-          <IconQuestionCircle width="12px" height="12px" class="fill-gray"
-        /></span>
+        <span class="text-base font-weight-normal">
+          (Không bắt buộc)
+          <IconQuestionCircle width="12px" height="12px" class="fill-gray" />
+        </span>
       </h5>
 
       <div class="d-flex align-items-center mb-3">
@@ -219,9 +193,9 @@
           :value="payload.open_time"
           :disabled="!payload.opentime_enable"
         />
-        <app-checkbox v-model="payload.opentime_enable"
-          ><span class="text-base">Áp dụng</span></app-checkbox
-        >
+        <app-checkbox v-model="payload.opentime_enable">
+          <span class="text-base">Áp dụng</span>
+        </app-checkbox>
       </div>
       <app-error :error="get(error, 'open_time', '')" />
 
@@ -234,9 +208,9 @@
           :disabled="!payload.closetime_enable"
         />
 
-        <app-checkbox v-model="payload.closetime_enable"
-          ><span class="text-base">Áp dụng</span></app-checkbox
-        >
+        <app-checkbox v-model="payload.closetime_enable">
+          <span class="text-base">Áp dụng</span>
+        </app-checkbox>
       </div>
       <app-error :error="get(error, 'close_time', '')" />
     </div>
@@ -248,15 +222,13 @@
         outline
         class="font-weight-semi-bold mr-4 text-secondary"
         @click="$emit('cancel')"
-        >Huỷ</app-button
-      >
+      >Huỷ</app-button>
       <app-button
         size="md"
         color="primary"
         class="font-weight-semi-bold"
         @click="handleAddExam"
-        >Tạo bài kiểm tra</app-button
-      >
+      >Tạo bài kiểm tra</app-button>
     </div>
 
     <app-modal-confirm
@@ -292,7 +264,7 @@ export default {
     IconEvent24px,
     IconQuestionCircle,
     IconCalender,
-    SelectDate,
+    SelectDate
   },
 
   computed: {
@@ -300,14 +272,14 @@ export default {
       general: "general",
       lesson: "lesson",
       exams: "exams",
-      setting: "setting",
+      setting: "setting"
     }),
     disabledType() {
       return !!(
         get(this, "exams.content.0.weight", "") !== "" ||
         get(this, "exams.content.0.coefficient", "") !== ""
       );
-    },
+    }
   },
 
   mounted() {
@@ -332,7 +304,7 @@ export default {
         closetime_enable: false,
         coefficient: 1,
         // id: "",
-        weight: "",
+        weight: ""
       },
       showModalConfirm: false,
       confirmLoading: false,
@@ -342,8 +314,8 @@ export default {
         type: "",
         weight: "",
         opent_time: "",
-        close_time: "",
-      },
+        close_time: ""
+      }
     };
   },
 
@@ -514,9 +486,9 @@ export default {
         url: "/elearning/creating/test",
         method: "post",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        data,
+        data
       });
 
       this.handleCancel();
@@ -528,7 +500,7 @@ export default {
           apply: true,
           calculation_method:
             this.typeRadio === "coefficient" ? "COEFFICIENT" : "WEIGHT",
-          elearning_id: this.payload.elearning_id,
+          elearning_id: this.payload.elearning_id
         };
         await this.handleCalculatePoint(data);
         this.$emit("cancel");
@@ -543,9 +515,9 @@ export default {
         url: "/elearning/creating/point_calculation",
         method: "post",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        data,
+        data
       });
       return res;
     },
@@ -559,7 +531,11 @@ export default {
       this.typeRadio = e.target.value;
     },
 
-    get,
-  },
+    get
+  }
 };
 </script>
+
+<style lang="scss">
+@import "~/assets/scss/components/elearning/course/creat/_form-creat-excercise.scss";
+</style>

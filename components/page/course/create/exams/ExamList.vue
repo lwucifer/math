@@ -16,34 +16,22 @@
                 Bài {{ index + 1 }}:
                 {{ examName }}
               </h2>
-              <button
-                class="cc-box__btn cc-box__btn-edit-hover mr-3"
-                @click="handleEditExam"
-              >
+              <button class="cc-box__btn cc-box__btn-edit-hover mr-3" @click="handleEditExam">
                 <IconEditAlt class="icon d-block subheading fill-primary" />
               </button>
-              <button
-                class="cc-box__btn cc-box__btn-edit-hover"
-                @click="handleDeleteExam"
-              >
-                <IconTrashAlt
-                  class="d-block subheading fill-secondary"
-                  width="20px"
-                  height="20px"
-                />
+              <button class="cc-box__btn cc-box__btn-edit-hover" @click="handleDeleteExam">
+                <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px" />
               </button>
             </div>
           </div>
 
           <div class="cc-box__head-right">
-            <p class="mr-5" v-if="get(exam, 'coefficient', '')">
-              Hệ số: {{ get(exam, "coefficient", "") }}
-            </p>
+            <p
+              class="mr-5"
+              v-if="get(exam, 'coefficient', '')"
+            >Hệ số: {{ get(exam, "coefficient", "") }}</p>
             <p class="mr-5" v-else>Trọng số: {{ get(exam, "weight", "") }}%</p>
-            <button
-              @click.prevent="toggleFormAdd"
-              class="text-primary d-flex align-items-center"
-            >
+            <button @click.prevent="toggleFormAdd" class="text-primary d-flex align-items-center">
               <IconPlus2 class="mr-3 fill-primary" />
               <span class="font-weight-semi-bold">Thêm câu hỏi</span>
             </button>
@@ -58,12 +46,7 @@
                 class="icon fill-primary"
                 v-if="!isShowExercise"
               />
-              <IconAngleUp
-                width="20px"
-                height="20px"
-                class="icon fill-primary"
-                v-else
-              />
+              <IconAngleUp width="20px" height="20px" class="icon fill-primary" v-else />
             </button>
           </div>
         </div>
@@ -116,7 +99,7 @@
 <script>
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
-import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
@@ -148,18 +131,18 @@ export default {
     IconAngleUp,
     IconPlus2,
     UpdateExam,
-    ExamInfo,
+    ExamInfo
   },
 
   props: {
     exam: {
       type: Object,
-      default: null,
+      default: null
     },
     index: {
       type: Number,
-      default: 0,
-    },
+      default: 0
+    }
   },
 
   computed: {
@@ -170,7 +153,7 @@ export default {
       return get(this, "exam.title", "").length > 40
         ? get(this, "exam.title", "").slice(0, 40) + "..."
         : get(this, "exam.title", "");
-    },
+    }
   },
 
   data() {
@@ -179,7 +162,7 @@ export default {
       isShowExercise: true,
       isShowEdit: false,
       showModalConfirm: false,
-      confirmLoading: false,
+      confirmLoading: false
     };
   },
 
@@ -197,16 +180,16 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       const payload = {
-        id: get(this, "exam.id", ""),
+        id: get(this, "exam.id", "")
       };
 
       const res = await this.$axios({
         url: "/elearning/creating/test",
         method: "delete",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        data: payload,
+        data: payload
       });
 
       this.handleCancel();
@@ -227,8 +210,8 @@ export default {
       if (this.disabled_all) return;
       this.isAddQuestionForm = !this.isAddQuestionForm;
     },
-    get,
-  },
+    get
+  }
 };
 </script>
 

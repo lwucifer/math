@@ -7,15 +7,22 @@
       @cancel="$emit('handleCancel')"
     >
       <template #title>
-        <h4 class="mb-3">Bài giảng riêng tư</h4>
+        <h4 class="mb-3">
+          {{ get(info, "type", "") === "LECTURE" ? "Bài giảng" : "Khoá học" }}
+          riêng tư
+        </h4>
       </template>
 
       <template #description>
         <p class="text-center mb-3">
-          Vui lòng nhập mã riêng tư vào ô dưới đây để truy cập bài giảng
+          Đây là
+          {{
+            get(info, "type", "") === "LECTURE" ? "bài giảng" : "khoá học"
+          }}
+          riêng tư, vui lòng gửi yêu cầu tham gia và chờ giáo viên phê duyệt.
         </p>
 
-        <app-input v-model="code" placeholder="Nhập mã"></app-input>
+        <!-- <app-input v-model="code" placeholder="Nhập mã"></app-input> -->
       </template>
 
       <template slot="actions" slot-scope="{ confirmLoading }">
@@ -32,7 +39,7 @@
           class="font-weight-semi-bold"
           color="primary"
           :style="{ 'pointer-events': confirmLoading ? 'none' : '' }"
-          @click="$emit('handleSubmit', code)"
+          @click="handleRequestCode"
         >
           <app-spin
             v-if="confirmLoading"
@@ -40,13 +47,13 @@
             color="white"
             size="small"
           />
-          Xác nhận
+          Gửi yêu cầu
         </app-button>
 
-        <div class="mt-4 mess text-secondary font-italic text-left">
+        <!-- <div class="mt-4 mess text-secondary font-italic text-left">
           Nếu bạn chưa có mã riêng tư để truy cập, bạn có thể gửi yêu cầu tham
           gia bài giảng <a @click="handleRequestCode">tại đây</a>
-        </div>
+        </div> -->
       </template>
     </app-modal-confirm>
 
@@ -79,15 +86,20 @@ export default {
       type: Boolean,
       default: false,
     },
+    info: {},
   },
 
   computed: {
     ...mapState("auth", {
       token: "token",
     }),
+    title() {
+      return "";
+    },
   },
 
   methods: {
+    get,
     async handleRequestCode() {
       const data = {
         elearning_id: get(this, "$route.params.id", ""),

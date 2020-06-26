@@ -81,7 +81,7 @@ export const ELEARNING_CREATING_QUESTIONS = `/elearning/creating/questions`;
 export const ELEARNING_PUBLIC_RELATED = `/elearning/public/related`;
 export const ELEARNING_PUBLIC_SUBJECT = `/elearning/public/subjects`;
 export const ELEARNING_PUBLIC_LEVEL = `/elearning/public/levels`;
-export const ELEARNING_PUBLIC_SCHOOL_YEAR = `/elearning/public/school-year`;
+export const ELEARNING_PUBLIC_SCHOOL_YEAR = `/elearning/public/schoolyears`;
 export const ELEARNING_TEACHING_REPOSITORY_FILE = `/elearning/teaching/repository/files`;
 export const ELEARNING_TEACHING_REPOSITORY = `/elearning/teaching/repository`;
 export const ELEARNING_TEACHING_EXERCISE = `/elearning/teaching/elearning/exercises`;
@@ -227,7 +227,6 @@ export const TEACHING_INTERACTIVE_ANNOUNCEMENTS = `/elearning/teaching/interacti
 export const TEACHING_INTERACTIVE_ADD_ANNOUNCEMENT = `/elearning/teaching/interactive/announcement`;
 export const TEACHING_PUBLIC_LIST = `/elearning/public/list`;
 export const PUBLIC_CLASSES = `/elearning/public/classes`;
-// export const TEACHING_STUDENTS = `/elearning/teaching/students`;
 /**
  * PAYMENT
  */

@@ -16,7 +16,7 @@
                 color="secondary"
                 size="sm"
                 class="btn-block__manager-student"
-                @click="bannedStudent(get(progress, 'is_banned', false))"
+                @click="showModalBanned = true"
               >
                 <IconBlock24px class="icon mr-2" />Cấm học sinh này
               </app-button>
@@ -26,7 +26,7 @@
                 color="primary"
                 size="sm"
                 class="btn-unblock__manager-student"
-                @click="bannedStudent"
+                @click="showModalBanned = true"
               >
                 <IconBlock24px class="icon mr-2" />Bỏ cấm học sinh này
               </app-button>
@@ -54,6 +54,16 @@
         </sub-block-section>
       </div>
     </div>
+
+    <app-modal-confirm
+      v-if="showModalBanned"
+      :confirmLoading="confirmBannedLoading"
+      @ok="bannedStudent"
+      :width="550"
+      @cancel="showModalBanned = false"
+      :title="!get(progress, 'banned', false) ? 'Bạn có chắc chắn muốn cấm học sinh này?': 'Bạn muốn bỏ cấm học sinh này?'"
+      :description="!get(progress, 'banned', false) ? 'Học sinh này sẽ không thể tham gia học tập và làm bài' : 'Học sinh này sẽ có thể tiếp tục tham gia học tập và làm bài'"
+    />
   </div>
 </template>
 
@@ -135,6 +145,8 @@ export default {
         size: 10,
         category: 'EXERCISE'
       },
+      confirmBannedLoading: false,
+      showModalBanned: false
     };
   },
   computed: {
@@ -148,7 +160,9 @@ export default {
     get,
     ...mapActions(STORE_TEACHING_BANNED, ["teachingElearningBanned"]),
     ...mapActions(STORE_TEACHING_PROGRESS, ["teachingStudentProGressList"]),
-    bannedStudent(isBanned) {
+    bannedStudent() {
+      this.confirmBannedLoading = true;
+      let isBanned = this.get(this.progress, 'banned', false);
       const data = createBannedStudent({
         elearning_id:
           this.$route.query && this.$route.query.elearning_id
@@ -173,6 +187,8 @@ export default {
       };
       this.teachingElearningBanned(data).then(result => {
         if (result.success == true) {
+          this.confirmBannedLoading = false;
+          this.showModalBanned = false;
           this.teachingStudentProGressList(dataQuery);
         }
       });

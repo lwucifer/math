@@ -36,11 +36,13 @@
             "
             :size="20"
           />
-          <span class="ml-2">{{
-            elearning && elearning.teacher.name
-              ? elearning && elearning.teacher.name
-              : "Nguyễn Văn C"
-          }}</span>
+          <span class="ml-2">
+            {{
+              elearning && elearning.teacher.name
+                ? elearning && elearning.teacher.name
+                : "Nguyễn Văn C"
+            }}
+          </span>
         </n-link>
         <!--<app-avatar-->
         <!--:src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"-->
@@ -148,16 +150,18 @@
           <p>
             Điểm trung bình:
             <span
-              v-if="isPoint"
-              class="heading-5 text-primary font-weight-semi-bold"
-              >{{
-                numeral(get(elearning, "medium_score.score", 0)).format("0,0.0")
-              }}</span
+              v-if="isPoint && isCaculation"
+              class="heading-6 text-primary font-weight-semi-bold"
             >
-            <span v-else>Chưa tổng kết</span>
+              {{
+                numeral(get(elearning, "medium_score.score", 0)).format("0,0.0")
+              }}
+            </span>
+            <span v-if="isPoint && !isCaculation">Chưa tổng kết</span>
+            <span v-if="!isPoint">Không áp dụng</span>
           </p>
 
-          <div v-if="isPoint" class="popover-point">
+          <div v-if="isPoint && isCaculation" class="popover-point">
             <v-popover class="popover-detail" placement="right" trigger="click">
               <IconQuestionCircle
                 width="16px"
@@ -170,8 +174,14 @@
                 <p class="font-weight-semi-bold mb-2">Điểm chi tiết</p>
 
                 <p class="mb-2" v-for="(score, index) in scores" :key="index">
-                  {{ get(score, "name", "") }}:
-                  <span class="text-primary">{{ get(score, "score", 0) }}</span>
+                  {{ get(score, "name", "").substring(0, 20) }}
+                  {{ get(score, "name.length", 0) > 20 ? "..." : "" }} :
+                  <span class="text-primary"
+                    >{{
+                      numeral(get(score, "score", 0)).format("0,0.0")
+                    }}
+                    điểm</span
+                  >
                 </p>
               </template>
             </v-popover>
@@ -285,7 +295,7 @@
             >Mua ngay</app-button
           >
         </div>
-      </div> -->
+      </div>-->
     </div>
   </div>
   <ElearningItem2 v-else :elearning="elearning">
@@ -338,7 +348,7 @@ export default {
       },
       progress: null,
       is_favourite: false,
-      isPoint: true,
+      // isPoint: true,
       isLearning: true,
       isFree: true,
       scores: [],
@@ -356,6 +366,12 @@ export default {
     ...mapState("elearning/study/study-student", {
       elearningStudyStudent: "elearningStudyStudent",
     }),
+    isPoint() {
+      return get(this, "elearning.medium_score.apply", false) == true;
+    },
+    isCaculation() {
+      return get(this, "elearning.medium_score.calculation", false) == true;
+    },
   },
   methods: {
     get,

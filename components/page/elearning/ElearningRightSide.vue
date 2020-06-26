@@ -117,7 +117,7 @@
       </li>
       <li v-else>
         <IconPauseCircleOutline24px class="icon" />
-        Kết thúc: không thời hạn
+        Kết thúc: Không thời hạn
       </li>
       <li>
         <IconRemoveRedEye class="icon" />Xem được trên máy tính, điện thoại,
@@ -166,6 +166,7 @@
       @close-modal="handleCloseModal"
     />
     <ElearningRequestCode
+      :info="info"
       :showRequestCode="showRequestCode"
       @handleCancel="handleCancelRequestCode"
       @handleSubmit="handleSubmitCode"

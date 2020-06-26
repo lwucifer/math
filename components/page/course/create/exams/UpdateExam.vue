@@ -508,6 +508,8 @@ export default {
       if (this.typeRadio === "weight") delete data.coefficient;
       delete data.type;
       delete data.category;
+      delete data.questions;
+      delete data.status;
 
       const res = await this.$axios({
         url: "/elearning/creating/test",

@@ -512,10 +512,10 @@ export default {
           let lectures = [];
           if(Array.isArray(resource)) {
             lectures = resource.map(i => {
-              return `${_link}${i._attributes.href}`;
+              return `${process.env.BASE_ORIGIN_LOCATION}${_link}${i._attributes.href}`;
             });
           } else {
-            lectures = [`${_link}${resource._attributes.href}`];
+            lectures = [`${process.env.BASE_ORIGIN_LOCATION}${_link}${resource._attributes.href}`];
           }
           self.setElearningStudyScormItems(lectures);
 

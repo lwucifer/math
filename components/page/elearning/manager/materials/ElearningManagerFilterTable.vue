@@ -139,8 +139,7 @@
 
     filters: {
       statusFilter: function(val) {
-        if (val) return 'Đã sử dụng'
-        return '- -'
+        return val ? 'Đã sử dụng' : 'Chưa sử dụng'
       }
     },
 

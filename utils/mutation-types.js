@@ -408,6 +408,7 @@ export const ELEARNING_STUDY = {
     SET_EXPAND: "setElearningStudyExpand",
     SET_FULLSCREEN: "setElearningStudyFullScreen",
     SET_SCORM_ITEMS: "setElearningStudyScormItems",
+    SET_SCORM_ITEM_ACTIVE: "setElearningStudyScormItemActive",
 };
 
 export const ELEARNING_STUDY_OVERVIEW = {

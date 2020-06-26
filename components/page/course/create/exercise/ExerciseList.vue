@@ -20,37 +20,24 @@
                 <h2 class="cc-box__title heading-6">
                   Bài {{ index + 1 }}:
                   {{
-                    get(exercise, "title", "").length > 40
-                      ? get(exercise, "title", "").slice(0, 40) + "..."
-                      : get(exercise, "title", "")
+                  get(exercise, "title", "").length > 40
+                  ? get(exercise, "title", "").slice(0, 40) + "..."
+                  : get(exercise, "title", "")
                   }}
                 </h2>
               </div>
-              <button
-                class="cc-box__btn mr-3 cc-box__btn-edit-hover"
-                @click="handleEditExercise"
-              >
+              <button class="cc-box__btn mr-3 cc-box__btn-edit-hover" @click="handleEditExercise">
                 <IconEditAlt class="icon d-block subheading fill-primary" />
               </button>
-              <button
-                class="cc-box__btn cc-box__btn-edit-hover"
-                @click="handleDeleteExercise"
-              >
-                <IconTrashAlt
-                  class="d-block subheading fill-secondary"
-                  width="20px"
-                  height="20px"
-                />
+              <button class="cc-box__btn cc-box__btn-edit-hover" @click="handleDeleteExercise">
+                <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px" />
               </button>
             </div>
           </div>
 
           <div class="cc-box__head-right">
             <!-- <p class="mr-5">Trọng số: 30%</p> -->
-            <button
-              @click.prevent="toggleFormAdd"
-              class="text-primary d-flex align-items-center"
-            >
+            <button @click.prevent="toggleFormAdd" class="text-primary d-flex align-items-center">
               <IconPlus2 class="mr-3 fill-primary" />
               <span class="font-weight-semi-bold">Thêm câu hỏi</span>
             </button>
@@ -65,12 +52,7 @@
                 class="icon fill-primary"
                 v-if="!isShowExercise"
               />
-              <IconAngleUp
-                width="20px"
-                height="20px"
-                class="icon fill-primary"
-                v-else
-              />
+              <IconAngleUp width="20px" height="20px" class="icon fill-primary" v-else />
             </button>
           </div>
         </div>
@@ -124,7 +106,7 @@
 <script>
 import IconInfoCircle from "~/assets/svg/design-icons/info-circle.svg?inline";
 import IconAngleDown from "~/assets/svg/design-icons/angle-down.svg?inline";
-import IconEditAlt from "~/assets/svg/design-icons/edit-alt.svg?inline";
+import IconEditAlt from "~/assets/svg/v2-icons/edit.svg?inline";
 import IconTrashAlt from "~/assets/svg/design-icons/trash-alt.svg?inline";
 import IconAlignCenterAlt from "~/assets/svg/design-icons/align-center-alt.svg?inline";
 import IconFileCheck from "~/assets/svg/design-icons/file-check.svg?inline";
@@ -159,25 +141,25 @@ export default {
     IconPlus2,
     UpdateExercise,
     IconDown,
-    ExerciseInfo,
+    ExerciseInfo
   },
 
   props: {
     exercise: {
       type: Object,
-      default: null,
+      default: null
     },
     index: {
       type: Number,
-      default: 0,
+      default: 0
     },
-    lesson: Object,
+    lesson: Object
   },
 
   computed: {
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
-    },
+    }
   },
 
   data() {
@@ -186,7 +168,7 @@ export default {
       isShowExercise: true,
       isShowEditExercise: false,
       showModalConfirm: false,
-      confirmLoading: false,
+      confirmLoading: false
     };
   },
 
@@ -209,7 +191,7 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       const payload = {
-        id: get(this, "exercise.id", ""),
+        id: get(this, "exercise.id", "")
       };
       const result = await this.$store.dispatch(
         `elearning/creating/creating-excercises/${actionTypes.ELEARNING_CREATING_EXERCISES.DELETE}`,
@@ -231,8 +213,8 @@ export default {
       this.confirmLoading = false;
     },
 
-    get,
-  },
+    get
+  }
 };
 </script>
 

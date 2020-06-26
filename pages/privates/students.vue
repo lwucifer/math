@@ -161,11 +161,19 @@ import IconAccountBox24px from "~/assets/svg/v2-icons/account_box_24px.svg?inlin
 import { getDateFormat } from "~/utils/moment";
 export default {
   async fetch({ params, store }) {
-    const { data = [] } = await store.dispatch(
-      `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`
+    // const dataUser = await store.dispatch(
+    //   `account/${actionTypes.ACCOUNT_PROFILE.LIST}`
+    // );
+    // const dataProfile = dataUser && dataUser.data ? dataUser.data : {};
+    const schoolId = store.getters["auth/organizationId"] || null;
+    const dataYear = await store.dispatch(
+      `${STORE_NAME_YEARS}/${actionTypes.ELEARNING_PUBLIC_SCHOOL_YEAR.LIST}`,
+      {
+        school_id: schoolId
+      }
     );
-    console.log("data", data);
-    const school_year_id = data && data[0] ? data[0].id : null;
+    const school_year_id =
+      dataYear && dataYear.data ? dataYear.data[0].id : null;
     const queryStudent = {
       cal_type: "SCHOOL_YEAR",
       school_year_id: school_year_id
@@ -297,12 +305,14 @@ export default {
         this.studentPrivates && this.studentPrivates.content
           ? this.studentPrivates.content
           : [];
-      const dataFilter = data.map(item => {
-        return {
-          ...item,
-          joint_at: item && item.joint_at ? getDateFormat(item.joint_at) : ""
-        };
-      });
+      const dataFilter =
+        data &&
+        data.map(item => {
+          return {
+            ...item,
+            joint_at: item && item.joint_at ? getDateFormat(item.joint_at) : ""
+          };
+        });
       return dataFilter;
     },
     filterPagination() {
@@ -316,7 +326,7 @@ export default {
         this.years.map(item => {
           return {
             value: item ? item.id : "",
-            text: item ? item.from_year + " - " + item.to_year : ""
+            text: item ? item.from + " - " + item.to : ""
           };
         });
       return data;
@@ -330,10 +340,16 @@ export default {
           text: item ? item.name : ""
         };
       });
-      dataMap.push({
-        value: "-1",
-        text: "Khác"
-      });
+      dataMap.push(
+        {
+          value: "-1",
+          text: "Khác"
+        },
+        {
+          value: null,
+          text: "Tất cả"
+        }
+      );
       return dataMap;
     },
     filterCheckData() {
