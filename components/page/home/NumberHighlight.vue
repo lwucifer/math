@@ -12,7 +12,7 @@
                             </div>
 
                             <div class="box__text">
-                                <div class="number">1.000</div>
+                                <div class="number">500+</div>
                                 <p>Trường học</p>
                             </div>
                         </div>
@@ -25,7 +25,7 @@
                             </div>
 
                             <div class="box__text">
-                                <div class="number">500.000</div>
+                                <div class="number">9000+</div>
                                 <p>Bài giảng & Khóa học</p>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                             </div>
 
                             <div class="box__text">
-                                <div class="number">1.555.000</div>
+                                <div class="number">15000+</div>
                                 <p>Giáo viên</p>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                             </div>
 
                             <div class="box__text">
-                                <div class="number">5.000.000</div>
+                                <div class="number">200000+</div>
                                 <p>Học sinh</p>
                             </div>
                         </div>

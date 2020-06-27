@@ -410,7 +410,7 @@ export default {
       if (get(this.lesson, "type", "") === "SCORM") {
         this.setStudyMode(STUDY_MODE.SCORM);
         // this.setPayload(this.lesson);
-        this.fetchScormItems(this.lesson.link, this.setExerciseLoading);
+        this.fetchScormItems(`${process.env.BASE_ORIGIN_LOCATION}${this.lesson.link}`, this.setExerciseLoading);
         // this.setExerciseLoading(false); // turnoff loading
         return;
       }
@@ -512,10 +512,10 @@ export default {
           let lectures = [];
           if(Array.isArray(resource)) {
             lectures = resource.map(i => {
-              return `${process.env.BASE_ORIGIN_LOCATION}${_link}${i._attributes.href}`;
+              return `${_link}${i._attributes.href}`;
             });
           } else {
-            lectures = [`${process.env.BASE_ORIGIN_LOCATION}${_link}${resource._attributes.href}`];
+            lectures = [`${_link}${resource._attributes.href}`];
           }
           self.setElearningStudyScormItems(lectures);
 

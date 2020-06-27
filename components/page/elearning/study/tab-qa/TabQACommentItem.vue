@@ -101,9 +101,8 @@
           :class="{ active: get(question, 'liked', false) }"
           @click="handleLike"
         >
-          <IconThumbUp class="icon" />&nbsp;{{
-            numeral(get(question, "likes", 0)).format()
-          }}
+          <IconThumbUp class="icon" style="vertical-align: inherit"/>
+          <span>{{ numeral(get(question, "likes", 0)).format() }}</span>
         </button>
         <button
           v-if="level == 1"

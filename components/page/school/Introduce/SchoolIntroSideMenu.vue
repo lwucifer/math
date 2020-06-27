@@ -5,7 +5,7 @@
         <div v-for="(item,index) in get(this,'schoolNewsest.content',[])" :key="index">
                 <n-link  class="row mb-3 text-decoration-none" :to="params.organization_id+'?tab=news&news_id='+item.id">
                     <div class="col-md-5">
-                        <img :height="73" :width="122" class="w-100" :src="get(item,'thumb','')">
+                        <img :height="73" :width="122" class="w-100" :src="get(item,'thumb','') ? get(item,'thumb','') : 'https://picsum.photos/122/73'">
                     </div>
                     <div class="col-md-7">
                         <div>

@@ -394,6 +394,14 @@ export const SCHOOL_ORGANIZATION = {
     SET_SCHOOL_ORGANIZATION: "setSchoolOrganization",
 };
 
+export const SCHOOL_STAFFS = {
+    SET_SCHOOL_STAFFS: "setSchoolStaffs"
+};
+
+export const SCHOOL_LINK_WEBSITE = {
+    SET_SCHOOL_LINK_WEBSITE: "setSchoolLinkWebsiteList",
+};
+
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
