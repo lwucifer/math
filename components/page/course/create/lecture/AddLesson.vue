@@ -135,47 +135,16 @@
         </div>
       </div>
     </div>
-    <app-modal-confirm
+
+     <app-modal-confirm
       centered
       v-if="showModalConfirm"
       :confirmLoading="confirmLoading"
-      title="Xác nhận"
-      description="Bạn có chắc chắn là muốn lưu thay đổi này?"
       @ok="handleOk"
       @cancel="handleCancelModal"
-    />
-
-    <app-modal-confirm
-      centered
-      v-if="showModalConfirmDoc"
-      :confirmLoading="confirmLoadingDoc"
-      @ok="handleOk"
-      @cancel="handleCancelModal"
-      :okText="chagingBtnOk"
-      :title="changingTitleDoc"
-      :description="chagingDescriptionDoc"
-    />
-
-    <app-modal-confirm
-      centered
-      v-if="showModalConfirmVideo"
-      :confirmLoading="confirmLoadingVideo"
-      @ok="handleOk"
-      @cancel="handleCancelModal"
-      :okText="chagingBtnOk"
-      :title="changingTitle"
-      :description="chagingDescription"
-    />
-
-    <app-modal-confirm
-      centered
-      v-if="showModalConfirmScorm"
-      :confirmLoading="confirmLoadingScorm"
-      @ok="handleOk"
-      @cancel="handleCancelModal"
-      :okText="chagingBtnOk"
-      title="Upload scorm bài học"
-      :description="chagingDescription"
+      :title="title"
+      :description="description"
+      :okText="okText"
     />
   </div>
 </template>
@@ -239,13 +208,7 @@ export default {
     return {
       tabType: "video",
       showModalConfirm: false,
-      showModalConfirmVideo: false,
-      showModalConfirmScorm: false,
-      showModalConfirmDoc: false,
       confirmLoading: false,
-      confirmLoadingVideo: false,
-      confirmLoadingScorm: false,
-      confirmLoadingDoc: false,
       error_name: "",
       payload: {
         elearning_id: getParamQuery("elearning_id"),
@@ -269,45 +232,112 @@ export default {
       general: "general",
     }),
 
-    changingTitle() {
-      if (this.modalType == "url") {
-        return "Thêm video bài học";
-      }
-
-      return "Upload video bài học";
+    edit() {
+      return !!get(this, "lesson.id", "");
     },
 
-    changingTitleDoc() {
-      if (this.modalType == "url") {
-        return "Thêm bài học";
-      }
-
-      return "Upload bài học";
-    },
-
-    chagingDescription() {
-      if (this.confirmLoadingVideo) {
-        return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
-      } else if (this.modalType == "url") {
-        return "Bạn có chắc chắn muốn thêm video bài học này từ kho học liệu?";
-      }
-      return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
-    },
-
-    chagingDescriptionDoc() {
-      if (this.confirmLoadingDoc) {
-        return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
-      } else if (this.modalType == "url") {
-        return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
-      }
-      return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
-    },
-
-    chagingBtnOk() {
-      if (this.confirmLoadingVideo || this.confirmLoadingDoc) {
+    okText() {
+      if (this.confirmLoading) {
         return "Đang tải";
       }
       return "Xác nhận";
+    },
+
+    title() {
+      if (this.edit) {
+        return "Xác nhận";
+      }
+
+      if (this.payload.type === "VIDEO" && this.tabType === "video") {
+        if (this.payload.repository_file_id) {
+          return "Thêm video bài học";
+        }
+
+        if (this.payload.lesson) {
+          return "Upload video bài học";
+        }
+      }
+
+      if (
+        this.payload.type == "PDF" ||
+        this.payload.type == "DOC" ||
+        this.payload.type == "TXT"
+      ) {
+        if (
+          this.payload.repository_file_id ||
+          this.payload.article_content.length > 0
+        ) {
+          return "Thêm bài học";
+        }
+
+        if (this.payload.lesson) {
+          return "Upload bài học";
+        }
+      }
+
+      if (this.payload.type === "SCORM") {
+        return "Upload scorm bài học";
+      }
+
+      if (this.tabType === "audio") {
+        return "Upload audio bài học";
+      }
+
+      return "Thêm bài học";
+    },
+
+    description() {
+      if (this.confirmLoading) {
+        if (this.payload.type == "VIDEO") {
+          return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+        }
+
+        if (
+          this.payload.type == "PDF" ||
+          this.payload.type == "DOC" ||
+          this.payload.type == "TXT"
+        ) {
+          if (this.payload.lesson) {
+            return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
+          }
+        }
+      }
+
+      if (this.edit) {
+        if (this.payload.repository_file_id) {
+          return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
+        }
+        
+        return "Bạn có chắc chắn là muốn lưu thay đổi này?"
+      }
+
+      if (this.payload.type == "VIDEO") {
+        if (this.payload.lesson && this.tabType === "video") {
+          return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
+        }
+        if (this.payload.lesson && this.tabType === "audio") {
+          return "Bạn có chắc chắn muốn tải audio này lên hệ thống?";
+        }
+        if (this.payload.repository_file_id) {
+          return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
+        }
+      }
+
+      if (
+        this.payload.type == "PDF" ||
+        this.payload.type == "DOC" ||
+        this.payload.type == "TXT"
+      ) {
+        if (this.payload.article_content) {
+          return "Bạn có chắc chắn muốn thêm bài học này?";
+        }
+        if (this.payload.lesson) {
+          return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
+        }
+        if (this.payload.repository_file_id) {
+          return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
+        }
+      }
     },
   },
 
@@ -409,36 +439,11 @@ export default {
         this.$toasted.error("Invalid params");
         return;
       }
-
-      if (this.payload.type == "VIDEO") {
-        this.showModalConfirmVideo = true;
-      } else if (this.payload.type == "SCORM") {
-        this.showModalConfirmScorm = true;
-      } else if (
-        this.payload.type == "PDF" ||
-        this.payload.type == "DOC" ||
-        this.payload.type == "TXT"
-      ) {
-        this.showModalConfirmDoc = true;
-      } else {
-        this.showModalConfirm = true;
-      }
+      this.showModalConfirm = true;
     },
 
     async handleOk() {
-      if (this.payload.type == "VIDEO") {
-        this.confirmLoadingVideo = true;
-      } else if (this.payload.type == "SCORM") {
-        this.confirmLoadingScorm = true;
-      } else if (
-        this.payload.type == "PDF" ||
-        this.payload.type == "DOC" ||
-        this.payload.type == "TXT"
-      ) {
-        this.confirmLoadingDoc = true;
-      } else {
-        this.confirmLoading = true;
-      }
+      this.confirmLoading = true;
 
       const payload = { ...this.payload };
       if (!payload.id) delete payload.id;
