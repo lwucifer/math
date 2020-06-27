@@ -178,7 +178,7 @@
                   {{ get(score, "name.length", 0) > 20 ? "..." : "" }} :
                   <span class="text-primary"
                     >{{
-                      numeral(get(score, "score", 0)).format("0,0.0")
+                      numeral(get(score, "score", 0)).format("0,0.[0]")
                     }}
                     điểm</span
                   >

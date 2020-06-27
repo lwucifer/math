@@ -4,12 +4,12 @@
             <div class="row">
                 <div class="col-12 col-md-4 d-flex align-items-center">
                     <div class="every-devices-left">
-                        <h3>Học tập mọi lúc, mọi nơi trên mọi thiết bị</h3>
+                        <h3>Học tập tiện lợi trên mọi thiết bị</h3>
 
                         <div class="border-line"></div>
 
                         <div class="every-devices-left__text">
-                            It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. 
+                            Chỉ cần có máy tính, điện thoại hoặc tablet có kết nối Internet, bạn đã thể sử dụng toàn bộ tiện ích của Schoolly. 
                         </div>
 
                         <div class="every-devices-left__download d-flex">

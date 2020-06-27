@@ -452,6 +452,10 @@ export const SCHOOL_STUDENTS = {
     DELETE: "schoolStudentsDelete",
 };
 
+export const SCHOOL_STAFFS = {
+    LIST: "schoolStaffsList"
+};
+
 export const SCHOOL_TEACHERS = {
     LIST: "schoolTeachersList",
     ADD: "schoolTeachersAdd",
@@ -462,6 +466,10 @@ export const SCHOOL_TEACHERS = {
 export const SCHOOL_NEWS = {
     LIST: "schoolNewsList",
     DETAIL: "schoolNewsDetail",
+};
+
+export const SCHOOL_LINK_WEBSITE = {
+    LIST: "schoolLinkWebsiteList",
 };
 
 export const ELEARNING_STURY = {

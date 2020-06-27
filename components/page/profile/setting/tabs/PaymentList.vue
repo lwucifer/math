@@ -41,7 +41,13 @@
         />
       </div>
     </div>
-     <!-- <p>
+    <EditBank
+      v-if="bank"
+      @close="closeModal"
+      :bank="bank"
+      @editSuccess="editBankDone"
+    />
+    <!-- <p>
       <i style="font-size: 1.3rem;"
         >Để nhận tiền từ việc bán bài giảng/khóa học của bạn, vui lòng cập nhật
         tài khoản ngâng hàng của bạn</i
@@ -100,13 +106,13 @@ export default {
     }),
     msgCls() {
       const colorCls = {
-        'text-primary': this.notifyType == 'success',
-        'text-error': this.notifyType == 'error'
-      }
+        "text-primary": this.notifyType == "success",
+        "text-error": this.notifyType == "error",
+      };
       return {
-        ...colorCls
-      }
-    }
+        ...colorCls,
+      };
+    },
   },
   methods: {
     handleEditBank(bank) {
@@ -119,45 +125,44 @@ export default {
       const payload = {
         params: this.params,
       };
-      this.$store.dispatch(
-        `bank/${actionTypes.ACCOUNT_BANKS.LIST}`,
-        payload
-      );
+      this.$store.dispatch(`setting/getAccountBanks`, {
+        params: { status: "ACTIVE" },
+      });
     },
     handleRefresh() {
       this.fetchAccountBank();
     },
     refreshDel() {
-      this.handleRefresh()
-      this.notifyMsg = 'Bạn vừa xóa 1 tài khoản'
-      this.notifyType = 'success'
+      this.handleRefresh();
+      this.notifyMsg = "Bạn vừa xóa 1 tài khoản";
+      this.notifyType = "success";
       this.$nextTick(() => {
         setTimeout(() => {
-          this.notifyMsg = null
-        }, 3000)
-      })
+          this.notifyMsg = null;
+        }, 3000);
+      });
     },
     closeModal() {
       this.bank = null;
     },
     addBankDone() {
-      this.notifyMsg = 'Bạn vừa thêm 1 tài khoản'
-      this.notifyType = 'success'
+      this.notifyMsg = "Bạn vừa thêm 1 tài khoản";
+      this.notifyType = "success";
       this.$nextTick(() => {
         setTimeout(() => {
-          this.notifyMsg = null
-        }, 3000)
-      })
+          this.notifyMsg = null;
+        }, 3000);
+      });
     },
     editBankDone() {
-      this.notifyMsg = 'Chỉnh sửa thành công'
-      this.notifyType = 'success'
+      this.notifyMsg = "Chỉnh sửa thành công";
+      this.notifyType = "success";
       this.$nextTick(() => {
         setTimeout(() => {
-          this.notifyMsg = null
-        }, 3000)
-      })
-    }
+          this.notifyMsg = null;
+        }, 3000);
+      });
+    },
   },
   // created() {
   //   this.fecthPublicBank();
