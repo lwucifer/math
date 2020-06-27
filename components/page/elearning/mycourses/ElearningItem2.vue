@@ -11,18 +11,18 @@
           "
         />
         <div
-          v-if="get(elearning, 'is_streaming', true)"
+          v-if="get(elearning, 'is_streaming', false)"
           class="item-2__livestream"
         >
           <IconCameraOnline class="icon" />Trực tiếp
         </div>
 
-        <div
+        <!-- <div
           v-if="get(elearning, 'is_streaming', false)"
           class="item-2__online-class"
         >
           Lớp học đang diễn ra
-        </div>
+        </div> -->
 
         <!-- nếu giảm giá 100% thì sẽ ko hiện nữa -->
         <!--
