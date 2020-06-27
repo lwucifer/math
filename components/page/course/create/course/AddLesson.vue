@@ -294,9 +294,9 @@ export default {
       if (this.confirmLoadingVideo) {
         return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
       } else if (this.modalType == "url") {
-        return "Bạn có chắc chắn muốn thêm video bài học này từ kho học liệu?";
+        return "Bạn có chắc chắn muốn thêm tài liệu bài học này từ kho học liệu?";
       }
-      return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
+      return "Bạn có chắc chắn muốn tải tài liệu này lên hệ thống?";
     },
 
     chagingDescriptionDoc() {

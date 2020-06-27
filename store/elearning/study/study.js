@@ -68,6 +68,7 @@ const mutations = {
   },
   
   [mutationTypes.ELEARNING_STUDY.SET_EXPAND](state, expand) {
+    console.log("[SET_EXPAND]", expand);
     state.expand = expand;
   },
 
