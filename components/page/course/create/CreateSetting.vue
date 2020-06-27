@@ -137,8 +137,8 @@
         <app-input
           :value="numeral(payload.fee).format()"
           @onFocus="(event) => event.target.select()"
-          type="text"
           @input="handleChangeFee"
+          only-number
           class="text-primary font-weight-semi-bold w-170 input-price"
         >
           <template #unit>đ</template>
@@ -152,8 +152,8 @@
           <app-input
             :value="numeral(payload.price).format()"
             @onFocus="(event) => event.target.select()"
-            type="text"
             @input="handleChangePrice"
+            only-number
             class="text-primary font-weight-semi-bold w-170 mb-0 input-price"
           >
             <template #unit>đ</template>
