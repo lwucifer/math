@@ -62,6 +62,14 @@ export default {
             default: ()=>{}
         }
     },
+    watch:{
+        '$route.query'(){
+            const type = this.$route.query.type
+            if(type == 'organization'){
+                this.tab = 'diagram'
+            }
+        }
+    },
     data(){
         return{
             tab:'intro'

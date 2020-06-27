@@ -472,6 +472,10 @@ export const SCHOOL_LINK_WEBSITE = {
     LIST: "schoolLinkWebsiteList",
 };
 
+export const SCHOOL_SUBJECTS = {
+    LIST: "schoolSubjectList"
+};
+
 export const ELEARNING_STURY = {
     LIST: "elearningStudyList",
     LIST_TIMETABLE: "elearningStudyListTimetable",

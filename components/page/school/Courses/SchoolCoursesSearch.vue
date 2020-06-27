@@ -1,7 +1,7 @@
 <template>
   <div class="wrap-courses-school">
       <div class="d-flex align-items-center">
-          <h3>Toán học</h3>
+          <h3>{{ get(this,'typeSearch','') }}</h3>
           <p class="ml-3">(<strong>50</strong> Bài giảng - <strong>20</strong> khóa học)</p>
       </div>
       <div class="d-flex mb-5 mt-3">
@@ -95,6 +95,12 @@ export default {
     components:{
         CourseItem2
     },
+    props:{
+        typeSearch:{
+            type: String,
+            default: 'Bài giảng - Khóa học'
+        },
+    },
     data(){
         return{
             tab:'1',
@@ -135,7 +141,8 @@ export default {
         },
         changeTab(val){
             this.tab = val;
-        }
+        },
+        get
     },
     computed:{
         ...mapState("elearning/public/public-newest", [
