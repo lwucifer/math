@@ -178,7 +178,7 @@ export const SCHOOL_ORG_INTRO = `/elearning/school/organization`;
 export const SCHOOL_PROFESSION = `/elearning/school/professions`;
 export const SCHOOL_TIMETABLE = `/elearning/school/timetable`;
 export const SCHOOL_STAFFS = `/elearning/school/staffs`;
-
+export const SCHOOL_SUBJECTS = `/elearning/school/subjects`;
 /**
  * MESSAGE
  */

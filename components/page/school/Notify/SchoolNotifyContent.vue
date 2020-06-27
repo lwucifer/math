@@ -14,7 +14,7 @@
                         </div>
                         <div>
                             <p class="title-notify">{{ get(item,'title','') }}</p>
-                            <p v-html="get(item,'short_desc','')"></p>
+                            <p class="short-desc-notify-school" v-html="get(item,'short_desc','')"></p>
                             <p class="text-sub">{{ get(item,'updated','') | moment('DD/MM/YYYY')}}</p>
                         </div>
                     </div>

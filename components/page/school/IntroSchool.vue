@@ -5,15 +5,20 @@
                 <div class="intro-text">
                     <div class="intro-text__title">Giới thiệu</div>
 
-                    <div class="intro-text__content">
-                        <div v-html="get(this,'organization.content')"></div>
-                    </div>
+                    <div v-if="get(this,'organization.content')">
+                        <div class="intro-text__content">
+                            <div v-html="get(this,'organization.content')"></div>
+                        </div>
 
-                    <app-button
-                        size="md"
-                         @click="getDetail"
-                        class="intro-text__btn text-white"
-                        color="primary">Xem thêm</app-button>
+                        <app-button
+                            size="md"
+                            @click="getDetail"
+                            class="intro-text__btn text-white"
+                            color="primary">Xem thêm</app-button>
+                    </div>
+                    <div v-else>
+                        Chưa có thông tin
+                    </div>
                 </div>
             </div>
 
@@ -42,7 +47,7 @@ export default {
     },
     methods:{
         getDetail(){
-            this.$router.push({query: { tab: 'intro',type: 'organization'}})
+            this.$router.push({query: { tab: 'intro'}})
         },
         get
     }

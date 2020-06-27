@@ -402,6 +402,10 @@ export const SCHOOL_LINK_WEBSITE = {
     SET_SCHOOL_LINK_WEBSITE: "setSchoolLinkWebsiteList",
 };
 
+export const SCHOOL_SUBJECTS = {
+    SET_SCHOOL_SUBJECTS: "setSchoolSubjectList"
+};
+
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
