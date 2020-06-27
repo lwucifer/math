@@ -298,7 +298,15 @@
       </div>-->
     </div>
   </div>
-  <ElearningItem2 v-else :elearning="elearning">
+  <ElearningItem2
+    v-else
+    :elearning="elearning"
+    @handleFavourite="handleFavourite"
+    @handleDeleteFavourite="handleDeleteFavourite"
+    @handleArchive="handleArchive"
+    @handleDeleteArchive="handleDeleteArchive"
+    @shareSchool="shareSchool"
+  >
     <template v-slot:mycoursefavourite>
       <MenuDropDown />
     </template>

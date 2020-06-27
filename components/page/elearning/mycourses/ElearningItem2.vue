@@ -4,7 +4,11 @@
     <div class="img__elearning-item">
       <n-link :to="`/elearning/${elearning && elearning.elearning_id}`">
         <img
-          v-lazy="elearning && elearning.avatar && elearning.avatar.low ? elearning.avatar.low : 'https://picsum.photos/20/206'"
+          v-lazy="
+            elearning && elearning.avatar && elearning.avatar.low
+              ? elearning.avatar.low
+              : 'https://picsum.photos/20/206'
+          "
         />
         <div
           v-if="get(elearning, 'is_streaming', true)"
@@ -29,10 +33,7 @@
           -{{ elearning.discount }}%
         </div>
         -->
-        <div
-          v-if="price.discount && price.price"
-          class="item-2__discount"
-        >
+        <div v-if="price.discount && price.price" class="item-2__discount">
           -{{ elearning.discount }}%
         </div>
       </n-link>
@@ -42,7 +43,8 @@
         <n-link
           :to="`/elearning/${elearning && elearning.elearning_id}`"
           :title="elearning.name"
-        >{{elearning && elearning.name}}</n-link>
+          >{{ elearning && elearning.name }}</n-link
+        >
       </h3>
       <div class="d-flex align-items-center my-3">
         <n-link
@@ -51,12 +53,20 @@
           target="_blank"
         >
           <app-avatar
-            :src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"
+            :src="
+              elearning &&
+              elearning.teacher.avatar &&
+              elearning.teacher.avatar.low
+                ? elearning.teacher.avatar.low
+                : 'https://picsum.photos/20/206'
+            "
             :size="20"
           />
-          <span
-            class="ml-2"
-          >{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>
+          <span class="ml-2">{{
+            elearning && elearning.teacher.name
+              ? elearning && elearning.teacher.name
+              : "Nguyễn Văn C"
+          }}</span>
         </n-link>
         <!--<app-avatar-->
         <!--:src="elearning && elearning.teacher.avatar && elearning.teacher.avatar.low ? elearning.teacher.avatar.low : 'https://picsum.photos/20/206'"-->
@@ -67,16 +77,16 @@
         <!--&gt;{{elearning && elearning.teacher.name ? elearning && elearning.teacher.name : 'Nguyễn Văn C'}}</span>-->
       </div>
       <div class="d-flex">
-          <app-stars
-            class="d-inline-flex"
-            :stars="get(elearning, 'voting.rate', 0)"
-            :size="size === 'sm' ? 12 : 14"
-            />
-            <span class="text-dark ml-2">
-            <strong>{{ get(elearning, "voting.rate", 0) }}</strong>
-            ({{ get(elearning, "voting.votes", 0) }})
-            </span>
-            <div class="ml-auto">
+        <app-stars
+          class="d-inline-flex"
+          :stars="get(elearning, 'voting.rate', 0)"
+          :size="size === 'sm' ? 12 : 14"
+        />
+        <span class="text-dark ml-2">
+          <strong>{{ get(elearning, "voting.rate", 0) }}</strong>
+          ({{ get(elearning, "voting.votes", 0) }})
+        </span>
+        <div class="ml-auto">
           <app-dropdown
             class="post__menu-dropdown"
             position="right"
@@ -91,7 +101,7 @@
             <ul class="link--dropdown__ElearningItem">
               <li
                 class="item-share__ElearningItem"
-                @click.prevent="shareDropdown=!shareDropdown"
+                @click.prevent="shareDropdown = !shareDropdown"
                 v-if="tab !== 5"
               >
                 <v-popover
@@ -105,10 +115,12 @@
                   <template slot="popover">
                     <ul class="share-dropdowm__ElearningItem">
                       <li @click.prevent="shareFb(elearning.elearning_id)">
-                        <IconFacebook class="icon fill-info" />Chia sẻ qua Facebook
+                        <IconFacebook class="icon fill-info" />Chia sẻ qua
+                        Facebook
                       </li>
                       <li @click.prevent="shareSchool(elearning)">
-                        <IconSchooly class="icon fill-white" />Chia sẻ qua Schoolly
+                        <IconSchooly class="icon fill-white" />Chia sẻ qua
+                        Schoolly
                       </li>
                     </ul>
                   </template>
@@ -118,9 +130,7 @@
                 v-if="elearning && !elearning.is_favourite && tab !== 5"
                 @click.prevent="handleFavourite(elearning.elearning_id)"
               >
-                <n-link to>
-                  <IconCardsHeart class="icon" />Yêu thích
-                </n-link>
+                <n-link to> <IconCardsHeart class="icon" />Yêu thích </n-link>
               </li>
               <li
                 v-else-if="elearning && elearning.is_favourite && tab !== 5"
@@ -134,9 +144,7 @@
                 v-if="elearning && !elearning.is_archive"
                 @click.prevent="handleArchive(elearning.elearning_id)"
               >
-                <n-link to>
-                  <IconArchive class="icon" />Lưu trữ
-                </n-link>
+                <n-link to> <IconArchive class="icon" />Lưu trữ </n-link>
               </li>
               <li
                 v-else-if="elearning && !elearning.is_archive && tab === 5"
@@ -177,11 +185,13 @@ import IconArchive from "~/assets/svg/design-icons/archive.svg?inline";
 import IconFacebook from "~/assets/svg/design-icons/facebook.svg?inline";
 import IconSchooly from "~/assets/svg/icons/schooly.svg?inline";
 import { get } from "lodash";
+import numeral from "numeral";
 import { mapActions, mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import ElearningItem2 from "~/components/page/elearning/mycourses/ElearningItem2"
+import ElearningItem2 from "~/components/page/elearning/mycourses/ElearningItem2";
 import MenuDropDown from "~/components/page/elearning/mycourses/MenuDropDown";
 import IconCameraOnline from "assets/svg/icons/camera-online.svg?inline";
+
 export default {
   components: {
     IconDots,
@@ -193,7 +203,7 @@ export default {
     IconSchooly,
     ElearningItem2,
     MenuDropDown,
-    IconCameraOnline
+    IconCameraOnline,
   },
   data() {
     return {
@@ -204,28 +214,31 @@ export default {
       avatar: "",
       teacher: {
         avatar: "",
-        name: ""
+        name: "",
       },
       progress: null,
-      is_favourite: false
+      is_favourite: false,
+      isLearning: true,
+      isFree: true,
+      scores: [],
     };
   },
   props: {
     elearning: {
-      default: null
+      default: null,
     },
     tab: {
-      default: 1
+      default: 1,
     },
     size: {
       type: String,
       default: "md",
       validator: (value) => ["sm", "md"].includes(value),
-    }
+    },
   },
   computed: {
     ...mapState("elearning/study/study-student", {
-      elearningStudyStudent: "elearningStudyStudent"
+      elearningStudyStudent: "elearningStudyStudent",
     }),
     price() {
       if (this.elearning.elearning_price) return this.elearning.elearning_price;
@@ -234,12 +247,79 @@ export default {
         original_price: get(this.elearning, "original_price", 0),
         price: get(this.elearning, "price", 0),
       };
-    }
+    },
+    isPoint() {
+      return get(this, "elearning.medium_score.apply", false) == true;
+    },
+    isCaculation() {
+      return get(this, "elearning.medium_score.calculation", false) == true;
+    },
+    showArchive() {
+      return (
+        !get(this, "elearning.is_archive", true) &&
+        !get(this, "elearning.is_study", true) &&
+        get(this, "elearning.is_favourite", false)
+      );
+    },
   },
-  methods:{
-      get
-  }
-}
+  methods: {
+    get,
+    numeral,
+    async handleShowDetailExams() {
+      const params = {
+        elearning_id: get(this, "elearning.elearning_id", ""),
+      };
+      const { data } = await this.$axios({
+        url: "/elearning/study/elearning/score",
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params,
+      });
+      this.scores = get(data, "data.scores", []);
+    },
+
+    handleFavourite(id) {
+      this.menuDropdown = false;
+      this.$emit("handleFavourite", id);
+    },
+    handleDeleteFavourite(id) {
+      this.menuDropdown = false;
+      this.$emit("handleDeleteFavourite", id);
+    },
+    handleArchive(id) {
+      this.menuDropdown = false;
+      this.$emit("handleArchive", id);
+    },
+    handleDeleteArchive(id) {
+      this.menuDropdown = false;
+      this.$emit("handleDeleteArchive", id);
+    },
+    shareFb(id) {
+      this.$emit("shareFb", id);
+      // const url =
+      //   "https://facebook.com/sharer.php?display=popup&u=" +
+      //   window.origin +
+      //   `elearning/${id}`;
+      // window.open(url, "sharer", "_blank");
+    },
+    async shareSchool(elearning) {
+      this.$emit("shareSchool", elearning);
+      // const link = window.origin + `/elearning/${id}`;
+      // const doAdd = await this.$store.dispatch(
+      //   `social/${actionTypes.SOCIAL.ADD_POST}`,
+      //   { link: link }
+      // );
+      // if (doAdd.success) {
+      //   this.menuDropdown = false;
+      //   this.$toasted.show("Đã chia sẻ thành công.");
+      // } else {
+      //   this.$toasted.error(doAdd.message);
+      // }
+    },
+  },
+};
 </script>
 
 <style lang="scss">
