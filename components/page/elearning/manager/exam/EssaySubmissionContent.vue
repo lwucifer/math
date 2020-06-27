@@ -21,7 +21,7 @@
         <attachment-assets
           v-if="get(item, 'student.attachment', false)"
           :link="get(item, 'student.attachment')"
-	  :title="get(item, 'student.attachment_name', '')"
+	  :title="get(item, 'student.attachment_name', 'Tệp đính kèm')"
         />
       </div>
     </div>
