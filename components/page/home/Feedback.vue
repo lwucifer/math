@@ -3,7 +3,6 @@
         <div class="container">
             <div class="feedback__title">
                 Nhận xét người dùng
-                <p>Hơn 15 triệu người đã học trên Schoolly</p>
             </div>
 
             <div class="feedback__swiper" @slideChange="slideChanged" v-swiper:mySwiper="swiperOption">

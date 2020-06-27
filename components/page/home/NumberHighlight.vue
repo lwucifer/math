@@ -25,7 +25,7 @@
                             </div>
 
                             <div class="box__text">
-                                <div class="number">9000+</div>
+                                <div class="number">5,000+</div>
                                 <p>Bài giảng & Khóa học</p>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                             </div>
 
                             <div class="box__text">
-                                <div class="number">15000+</div>
+                                <div class="number">15,000+</div>
                                 <p>Giáo viên</p>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                             </div>
 
                             <div class="box__text">
-                                <div class="number">200000+</div>
+                                <div class="number">200,000+</div>
                                 <p>Học sinh</p>
                             </div>
                         </div>

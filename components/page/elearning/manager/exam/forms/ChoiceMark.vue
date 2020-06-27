@@ -20,6 +20,7 @@
       class="mt-4 text-center"
     >
       <app-button
+        v-if="canPass"
         normal
         :disabled="(!formData.to_passed) || !canPass"
         :color="(formData.to_passed && canPass) ? 'primary' : 'disabled'"

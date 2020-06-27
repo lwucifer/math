@@ -1,7 +1,7 @@
 <template>
   <div class="how">
     <div class="container">
-      <h1 class="how__title text-center">Học tập như thế nào?</h1>
+      <h1 class="how__title text-center">Sử dụng Schoolly như thế nào?</h1>
 
       <div class="how__content">
         <div class="row">

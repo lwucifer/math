@@ -9,7 +9,7 @@
                         <div class="border-line"></div>
 
                         <div class="every-devices-left__text">
-                            Chỉ cần có máy tính, điện thoại hoặc tablet có kết nối Internet, bạn đã thể sử dụng toàn bộ tiện ích của Schoolly. 
+                            Sử dụng mọi tiện ích của Schoolly trên đa phương tiện: máy tính, điện thoại hay máy tính bảng.
                         </div>
 
                         <div class="every-devices-left__download d-flex">

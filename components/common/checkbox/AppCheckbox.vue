@@ -14,7 +14,7 @@
         class="app-checkbox__icon app-checkbox__icon--unchecked icon fill-opacity-1"
       />
     </span>
-    <span v-if="label || $slots.default" class="app-checkbox__text">
+    <span v-if="label || $slots.default" class="app-checkbox__text" :class="{'text-primary': checked && isChangeLabelColor}">
       <slot>{{ label }}</slot>
     </span>
   </label>
@@ -47,6 +47,10 @@ export default {
     label: {
       type: String,
       default: ""
+    },
+    isChangeLabelColor: {
+      type: Boolean,
+      default: false
     }
   },
 

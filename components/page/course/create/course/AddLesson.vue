@@ -422,44 +422,13 @@ export default {
         this.$toasted.error("Invalid params");
         return;
       }
-
       this.showModalConfirm = true;
-
-      // if (this.payload.type == "VIDEO") {
-      //   this.showModalConfirmVideo = true;
-      // } else if (this.payload.type == "SCORM") {
-      //   this.showModalConfirmScorm = true;
-      // } else if (
-      //   this.payload.article_content.length > 0 ||
-      //   this.payload.type == "PDF" ||
-      //   this.payload.type == "DOC" ||
-      //   this.payload.type == "TXT"
-      // ) {
-      //   this.showModalConfirmDoc = true;
-      // } else {
-      //   this.showModalConfirm = true;
-      // }
     },
 
     async handleOk() {
       this.confirmLoading = true;
-      // if (this.payload.type == "VIDEO") {
-      //   this.confirmLoadingVideo = true;
-      // } else if (this.payload.type == "SCORM") {
-      //   this.confirmLoadingScorm = true;
-      // } else if (
-      //   this.payload.type == "PDF" ||
-      //   this.payload.type == "DOC" ||
-      //   this.payload.type == "TXT"
-      // ) {
-      //   this.confirmLoadingDoc = true;
-      // } else {
-      //   this.confirmLoading = true;
-      // }
-
       this.payload.chapter_id = get(this, "chapter.id", "");
       this.payload.id = get(this, "lesson.id", "");
-      // const payload = createPayloadAddContentCourse(this.payload);
 
       const payload = { ...this.payload };
       if (!payload.id) delete payload.id;
