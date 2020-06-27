@@ -11,7 +11,7 @@
 
       <ul class="the-header__menu">
         <li>
-          <n-link to="/social">Dòng thời gian</n-link>
+          <n-link to="/coming-soon">Dòng thời gian</n-link>
         </li>
         <li>
           <n-link to="/elearning">E-learning</n-link>
@@ -23,7 +23,7 @@
       <div v-if="isAuthenticated" class="the-header__user">
         <study-space />
 
-        <n-link class="item" to="/messages/t">
+        <n-link class="item" to="/coming-soon">
           <IconCommentAltMessage />
           <span class="number">9</span>
         </n-link>

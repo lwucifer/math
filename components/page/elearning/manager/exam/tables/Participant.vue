@@ -55,7 +55,7 @@
       <template v-slot:cell(submission)="{row}">
         <td>
           <span v-if="get(row, 'submission')">
-            {{ get(row, 'submission', '') | moment("hh:mm A DD/MM/YYYY") }}
+            {{ get(row, 'submission', '') | getDateTimeHH_MM_A_DD_MM_YY }}
           </span>
         </td>
       </template>

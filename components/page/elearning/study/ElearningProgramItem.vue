@@ -371,28 +371,28 @@ export default {
       this.isShowConfirmExit2 = false;
       redirectWithParams({ lesson_id: get(this.lesson, "id", "") });
 
-      if (get(this.lesson, "type", "") === "DOCS") {
+      if (get(this.lesson, "type", "") === LESSION_TYPE.DOCS) {
         this.setStudyMode(STUDY_MODE.DOCS);
         this.setPayload(this.lesson);
         this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
-      if (get(this.lesson, "type", "") === "ARTICLE") {
+      if (get(this.lesson, "type", "") === LESSION_TYPE.ARTICLE) {
         this.setStudyMode(STUDY_MODE.ARTICLE);
         this.setPayload(this.lesson);
         this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
-      if (get(this.lesson, "type", "") === "IMAGE") {
+      if (get(this.lesson, "type", "") === LESSION_TYPE.IMAGE) {
         this.setStudyMode(STUDY_MODE.IMAGE);
         this.setPayload(this.lesson);
         this.setExerciseLoading(false); // turnoff loading
         return;
       }
 
-      if (get(this.lesson, "type", "") === "VIDEO") {
+      if (get(this.lesson, "type", "") === LESSION_TYPE.VIDEO) {
         const elearning_id = get(this, "$router.history.current.params.id", "");
         const lesson_id = get(this.lesson, "id", "");
         const res = await new StudyService(this.$axios)["studyLesson"](
@@ -407,11 +407,15 @@ export default {
         this.$toasted.error(get(res, "message", "Có lỗi xảy ra"));
       }
 
-      if (get(this.lesson, "type", "") === "SCORM") {
+      if (get(this.lesson, "type", "") === LESSION_TYPE.SCORM) {
         this.setStudyMode(STUDY_MODE.SCORM);
-        // this.setPayload(this.lesson);
-        this.fetchScormItems(this.lesson.link, this.setExerciseLoading);
-        // this.setExerciseLoading(false); // turnoff loading
+        this.fetchScormItems(`${process.env.BASE_ORIGIN_LOCATION}${this.lesson.link}`, this.setExerciseLoading);
+        return;
+      }
+
+      if (get(this.lesson, "type", "") === LESSION_TYPE.AUDIO) {
+        this.setStudyMode(STUDY_MODE.AUDIO_PLAYING);
+        this.setPayload(this.lesson);
         return;
       }
     },
@@ -512,10 +516,10 @@ export default {
           let lectures = [];
           if(Array.isArray(resource)) {
             lectures = resource.map(i => {
-              return `${process.env.BASE_ORIGIN_LOCATION}${_link}${i._attributes.href}`;
+              return `${_link}${i._attributes.href}`;
             });
           } else {
-            lectures = [`${process.env.BASE_ORIGIN_LOCATION}${_link}${resource._attributes.href}`];
+            lectures = [`${_link}${resource._attributes.href}`];
           }
           self.setElearningStudyScormItems(lectures);
 

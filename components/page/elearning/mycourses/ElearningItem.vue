@@ -129,7 +129,7 @@
                 </li>
 
                 <li
-                  v-if="elearning && !elearning.is_archive"
+                  v-if="showArchive"
                   @click.prevent="handleArchive(elearning.elearning_id)"
                 >
                   <n-link to> <IconArchive class="icon" />Lưu trữ </n-link>
@@ -178,7 +178,7 @@
                   {{ get(score, "name.length", 0) > 20 ? "..." : "" }} :
                   <span class="text-primary"
                     >{{
-                      numeral(get(score, "score", 0)).format("0,0.0")
+                      numeral(get(score, "score", 0)).format("0,0.[0]")
                     }}
                     điểm</span
                   >
@@ -298,7 +298,15 @@
       </div>-->
     </div>
   </div>
-  <ElearningItem2 v-else :elearning="elearning">
+  <ElearningItem2
+    v-else
+    :elearning="elearning"
+    @handleFavourite="handleFavourite"
+    @handleDeleteFavourite="handleDeleteFavourite"
+    @handleArchive="handleArchive"
+    @handleDeleteArchive="handleDeleteArchive"
+    @shareSchool="shareSchool"
+  >
     <template v-slot:mycoursefavourite>
       <MenuDropDown />
     </template>
@@ -371,6 +379,13 @@ export default {
     },
     isCaculation() {
       return get(this, "elearning.medium_score.calculation", false) == true;
+    },
+    showArchive() {
+      return (
+        !get(this, "elearning.is_archive", true) &&
+        !get(this, "elearning.is_study", true) &&
+        get(this, "elearning.is_favourite", false)
+      );
     },
   },
   methods: {

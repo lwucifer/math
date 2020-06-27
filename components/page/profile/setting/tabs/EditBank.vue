@@ -113,7 +113,7 @@ export default {
           },
         });
         if (get(res, "data.success", false)) {
-          this.$toasted.success("Thành công");
+          this.$toasted.success("Sửa tài khoản ngân hàng thành công, bạn vui lòng đăng nhập email để active tài khoản. Xin cảm ơn!");
           this.$emit("close");
           this.$emit('editSuccess')
           this.$store.dispatch("setting/getAccountBanks", {

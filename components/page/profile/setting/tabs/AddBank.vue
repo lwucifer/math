@@ -135,7 +135,7 @@ export default {
         if (get(res, "data.success", false)) {
           this.$emit('addSuccess')
           this.$toasted.success(
-            "Thêm tài khoản thành công, bạn vui lòng đăng nhập email để active tài khoản. Xin cảm ơn!"
+            "Thêm tài khoản ngân hàng thành công, bạn vui lòng đăng nhập email để active tài khoản. Xin cảm ơn!"
           );
           this.$emit("cancel");
           this.$store.dispatch("setting/getAccountBanks", {

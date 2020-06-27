@@ -207,7 +207,7 @@ export default {
           size: 9999
         };
         await this.$store.dispatch(
-          `${STORE_SCHOOL_CLASSES}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`, params
+          `${STORE_SCHOOL_CLASSES}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`, {params}
         );
         let lessonList = this.get(this.stateSchoolClasses, "content", []);
         let list = [];

@@ -34,6 +34,7 @@
           color="primary"
           :loading="btnSubmitLoading"
           @click="submit"
+          :disabled="true"
         >Chia sẻ</app-button>
       </div>
     </div>

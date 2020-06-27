@@ -124,7 +124,7 @@ export default {
     limit() {
       const value = get(this, "question.content", "");
 
-      return limitCharacter(value, 60, 20);
+      return limitCharacter(value, 30, 20);
     }
   },
 

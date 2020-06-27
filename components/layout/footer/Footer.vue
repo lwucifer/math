@@ -53,7 +53,7 @@
               >Gửi yêu cầu hỗ trợ</a>
             </li>
             <li>
-              <a href>Hướng dẫn sử dụng</a>
+              <a href="https://hotro.schoolly.vn/hc/vi-vn" target="_blank">Hướng dẫn sử dụng</a>
             </li>
           </ul>
         </div>
