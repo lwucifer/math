@@ -1,9 +1,9 @@
 <template>
   <div class="container">
       <div class="wrap404page">
-        <h1 class="mb-4">Trang không tồn tại</h1>
+        <h1 class="mb-4">Chức năng đang phát triển</h1>
 
-        <p class="wrap404page__title">Liên kết bạn truy cập có thể bị hỏng hoặc trang có thể đã bị xóa.</p>
+        <p class="wrap404page__title">Chúng tôi đang phát triển chức năng này và sẽ triển khai sớm nhất có thể. Xin cảm ơn!</p>
 
         <div class="wrap404page__logo text-center">
           <Logo404/>
@@ -14,7 +14,7 @@
           size="md" 
           color="primary">
             <n-link to="/">
-              <IconArrowLeft class="mr-2"/> Quay lại trang chủ
+              <IconArrowLeft class="mr-2"/> Quay lại trang chủ
             </n-link>
         </app-button>
       </div>
