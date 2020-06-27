@@ -31,7 +31,8 @@
               </div>
               <div class="col-md-7 col-sm-8 value">
                 <!--Thứ 4, 18 tháng 10 năm 2019, 11:00 AM-->
-                {{ startedAt | getDateTimeFullWeekDay | uppercaseFirst }}
+                <span v-if="startedAt">{{ startedAt | getDateTimeFullWeekDay | uppercaseFirst }}</span>
+                <span v-else> {{ NOT_AVAILABLE_TXT }}</span>
               </div>
             </div>
             <div class="row item">
@@ -40,7 +41,8 @@
               </div>
               <div class="col-md-7 col-sm-8 value">
                 <!--Thứ 4, 18 tháng 10 năm 2019, 11:00 AM-->
-                {{ finishedAt | getDateTimeFullWeekDay | uppercaseFirst }}
+                <span v-if="finishedAt">{{ finishedAt | getDateTimeFullWeekDay | uppercaseFirst }}</span>
+                <span v-else>{{ NOT_AVAILABLE_TXT }}</span>
               </div>
             </div>
             <div class="row item">
@@ -48,7 +50,8 @@
                 Thời gian làm bài
               </div>
               <div class="col-md-7 col-sm-8 value">
-                {{ duration | durationTime }}
+                <span v-if="duration">{{ duration | durationTime }}</span>
+                <span v-else>{{ NOT_AVAILABLE_TXT }}</span>
               </div>
             </div>
             <div class="row item">
@@ -85,6 +88,8 @@
 
 <script>
   import { DATETIME_FULL_WEEK_DAY } from "~/utils/config";
+
+  const NOT_AVAILABLE_TXT = "Không xác định"
   
   export default {
     components: {},
@@ -158,7 +163,8 @@
     },
     data() {
       return {
-        DATETIME_FULL_WEEK_DAY
+        DATETIME_FULL_WEEK_DAY,
+        NOT_AVAILABLE_TXT
       }
     }
   }
