@@ -141,13 +141,13 @@
                 </n-link>
               </li>
               <li
-                v-if="elearning && !elearning.is_archive"
+                v-if="showArchive"
                 @click.prevent="handleArchive(elearning.elearning_id)"
               >
                 <n-link to> <IconArchive class="icon" />Lưu trữ </n-link>
               </li>
               <li
-                v-else-if="elearning && !elearning.is_archive && tab === 5"
+                v-else-if="showArchive && tab === 5"
                 @click.prevent="handleDeleteArchive(elearning.elearning_id)"
               >
                 <n-link to class="text-primary">
