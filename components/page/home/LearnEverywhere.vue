@@ -75,7 +75,7 @@
                 color="default"
                 class="text-primary"
                 outline
-              >Học miễn phí</app-button>
+              >Vào học ngay</app-button>
             </div>
           </div>
 
