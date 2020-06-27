@@ -2,7 +2,6 @@
   <div>
     <div class="container">
       <breadcrumb />
-      {{stateOnlineClassInfo}}
       <div class="row">
         <div class="col-md-3 sub-side">
           <sub-side>
@@ -665,20 +664,19 @@ export default {
       }
     },
 
-    arrayToString(data) {
-      return data.reduce((result, item) => {
-        const com = result ? "," : "";
-        return (result = result + com + item);
-      }, "");
-    },
-
     get
   },
 
   created() {
+    const that = this;
     this.params = this.get(this.stateOnlineClassInfo, 'data', {});
     this.schedules = this.get(this.stateOnlineClassInfo, 'data.schedules', []);
     let schedules = this.get(this.stateOnlineClassInfo, 'data.schedules', []);
+    schedules.forEach(function(item, index) {
+      that.selectedItems[index] = (item.days_of_week).split(',');
+      that.schedules[index] = {...that.schedules, start_time: '10:00 AM'}
+      //that.schedules[index] = {...that.schedules, duration: '2:30'}
+    });
   }
 };
 </script>
