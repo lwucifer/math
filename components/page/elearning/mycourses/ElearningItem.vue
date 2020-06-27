@@ -129,7 +129,7 @@
                 </li>
 
                 <li
-                  v-if="elearning && !elearning.is_archive"
+                  v-if="showArchive"
                   @click.prevent="handleArchive(elearning.elearning_id)"
                 >
                   <n-link to> <IconArchive class="icon" />Lưu trữ </n-link>
@@ -371,6 +371,13 @@ export default {
     },
     isCaculation() {
       return get(this, "elearning.medium_score.calculation", false) == true;
+    },
+    showArchive() {
+      return (
+        !get(this, "elearning.is_archive", true) &&
+        !get(this, "elearning.is_study", true) &&
+        get(this, "elearning.is_favourite", false)
+      );
     },
   },
   methods: {
