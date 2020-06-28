@@ -119,6 +119,7 @@ export default {
 
     async handleChangedClass() {
       this.checkAll = false;
+      this.arrMember = [];
       let params = {
         class_id: this.classSelected.value,
         size: 9999
@@ -138,7 +139,7 @@ export default {
       this.checkAll = !this.checkAll;
       this.$nextTick(() => {
         if (this.checkAll) {
-          this.arrMember = this.studentList.map(item => item.id);
+          this.arrMember = this.studentList.map(item => item.student_id);
         } else {
           this.arrMember = [];
         }
