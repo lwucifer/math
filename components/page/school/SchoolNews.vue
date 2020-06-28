@@ -3,7 +3,7 @@
         <div class="school-news__title">Tin tức sự kiện</div>
         <div class="school-news__line"></div>
 
-        <div class="school-news__content">
+        <div class="school-news__content" v-if="get(this,'newsList.content.length',0)">
             <div class="row">
                 <div class="col-12 col-md-4" v-for="(item, index) in get(this,'newsList.content',[])" :key="index">
                     <SchoolNewsItem :data="item"/>
@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <div class="school-news__btn text-center">
+        <div class="school-news__btn text-center" v-if="get(this,'newsList.content.length',0)">
             <app-button
                 class="text-white"
                 size="md"
@@ -20,6 +20,9 @@
                 >
                 Xem tất cả
             </app-button>
+        </div>
+        <div v-else>
+            Chưa có thông tin
         </div>
     </div>
 </template>

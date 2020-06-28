@@ -9,21 +9,26 @@
                         <VclList/>
                     </div>
                     <div v-else>
-                        <div class="row news-item-school" v-for="(item,index) in list" :key="index" @click="showDetailNews(item)">
-                            <div class="col-md-4">
-                                <img :height="131" class="w-100" :src="get(item,'thumb','https://picsum.photos/218/131')">
+                        <div v-if="get(this,'list.length')">
+                            <div class="row news-item-school" v-for="(item,index) in list" :key="index" @click="showDetailNews(item)">
+                                <div class="col-md-4">
+                                    <img :height="131" class="w-100" :src="get(item,'thumb','https://picsum.photos/218/131')">
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="title-notify">{{get(item,"title","")}}</p>
+                                    <p class="text-sub my-2">{{get(item,"updated","") | moment("DD/MM/YYYY")}}</p>
+                                    <p v-html="get(item,'short_desc','')"></p>
+                                </div>
                             </div>
-                            <div class="col-md-8">
-                                <p class="title-notify">{{get(item,"title","")}}</p>
-                                <p class="text-sub my-2">{{get(item,"updated","") | moment("DD/MM/YYYY")}}</p>
-                                <p v-html="get(item,'short_desc','')"></p>
-                            </div>
+                            <app-pagination
+                                :pagination="filterPagination"
+                                @pagechange="pagechange"
+                                class="mt-5"
+                            />
                         </div>
-                        <app-pagination
-                            :pagination="filterPagination"
-                            @pagechange="pagechange"
-                            class="mt-5"
-                        />
+                        <div v-else>
+                            Chưa có thông tin
+                        </div>
                     </div>
                 </div>
             </div>

@@ -433,6 +433,9 @@ export const SCHOOL_ELEARNING = {
     LIST: "schoolElearning",
 };
 
+export const SCHOOL_HIGHTLIGHT_ELEARNING = {
+    LIST: "schoolHightlightElearning",
+};
 
 export const SCHOOL_ORGANIZATION = {
     LIST: "schoolOrganization",

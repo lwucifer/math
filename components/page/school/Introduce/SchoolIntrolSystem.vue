@@ -15,7 +15,7 @@
             </app-button>
         </div>
      </div>
-     <div class="intro-system-detail-school" v-if="get(this,'schoolStaffs',[])">
+     <div class="intro-system-detail-school" v-if="get(this,'schoolStaffs.content.length',0)">
          <div class="title-system-school">
              {{get(this,'nameSystem','')}}
          </div>
@@ -47,6 +47,7 @@
             </div>
         </div>
      </div>
+     <div v-else>Chưa có thông tin</div>
   </div>
 </template>
 
@@ -64,7 +65,7 @@ export default {
     data(){
         return{
             changeContent:'',
-            nameSystem:'Tất cả giáo viên',
+            nameSystem:'',
             params:{
                 school_id : this.$route.params.id,
                 size: null,
