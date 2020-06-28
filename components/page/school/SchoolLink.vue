@@ -4,7 +4,7 @@
 
        <div class="school-link__line"></div>
 
-       <div class="school-link__content">
+       <div class="school-link__content" v-if="get(this,'linkWebsList.content.length',0)">
            <a 
             v-for="(item,index) in get(this,'linkWebsList.content',[])"
             :key="index"
@@ -13,6 +13,9 @@
            >
                <img :src="get(item,'logo','~assets/images/tmp/connect-1.png')" :alt="item.name">
             </a>
+       </div>
+       <div v-else>
+           Chưa có thông tin
        </div>
     </div>
 </template>

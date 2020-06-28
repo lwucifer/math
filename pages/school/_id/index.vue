@@ -17,6 +17,7 @@
 
             <AppCarouseSchool
               :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+              v-if="get(this,'newestLecture.content.length',0)"
             >
               <template slot="default" slot-scope="{ classes }">
                 <div
@@ -28,6 +29,7 @@
                 </div>
               </template>
             </AppCarouseSchool>
+            <div v-else>Chưa có thông tin</div>
           </ElearningHomeBox>
         </div>
 
@@ -37,6 +39,7 @@
 
             <AppCarouseSchool
               :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+              v-if="get(this,'newestCourse.content.length',0)"
             >
               <template slot="default" slot-scope="{ classes }">
                 <div
@@ -48,6 +51,7 @@
                 </div>
               </template>
             </AppCarouseSchool>
+            <div>Chưa có thông tin</div>
           </ElearningHomeBox>
         </div>
 
@@ -133,7 +137,7 @@ export default {
       `elearning/school/school-info/${actionTypes.SCHOOL_INFO.INFO}`,
       data
     );
-
+    /*
     const getNewestLecture = () =>
       store.dispatch(
         `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_LECTURE}`,
@@ -153,11 +157,12 @@ export default {
           }
         }
       );
-      
+    
     return await Promise.all([
       getNewestLecture(),
       getNewestCourse()
     ]);
+    */
   },
 
   data() {

@@ -25,13 +25,18 @@
                     </div>
                     
                     <div v-if="tab=='intro'">
-                        <div class="mt-2 mb-4">
-                            <img  class="w-100" :src="get(this,'organization.cover') ? get(this,'organization.cover') : '~assets/images/tmp/img-intro.png'" alt="">
-                        </div>
+                        <div v-if="get(this,'organization.content','0')">
+                            <div class="mt-2 mb-4">
+                                <img  class="w-100" :src="get(this,'organization.cover') ? get(this,'organization.cover') : '~assets/images/tmp/img-intro.png'" alt="">
+                            </div>
 
-                        <div class="intro-text__content">
-                            <div class="intro-text-school mt-4">{{get(this,'organization.title')}}</div>
-                            <div class="mb-4" v-html="get(this,'organization.content')"></div>
+                            <div class="intro-text__content">
+                                <div class="intro-text-school mt-4">{{get(this,'organization.title')}}</div>
+                                <div class="mb-4" v-html="get(this,'organization.content')"></div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            Chưa có thông tin
                         </div>
                     </div>
                     <div v-else-if="tab=='diagram'">
@@ -59,7 +64,7 @@ export default {
     props:{
         organization:{
             type: Object,
-            default: ()=>{}
+            default: () => {}
         }
     },
     watch:{

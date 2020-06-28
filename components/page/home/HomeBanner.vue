@@ -9,9 +9,9 @@
         size="md"
         color="primary"
         class="home-banner__btn text-white"
-        nuxt
-        to="/auth/signup"
-        >Tạo tài khoản</app-button>
+        tag="a"
+        :href="isLogin ? 'https://docs.google.com/forms/d/1KFVx4AUJ2sKBzp39BjYacbSbw-Fzi6PVhDMsrtlErek' :'/auth/signup'"
+        >{{isLogin ? " Đăng ký giảng dạy" : "Tạo tài khoản"}}</app-button>
     </div>
   </div>
 </template>
@@ -22,7 +22,9 @@ import BannerImage from "~/assets/svg/images/elearing-home-banner.svg?inline";
 export default {
   components: {
     BannerImage
-  }
+  },
+
+  props: ["isLogin"]
 };
 </script>
 
