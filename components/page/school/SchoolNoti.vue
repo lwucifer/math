@@ -3,7 +3,7 @@
         <div class="school-noti__title">Thông báo</div>
         <div class="school-noti__line"></div>
 
-        <div class="school-noti__content">
+        <div class="school-noti__content" v-if="get(this,'announcements.content.length',0)">
             <div class="row">
                 <div class="col-12 col-md-8">
                     <div v-for="(item, index) in get(this,'announcements.content',[])" :key="index" class="wrapper">
@@ -32,6 +32,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-else>
+            Chưa có thông tin
         </div>
     </div>
 </template>

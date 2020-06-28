@@ -4,12 +4,10 @@
       <div class="row">
         <div class="col-md-7 align-self-center py-5">
           <h1 class="elearning-home-banner__title">
-            <div>In-demand talent on demand.</div>Schoolly is how.
+            <div>Học tập mọi lúc, mọi nơi</div>với Schoolly.
           </h1>
 
-          <p
-            class="elearning-home-banner__subtitle"
-          >Schoolly expertly connects professionals and agencies <span>to businesses seeking specialized talent.</span></p>
+          <p class="elearning-home-banner__subtitle">Nền tảng học tập trực tuyến toàn diện dành cho <span> học sinh, giáo viên, nhà trường và các đơn vị giáo dục.</span></p>
         </div>
 
         <div class="col-md-5 align-self-end">

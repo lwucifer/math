@@ -369,6 +369,12 @@ export const SCHOOL_ELEARNING = {
     SET_SCHOOL_ELEARNING_LECTURE: "setSchoolElearningLecture",
 };
 
+
+export const SCHOOL_HIGHTLIGHT_ELEARNING = {
+    SET_SCHOOL_HIGHTLIGHT_ELEARNING_COURSE: "setSchoolHightlightElearningCourse",
+    SET_SCHOOL_HIGHTLIGHT_ELEARNING_LECTURE: "setSchoolHightlightElearningLecture",
+};
+
 export const SCHOOL_PROFESSIONAL = {
     SET_SCHOOL_PROFESSIONAL_LIST: "setSchoolProfessionalList",
     SET_SCHOOL_PROFESSIONAL_ADD: "setSchoolProfessionalAdd",

@@ -22,7 +22,7 @@
       @click="editCourseName"
       v-if="!isEditCourseName"
     >
-      <IconEdit class="icon ml-2" />
+      <IconEdit class="icon ml-2"  style="width: 18px"/>
     </button>
 
     <template v-if="isEditCourseName">
