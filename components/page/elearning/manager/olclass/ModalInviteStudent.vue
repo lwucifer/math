@@ -139,7 +139,9 @@ export default {
       this.checkAll = !this.checkAll;
       this.$nextTick(() => {
         if (this.checkAll) {
-          this.arrMember = this.studentList.map(item => item.student_id);
+          this.studentList.forEach(item => {
+            if (item.student_id) this.arrMember.push(item.student_id);
+          });
         } else {
           this.arrMember = [];
         }
