@@ -39,8 +39,8 @@
           <div class="item" v-for="(item, index) in studentList ? studentList : []" :key="index">
             <app-checkbox
               class="ml-auto"
-              @click="handleCheckbox(item.id)"
-              :checked="arrMember.includes(item.id)"
+              @click="handleCheckbox(item.student_id)"
+              :checked="arrMember.includes(item.student_id)"
             >{{item.name}}</app-checkbox>
           </div>
         </div>
@@ -99,6 +99,10 @@ export default {
   },
 
   methods: {
+    closeNotify() {
+      this.notify.showNotify = false;
+    },
+
     close(invite) {
       this.$emit("close", invite);
     },
