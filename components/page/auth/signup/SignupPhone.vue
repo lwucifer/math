@@ -204,6 +204,7 @@ export default {
             };
             this.sendotp(data).then(result => {
               if (!result.code) {
+                this.loading = false;
                 this.savePhonePass({
                   phone: this.phone,
                   password: this.password,
@@ -212,12 +213,14 @@ export default {
                 // this.$router.push(`/auth/signup/otp`);
                 this.$emit("hanldeCheckOtp");
               } else {
+                this.loading = false;
                 this.errorRespon = true;
                 this.messageErrorRegister =
                   "Số điện thoại bạn nhập không chính xác";
               }
             });
           } else {
+            this.loading = false;
             this.errorRespon = true;
             this.messageErrorRegister = "Số điện thoại bạn nhập đã đăng ký";
           }

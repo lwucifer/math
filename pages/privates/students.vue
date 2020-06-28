@@ -173,7 +173,9 @@ export default {
       }
     );
     const school_year_id =
-      dataYear && dataYear.data ? dataYear.data[0].id : null;
+      dataYear && dataYear.data && dataYear.data[0]
+        ? dataYear.data[0].id
+        : null;
     const queryStudent = {
       cal_type: "SCHOOL_YEAR",
       school_year_id: school_year_id
