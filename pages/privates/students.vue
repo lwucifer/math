@@ -178,7 +178,7 @@ export default {
         : null;
     const queryStudent = {
       cal_type: "SCHOOL_YEAR",
-      school_year_id: school_year_id
+      school_year: school_year_id
     };
     const queryClass = {
       school_year_id: school_year_id
@@ -357,6 +357,10 @@ export default {
     filterCheckData() {
       return this.years ? true : false;
     }
+  },
+  created() {
+    this.params.school_year =
+      this.years && this.years[0] ? this.years[0].value : null;
   },
   methods: {
     get,
