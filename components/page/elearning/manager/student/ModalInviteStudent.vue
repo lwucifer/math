@@ -23,9 +23,8 @@
               :options="classList"
               label="text"
               placeholder="Chọn lớp"
-              searchable
-              clearable
               @input="handleChangedClass"
+              has-border
             ></app-vue-select>
           </div>
         </div>
