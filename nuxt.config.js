@@ -11,12 +11,12 @@ module.exports = {
       },
       {
         name: "viewport",
-        content: "width=device-width, initial-scale=1",
+        content: "user-scalable=no",
       },
       {
         hid: "description",
         name: "description",
-        content: "Nuxt full stack template for creating web app easily.",
+        content: "Schoolly là hệ thống E-learning duy nhất hiện nay đáp ứng đầy đủ và hiệu quả các nhu cầu của việc học trực tuyến tại trường Phổ thông cho nhiều đối tượng tham gia: học sinh, giáo viên, nhà trường.",
       },
     ],
     link: [

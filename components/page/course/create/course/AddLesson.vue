@@ -203,13 +203,7 @@ export default {
     return {
       tabType: "video",
       showModalConfirm: false,
-      showModalConfirmVideo: false,
-      showModalConfirmScorm: false,
-      showModalConfirmDoc: false,
       confirmLoading: false,
-      confirmLoadingVideo: false,
-      confirmLoadingScorm: false,
-      confirmLoadingDoc: false,
       noLesson: get(this, "chapter.lessons", "").length,
       payload: {
         chapter_id: get(this, "chapter.id", ""),
@@ -302,6 +296,14 @@ export default {
             return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
           }
         }
+      }
+
+      if (this.edit) {
+        if (this.payload.repository_file_id) {
+          return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
+        }
+        
+        return "Bạn có chắc chắn là muốn lưu thay đổi này?"
       }
 
       if (this.payload.type == "VIDEO") {
