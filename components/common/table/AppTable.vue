@@ -295,36 +295,6 @@ export default {
     hasActionsSlot() {
       return !!this.$slots["actions"] || !!this.$scopedSlots["actions"];
     },
-    sortedCats: function() {
-      for (let i = this.cats.length - 1; i > 0; i--) {
-        let check = true;
-        for (let k = 0; k < i; k++) {
-          if (this.currentSortDir === "desc") {
-            if (
-              this.cats[k][this.currentSort] >
-              this.cats[k + 1][this.currentSort]
-            ) {
-              this.swap(this.cats, k, k + 1);
-            }
-            this.currentSortDir === "asc";
-            check = false;
-          } else {
-            if (
-              this.cats[k][this.currentSort] <
-              this.cats[k + 1][this.currentSort]
-            ) {
-              this.swap(this.cats, k, k + 1);
-            }
-            this.currentSortDir === "desc";
-            check = false;
-          }
-        }
-        if (check) {
-          break;
-        }
-      }
-      return this.cats;
-    },
     cats: function() {
       return this.data;
     },

@@ -53,10 +53,10 @@
           </n-link>
         </li>
         <li class="the-header__user-menu__item" v-if="checkMenuGuard(MENU.SUPPORT)">
-          <n-link :to="getSupportLink">
+          <a href="https://hotro.schoolly.vn/hc/vi-vn/requests/new" target="_blank">
             <IconHeadsetMic24px class="fill-gray" />
             <span>Trợ giúp</span>
-          </n-link>
+          </a>
         </li>
         <li
           class="the-header__user-menu__item"

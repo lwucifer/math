@@ -4,7 +4,7 @@
       <HomeMobile />
     </div>
     <div v-else>
-      <HomeBanner />
+      <HomeBanner :isLogin="isAuthenticated"/>
       <SubBanner/>
 
       <div v-if="pageLoading" class="container mt-6">
@@ -63,7 +63,7 @@
 
 <script>
 import { get } from "lodash";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { ELEARNING_TYPES, SUBJECT_CODE } from "~/utils/constants";
 import { VclList } from "vue-content-loading";
@@ -213,7 +213,9 @@ export default {
     ]),
     ...mapState("elearning/public/public-highlight-teachers", [
       "highlightTeachers"
-    ])
+    ]),
+
+    ...mapGetters("auth", ["isAuthenticated"]),
   },
 
   mounted() {

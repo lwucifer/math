@@ -24,10 +24,12 @@
 
     .question-title {
         width: 7%;
+        min-width: 7%;
     }
 
     .question-content {
-        width: 58%;
+        width: 55%;
+        min-width: 55%;
     }
     
     .question-type {
@@ -36,6 +38,7 @@
 
     .question-point {
         width: 9%;
+        min-width: 9%;
     }
 
     .question-actions {

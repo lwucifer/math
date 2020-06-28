@@ -3,9 +3,7 @@
     <IconAlertCircle1 class="icon-fail_payment mt-2" />
     <h3 class="my-4">Thanh toán không thành công!</h3>
     <p class="text-gray mb-4 description__payment-fail">
-      Giao dịch không thành công. Thẻ của bạn cần xác thực 3D Secure. Liên hệ
-      Hotline: 1900-6035 để biết thêm chi tiết. Bạn hãy thử thanh toán lại sau
-      vài phút hoặc Chọn phương thức thanh toán khác
+      Giao dịch không thành công. Người sử dụng hủy giao dịch.
     </p>
     <p class="text-gray mb-4 description__payment-fail">
       {{ message }}

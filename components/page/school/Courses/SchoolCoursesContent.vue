@@ -1,6 +1,6 @@
 <template>
     <div class="wrap-courses-school" v-if="!isSearch">
-        <SchoolCoursesSubject @showSearch="showSchoolSearch"/>
+        <SchoolCoursesSubject @showSearch="searchElearning"/>
         <div class="highlight pt-0">
           <ElearningHomeBox>
             <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
@@ -20,7 +20,7 @@
               </template>
             </AppCarouseSchool>
             <div class="text-center mt-5">
-                <app-button class="btn-show-all" @click="showSchoolSearch">Xem tất cả</app-button>
+                <app-button class="btn-show-all" @click="searchElearning">Xem tất cả</app-button>
             </div>
           </ElearningHomeBox>
         </div>
@@ -43,12 +43,16 @@
               </template>
             </AppCarouseSchool>
             <div class="text-center mt-5">
-                <app-button class="btn-show-all" @click="showSchoolSearch">Xem tất cả</app-button>
+                <app-button class="btn-show-all">Xem tất cả</app-button>
             </div>
           </ElearningHomeBox>
         </div>
     </div>
-    <SchoolCoursesSearch v-else/>
+    <SchoolCoursesSearch 
+      v-else
+      :typeSearch="typeSearch"
+      :paramsSearch="paramsSearch"
+    />
 </template>
 
 <script>
@@ -71,7 +75,19 @@ export default {
     },
     data(){
         return{
-            isSearch:false
+            isSearch:false,
+            typeSearch:'',
+            paramsSearch:{
+              elearning_type:null,
+              subject:null
+            }
+        }
+    },
+    watch:{
+      '$route.query'(news,old){
+          if(news.tab == 'courses' && news.searchBy){
+            this.isSearch = true
+          }
         }
     },
     methods:{
@@ -95,8 +111,9 @@ export default {
                 }
             );
         },
-        showSchoolSearch(){
-            this.isSearch = true;
+        searchElearning(val){
+            this.typeSearch = val.name;
+            this.$router.push({query: { tab: 'courses', searchBy: 'subject', id: val.subject_id}})
         }
     },
     created(){

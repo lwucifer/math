@@ -1,45 +1,38 @@
 <template>
   <div class="clc-video">
-    <div class="clc-video__image"><img :src="thumnail" alt /></div>
+    <div class="clc-video__image">
+      <img :src="thumnail" alt />
+    </div>
 
     <div class="clc-video__right w-100">
       <div class="d-flex justify-content-between clc-video__name">
         <p class="mb-3">
-          <span class="heading-6 mb-3 font-weight-bold"
-            >Bài {{ index + 1 + ": " }}</span
-          >
-          <span>{{
+          <span class="heading-6 mb-3 font-weight-bold">Bài {{ index + 1 + ": " }}</span>
+          <span>
+            {{
             get(lesson, "name", "").length > 60
-              ? get(lesson, "name", "").slice(0, 40) + "..."
-              : get(lesson, "name", "")
-          }}</span>
+            ? get(lesson, "name", "").slice(0, 40) + "..."
+            : get(lesson, "name", "")
+            }}
+          </span>
         </p>
 
         <div class="clc-video__actions">
-          <a
-            href
-            class="clc-video__btn-edit text-primary mr-2"
-            @click="handleEditLesson($event)"
-          >
-            <IconBorderColor24px class="icon" />
+          <a href class="clc-video__btn-edit text-primary mr-2" @click="handleEditLesson($event)">
+            <IconEdit class="icon" />
           </a>
-          <a
-            href
-            class="clc-video__btn-delete text-secondary"
-            @click="handleDeleteLesson($event)"
-          >
+          <a href class="clc-video__btn-delete text-secondary" @click="handleDeleteLesson($event)">
             <IconTrashAlt class="icon" />
           </a>
         </div>
       </div>
 
-      <div class="clc-video__type text-dark mt-2" v-if="showFileName">
-        {{ get(lesson, "file_name", "").length > 60 ? (get(lesson, "file_name", "").slice(0, 60) + '...' +  get(lesson, "format", "").toLowerCase()) : get(lesson, "file_name", "")}}
-      </div>
+      <div
+        class="clc-video__type text-dark mt-2"
+        v-if="showFileName"
+      >{{ get(lesson, "file_name", "").length > 60 ? (get(lesson, "file_name", "").slice(0, 60) + '...' + get(lesson, "format", "").toLowerCase()) : get(lesson, "file_name", "")}}</div>
 
-      <div class="clc-video__type text-dark mt-2" v-else>
-        {{ get(lesson, "type", "") }}
-      </div>
+      <div class="clc-video__type text-dark mt-2" v-else>{{ get(lesson, "type", "") }}</div>
 
       <div class="clc-video__time text-gray mb-3 mt-3">
         <IconClock width="15px" height="15px" class="mr-2" />
@@ -60,7 +53,7 @@
 </template>
 
 <script>
-import IconBorderColor24px from "~/assets/svg/v2-icons/border_color_24px.svg?inline";
+import IconEdit from "~/assets/svg/v2-icons/edit.svg?inline";
 const IconTrashAlt = () =>
   import("~/assets/svg/design-icons/trash-alt.svg?inline");
 import IconClock from "~/assets/svg/icons/clock.svg?inline";
@@ -70,20 +63,20 @@ import * as actionTypes from "~/utils/action-types";
 
 export default {
   components: {
-    IconBorderColor24px,
+    IconEdit,
     IconTrashAlt,
-    IconClock,
+    IconClock
   },
 
   props: {
     lesson: {
       type: Object,
-      default: null,
+      default: null
     },
     index: {
       type: Number,
-      default: null,
-    },
+      default: null
+    }
   },
 
   computed: {
@@ -100,13 +93,13 @@ export default {
         get(this, "lesson.type", "") === "VIDEO" ||
         get(this, "lesson.type", "") === "DOCS"
       );
-    },
+    }
   },
 
   data() {
     return {
       showModalConfirm: false,
-      confirmLoading: false,
+      confirmLoading: false
     };
   },
 
@@ -128,8 +121,8 @@ export default {
       this.confirmLoading = true;
       const options = {
         data: {
-          id: get(this, "lesson.id", ""),
-        },
+          id: get(this, "lesson.id", "")
+        }
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DELETE}`,
@@ -153,7 +146,7 @@ export default {
       this.confirmLoading = false;
     },
 
-    get,
-  },
+    get
+  }
 };
 </script>

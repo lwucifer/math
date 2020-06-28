@@ -55,7 +55,7 @@
   import ChoiceQuestionDetail from "~/components/page/elearning/manager/exam/ChoiceQuestionDetail"
   import { get } from "lodash"
 
-  const ANS_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+  const ANS_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 
   export default {
     components: {

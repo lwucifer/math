@@ -1,17 +1,20 @@
 <template>
-    <div class="school-noti-item">
-        <div class="school-noti-item__img">
-            <img src="~assets/images/school/email-2.png" alt="">
-        </div>
+    <n-link class="text-decoration-none" :to="'?tab=notify&announcement_id='+data.id">
+        <div class="school-noti-item">
+            <div class="school-noti-item__img">
+                <img src="~assets/images/school/email-2.png" alt="">
+            </div>
 
-        <div class="school-noti-item__content">
-            <div class="text">{{ data.noti_title }}</div>
-            <div class="date">{{ data.date }}</div>
+            <div class="school-noti-item__content">
+                <div class="text">{{ data.title }}</div>
+                <div class="date">{{ data.updated | moment('DD/MM/YYYY') }}</div>
+            </div>
         </div>
-    </div>
+    </n-link>
 </template>
 
 <script>
+import { moment } from "moment"
 export default {
     props: {
         data: {

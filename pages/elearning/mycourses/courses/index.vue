@@ -15,24 +15,24 @@
                 <!-- <a @click="changeTab(1)" :class="tab === 1 ? 'active' : ''">Tất cả ({{total.elearnings}})</a> -->
                 <a @click="changeTab(2)" :class="tab === 2 ? 'active' : ''">
                   Đang theo học ({{
-                  numeral(get(statistic, "total_elearnings", 0)).format()
+                    numeral(get(statistic, "total_elearnings", 0)).format()
                   }})
                 </a>
                 <a @click="changeTab(3)" :class="tab === 3 ? 'active' : ''">
                   Đã hoàn thành ({{
-                  numeral(get(statistic, "total_completed", 0)).format()
+                    numeral(get(statistic, "total_completed", 0)).format()
                   }})
                 </a>
 
                 <a @click="changeTab(4)" :class="tab === 4 ? 'active' : ''">
                   Yêu thích ({{
-                  numeral(get(statistic, "total_favourites", 0)).format()
+                    numeral(get(statistic, "total_favourites", 0)).format()
                   }})
                 </a>
 
                 <a @click="changeTab(5)" :class="tab === 5 ? 'active' : ''">
                   Lưu trữ ({{
-                  numeral(get(statistic, "total_archieves", 0)).format()
+                    numeral(get(statistic, "total_archieves", 0)).format()
                   }})
                 </a>
               </div>
@@ -56,7 +56,10 @@
                   :size="'sm'"
                   @click="toggleFilter"
                 >
-                  <IconHamberger :class="showFilter ? 'fill-white' : 'fill-primary'" class="mr-2" />
+                  <IconHamberger
+                    :class="showFilter ? 'fill-white' : 'fill-primary'"
+                    class="mr-2"
+                  />
                   <span>Lọc kết quả</span>
                 </app-button>
               </div>
@@ -83,12 +86,12 @@
                   <app-vue-select
                     style="width: 14rem"
                     class="app-vue-select filter-form__item__selection"
-                    v-model="selectPrivacy"
+                    v-model="selectSubject"
                     label="text"
                     placeholder="Môn học"
-                    :value="params.privacy"
+                    :value="params.subject"
                     :reduce="(item) => item.value"
-                    @input="handleChangePrivacy"
+                    @input="handleChangeSubject"
                     :options="subjectsOpt"
                     has-border
                   ></app-vue-select>
@@ -114,7 +117,10 @@
               </div>
             </div>
 
-            <ElearningList :elearningList="get(list, 'content', [])" :col="'col-md-4'">
+            <ElearningList
+              :elearningList="get(list, 'content', [])"
+              :col="'col-md-4'"
+            >
               <ElearningItem
                 slot-scope="{ item }"
                 :elearning="item"
@@ -172,7 +178,7 @@ export default {
     ElearningItem,
     MenuDropDown,
     ShareElearningModal,
-    IconHamberger
+    IconHamberger,
   },
   data() {
     return {
@@ -182,18 +188,18 @@ export default {
         page: 1,
         keyword: null,
         completed: null,
-        privacy: null,
+        subject: null,
         free: null,
         is_archive: false,
-        is_hidden: true
+        is_hidden: true,
       },
       tab: 2,
       checkModalShare: false,
       dataModal: {},
       showFilter: false,
       selectType: null,
-      selectPrivacy: null,
-      selectFree: null
+      selectSubject: null,
+      selectFree: null,
     };
   },
 
@@ -211,17 +217,17 @@ export default {
       unfinished_lecture: "unfinished_lecture",
       statistic: "statistic",
       archive: "archive",
-      favourite: "favourite"
+      favourite: "favourite",
     }),
     ...mapState("elearning/public/public-subject", {
-      subjects: "subjects"
+      subjects: "subjects",
     }),
 
     subjectsOpt() {
-      return this.subjects.map(item => ({
+      return this.subjects.map((item) => ({
         ...item,
         value: item.id,
-        text: item.name
+        text: item.name,
       }));
     },
 
@@ -239,7 +245,7 @@ export default {
         return this.archive;
       }
       return this.unfinished_lecture;
-    }
+    },
   },
 
   methods: {
@@ -247,8 +253,8 @@ export default {
       this.params.type = type;
     },
 
-    handleChangePrivacy(privacy) {
-      this.params.privacy = privacy;
+    handleChangeSubject(subject) {
+      this.params.subject = subject;
     },
 
     handleChangeFree(free) {
@@ -257,7 +263,7 @@ export default {
 
     getData() {
       const payload = {
-        params: this.params
+        params: this.params,
       };
       if (this.tab === 2) {
         this.$store.dispatch("elearning/study-space/getStudying", payload);
@@ -275,12 +281,12 @@ export default {
 
     ...mapActions(STORE_NAME_FAVOURITE, [
       "elearningStudyFavouriteAdd",
-      "elearningStudyFavouriteDelete"
+      "elearningStudyFavouriteDelete",
     ]),
 
     ...mapActions(STORE_NAME_ARCHIVE, [
       "elearningStudyArchiveAdd",
-      "elearningStudyArchiveDelete"
+      "elearningStudyArchiveDelete",
     ]),
 
     changeTab(tab) {
@@ -291,11 +297,11 @@ export default {
       }
       if (tab == 3) {
         this.params.completed = true;
-        this.params.is_archive = null;
+        this.params.is_archive = false;
       }
       if (tab == 4) {
         this.params.completed = null;
-        this.params.is_archive = null;
+        this.params.is_archive = false;
       }
       if (tab == 5) {
         this.params.completed = null;
@@ -307,9 +313,9 @@ export default {
 
     handleFavourite(id) {
       const query = {
-        elearning_id: id
+        elearning_id: id,
       };
-      this.elearningStudyFavouriteAdd(query).then(result => {
+      this.elearningStudyFavouriteAdd(query).then((result) => {
         if (result.success == true) {
           this.getData();
           this.$store.dispatch("elearning/study-space/getStatistic");
@@ -319,15 +325,15 @@ export default {
 
     handleDeleteFavourite(id) {
       const query = {
-        elearning_ids: [id]
+        elearning_ids: [id],
       };
-      this.elearningStudyFavouriteDelete(query).then(result => {
+      this.elearningStudyFavouriteDelete(query).then((result) => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page
-          }
+            page: this.params.page,
+          },
         };
         if (result.success == true) {
           this.getData();
@@ -338,15 +344,15 @@ export default {
 
     handleArchive(id) {
       const query = {
-        elearning_id: id
+        elearning_id: id,
       };
-      this.elearningStudyArchiveAdd(query).then(result => {
+      this.elearningStudyArchiveAdd(query).then((result) => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page
-          }
+            page: this.params.page,
+          },
         };
         if (result.success == true) {
           this.getData();
@@ -357,15 +363,15 @@ export default {
 
     handleDeleteArchive(id) {
       const query = {
-        elearning_ids: [id]
+        elearning_ids: [id],
       };
-      this.elearningStudyArchiveDelete(query).then(result => {
+      this.elearningStudyArchiveDelete(query).then((result) => {
         const payload = {
           params: {
             type: this.params.type,
             size: 8,
-            page: this.params.page
-          }
+            page: this.params.page,
+          },
         };
         if (result.success == true) {
           this.getData();
@@ -413,7 +419,7 @@ export default {
     toggleFilter() {
       if (this.showFilter) {
         this.selectType = null;
-        this.selectPrivacy = null;
+        this.selectSubject = null;
         this.selectFree = null;
       }
       this.showFilter = !this.showFilter;
@@ -423,8 +429,8 @@ export default {
       this.params.type = this.selectType.value;
     },
     get,
-    numeral
-  }
+    numeral,
+  },
 };
 </script>
 

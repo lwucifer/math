@@ -187,7 +187,7 @@ import {
 } from "~/utils/moment";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
-const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
+const STORE_CLASSES = "elearning/teaching/classes";
 
 export default {
   components: {
@@ -267,8 +267,8 @@ export default {
     ...mapState(STORE_NAMESPACE, {
       stateInvites: "Students"
     }),
-    ...mapState(STORE_SCHOOL_CLASSES, {
-      stateSchoolClasses: "schoolClasses"
+    ...mapState(STORE_CLASSES, {
+      stateClasses: "teachingClasses"
     }),
     ...mapState(STORE_NAMESPACE, {
       stateClassInfo: "OnlineClassInfo"
@@ -408,10 +408,13 @@ export default {
 
     async getSchoolClasses() {
       try {
+        let params = {
+          size: 9999
+        };
         await this.$store.dispatch(
-          `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
+          `${STORE_CLASSES}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`, {params}
         );
-        let lessonList = this.get(this.stateSchoolClasses, "data.content", []);
+        let lessonList = this.get(this.stateClasses, "content", []);
         let list = [];
         lessonList.forEach(element => {
           list.push({
@@ -419,7 +422,7 @@ export default {
             text: element.name
           });
         });
-        this.courses = list;
+        this.classList = list;
       } catch (e) {
       } finally {
       }

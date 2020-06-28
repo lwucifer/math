@@ -60,6 +60,7 @@
         :confirmLoading="confirmLoading"
         @ok="handleOk"
         @cancel="handleCancelModal"
+        description="Bạn có chắc chắn muốn xóa file này?"
       />
     </div>
   </div>

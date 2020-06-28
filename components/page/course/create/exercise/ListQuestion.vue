@@ -3,20 +3,16 @@
     <div class="d-flex align-items-center mb-3" v-if="!isShowEditQuestion">
       <h3 class="body-2 mr-1 question-title">Câu {{ index + 1 }}:</h3>
 
-      <div
-        class="body-2 mr-4 question-content font-weight-semi-bold text-dark"
-        v-html="limit"
-      ></div>
+      <div class="body-2 mr-4 question-content font-weight-semi-bold" v-html="limit"></div>
 
-      <span class="text-sub mr-4 question-type">{{ type }}</span>
+      <span class="mr-4 question-type">{{ type }}</span>
 
       <span
-        class="text-sub mr-4 question-point"
+        class="mr-4 question-point"
         v-if="
           get(question, 'type', '') === 'ESSAY' && get(question, 'points', '')
         "
-        >{{ get(question, "points", "") }} điểm</span
-      >
+      >{{ get(question, "points", "") }} điểm</span>
 
       <div
         class="d-flex align-items-center justify-content-end ce-question-item__actions question-actions"
@@ -26,16 +22,12 @@
         </button>
 
         <button @click="handleDeleteQuestion">
-          <IconTrashAlt
-            class="d-block subheading fill-secondary"
-            width="20px"
-            height="20px"
-          />
+          <IconTrashAlt class="d-block subheading fill-secondary" width="20px" height="20px" />
         </button>
 
         <!-- <button>
         <IconAlignCenterAlt class="icon d-block subheading fill-gray" />
-      </button> -->
+        </button>-->
       </div>
 
       <app-modal-confirm
@@ -93,29 +85,29 @@ export default {
     IconClipboardNotes,
     CreateQuestionEssay,
     EditQuestionChoice,
-    EditQuestionEssay,
+    EditQuestionEssay
   },
 
   props: {
     question: {
       type: Object,
-      default: null,
+      default: null
     },
     exercise: {
       type: Object,
-      default: null,
+      default: null
     },
     index: {
       type: Number,
-      default: 0,
-    },
+      default: 0
+    }
   },
 
   data() {
     return {
       isShowEditQuestion: false,
       showModalConfirm: false,
-      confirmLoading: false,
+      confirmLoading: false
     };
   },
 
@@ -127,7 +119,7 @@ export default {
     },
     ...mapState("elearning/create", {
       general: "general",
-      lesson: "lesson",
+      lesson: "lesson"
     }),
 
     disabled_all() {
@@ -138,7 +130,7 @@ export default {
       const value = get(this, "question.content", "");
 
       return limitCharacter(value, 60, 20);
-    },
+    }
   },
 
   methods: {
@@ -154,7 +146,7 @@ export default {
     async handleOk() {
       this.confirmLoading = true;
       const payload = {
-        id: get(this, "question.id", ""),
+        id: get(this, "question.id", "")
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-question/${actionTypes.ELEARNING_CREATING_QUESTIONS.DELETE}`,
@@ -180,8 +172,8 @@ export default {
       this.isShowEditQuestion = !this.isShowEditQuestion;
     },
 
-    get,
-  },
+    get
+  }
 };
 </script>
 

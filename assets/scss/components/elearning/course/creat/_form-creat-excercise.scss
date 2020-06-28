@@ -1,9 +1,19 @@
 .ce-input-with-unit {
-    @-moz-document url-prefix() { 
-       width: 150px !important;
+    @-moz-document url-prefix() {
+        width: 150px !important;
 
-       input {
-           width: 55px !important;
-       }
+        input {
+            width: 55px !important;
+        }
+    }
+}
+
+.input--modifer {
+    @-moz-document url-prefix() {
+        width: 90px !important;
+
+        input {
+            width: 40px !important;
+        }
     }
 }
