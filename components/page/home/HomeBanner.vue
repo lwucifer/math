@@ -10,6 +10,7 @@
         color="primary"
         class="home-banner__btn text-white"
         tag="a"
+        target="_blank"
         :href="isLogin ? 'https://docs.google.com/forms/d/1KFVx4AUJ2sKBzp39BjYacbSbw-Fzi6PVhDMsrtlErek' :'/auth/signup'"
         >{{isLogin ? " Đăng ký giảng dạy" : "Tạo tài khoản"}}</app-button>
     </div>
