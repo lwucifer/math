@@ -23,9 +23,8 @@
               :options="classList"
               label="text"
               placeholder="Chọn lớp"
-              searchable
-              clearable
               @input="handleChangedClass"
+              has-border
             ></app-vue-select>
           </div>
         </div>
@@ -186,7 +185,7 @@ export default {
       this.$nextTick(() => {
         if (this.checkAll) {
           this.studentList.forEach(item => {
-            if (item.student_id) this.arrMember.push[item.student_id];
+            if (item.student_id) this.arrMember.push(item.student_id);
           });
         } else {
           this.arrMember = [];
