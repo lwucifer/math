@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!pageLoading">
         <h4>{{ get(this,"newsListDetail.data.title","") }}</h4>
         <p class="text-sub my-2">{{ get(this,"newsListDetail.data.updated","") | moment('DD/MM/YYYY')}}</p>
         <div class="mt-5">
@@ -33,10 +33,14 @@
             </div>
         </div>
     </div>
+    <div v-else>
+        <VclList/>
+    </div>
 </template>
 
 <script>
 import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
+import { VclList} from "vue-content-loading";
 
 import { mapState, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -45,7 +49,8 @@ import {moment} from "moment";
 import { getParamQuery } from "~/utils/common"
 export default {
     components:{
-        IconEllipse2
+        IconEllipse2,
+        VclList
     },
     data(){
         return{
@@ -54,7 +59,8 @@ export default {
                 category_id:1,
                 size:5,
                 page:2
-            }
+            },
+            pageLoading:true
         }
     },
     watch:{
@@ -71,11 +77,13 @@ export default {
     methods:{
         ...mapActions("elearning/school/school-news", ["schoolNewsOtherList"]),
         async fetchNewsDetail(news_id){
+            this.pageLoading = true
             const data = { id : news_id };
             const rs = await this.$store.dispatch(
             `elearning/school/school-news/${actionTypes.SCHOOL_NEWS.DETAIL}`,
                 data
             );
+            this.pageLoading = false
         },
         async checkNewsId(){
             let news_id = this.$route.query.news_id;

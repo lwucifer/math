@@ -125,6 +125,7 @@ export default {
             this.titleAnnouncement = val.name;
             this.params.size = 10;
             this.params.page = 1;
+            this.pageLoading = true;
             this.fetchNotifyList();
         },
         pagechange(val){
