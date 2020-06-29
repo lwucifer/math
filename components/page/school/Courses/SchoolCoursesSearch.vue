@@ -79,7 +79,7 @@
 
       <div class="row list-course-school-search" v-else-if="tab=='1'">
         <div
-            v-for="item in courses && courses.content || []"
+            v-for="item in lectures && lectures.content || []"
             :key="item.id"
             class="col-md-3"
             >
@@ -93,7 +93,7 @@
 
       <div class="row list-course-school-search" v-else-if="tab=='2'">
         <div
-          v-for="item in lectures && lectures.content || []"
+          v-for="item in courses && courses.content || []"
           :key="item.id"
           class="col-md-3"
         >
