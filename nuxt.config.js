@@ -4,7 +4,7 @@ const webpack = require("webpack");
 module.exports = {
   dev: true,
   head: {
-    title: "Schoolly",
+    title: "Schoolly - Hệ thống giáo dục và đào tạo trực tuyến toàn diện",
     meta: [
       {
         charset: "utf-8",
