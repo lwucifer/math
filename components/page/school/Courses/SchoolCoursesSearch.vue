@@ -1,8 +1,8 @@
 <template>
   <div class="wrap-courses-school">
       <div class="d-flex align-items-center">
-          <h3>{{ get(this,'typeSearch','') }}</h3>
-          <p class="ml-3">(<strong>50</strong> Bài giảng - <strong>20</strong> khóa học)</p>
+          <h3>{{ get(this,'titleSearch','') }}</h3>
+          <p class="ml-3">(<strong>{{get(this,'lectures.content.length',0)}}</strong> Bài giảng - <strong>{{get(this,'courses.content.length',0)}}</strong> khóa học)</p>
       </div>
       <div class="d-flex mb-5 mt-3">
           <div class="filter-form-school">
@@ -41,29 +41,29 @@
           </div>
           <div class="sort-courses-school">
               <span class="nowrap mr-3">Sắp xếp theo:</span>
-              <app-vue-select
+              <app-select
                     class="app-vue-select w-100"
                     placeholder="Mới nhất"
                     has-border
+                    :options="sortOpts"
+                    size="sm"
                   />
           </div>
       </div>
-      <div class="school-course-menu-tab">
+      <div class="school-course-menu-tab d-flex">
         <span @click="changeTab('1')">
-            <n-link 
+            <div
                 :class="tab=='1' ?  'active' : ''"
-                to
             >
                 BÀI GIẢNG
-            </n-link>
+            </div>
         </span>
         <span  @click="changeTab('2')">
-            <n-link 
+            <div 
                 :class="tab=='2' ?  'active' : ''"
-                to
             >
                 KHÓA HỌC
-            </n-link>
+            </div>
         </span>
       </div>
 
@@ -91,7 +91,7 @@
         />
       </div>
 
-      <div class="row list-course-school-search" v-if="tab=='2'">
+      <div class="row list-course-school-search" v-else-if="tab=='2'">
         <div
           v-for="item in lectures && lectures.content || []"
           :key="item.id"
@@ -112,7 +112,7 @@ import CourseItem2 from "~/components/page/course/CourseItem2";
 import { VclList } from "vue-content-loading";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { ELEARNING_TYPES, SUBJECT_CODE } from "~/utils/constants";
+import { ELEARNING_TYPES, SUBJECT_CODE, SORT_ELEARNING} from "~/utils/constants";
 import { get } from "lodash";
 import { optionSelectSubject } from "~/utils/common";
 
@@ -120,12 +120,6 @@ export default {
     components:{
         CourseItem2,
         VclList
-    },
-    props:{
-        typeSearch:{
-            type: String,
-            default: 'Bài giảng - Khóa học'
-        },
     },
     data(){
         return{
@@ -140,7 +134,6 @@ export default {
                 number: 1
             },
             params: {
-                elearning_type: ELEARNING_TYPES.COURSE,
                 school_id: null,
                 subject: null,
                 teacher: null,
@@ -163,6 +156,21 @@ export default {
                 { value: "2h-4h", text: "2 - 4 giờ" },
                 { value: "4h+", text: "Trên 4 giờ" }
             ],
+            sortOpts: [
+                { value: SORT_ELEARNING.RELATED, text: "Liên quan nhất" },
+                { value: SORT_ELEARNING.RATE, text: "Đánh giá cao nhất" },
+                { value: SORT_ELEARNING.COMMENT, text: "Nhiều bình luận nhất" },
+                { value: SORT_ELEARNING.NEWEST, text: "Mới nhất" },
+                { value: SORT_ELEARNING.PRICE_ASC, text: "Giá thấp nhất" },
+                { value: SORT_ELEARNING.PRICE_DESC, text: "Giá cao nhất" }
+            ],
+            titleSearch:''
+
+        }
+    },
+    watch:{
+      '$route.query'(){
+          this.checkSearchByName()
         }
     },
     methods:{
@@ -170,6 +178,8 @@ export default {
             this.filterSelect =!this.filterSelect;
         },
         async fetchLectures(){
+            this.params.school_id = this.$route.params.id
+            this.updateFilter({elearning_type: "LECTURE"})
             const params = this.params
             const rs = await this.$store.dispatch(
                 `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
@@ -182,6 +192,8 @@ export default {
         async fetchCourses(){
             try {
                 this.loadingElearning = true
+                this.params.school_id = this.$route.params.id
+                this.updateFilter({elearning_type: "COURSE"})
                 const params = this.params
                 const rs = await this.$store.dispatch(
                     `elearning/school/school-elearning/${actionTypes.SCHOOL_ELEARNING.LIST}`,
@@ -201,22 +213,19 @@ export default {
                 `elearning/public/public-levels/${actionTypes.ELEARNING.LEVEL}`
             );
         },
+        checkSearchByName(){
+            const searchParams = this.$route.query.searchBy
+            const subjectName = this.$route.query.name
+            if(searchParams && subjectName){
+                this.params.subject = subjectName;
+                this.titleSearch = subjectName
+            }
+        },
         changeTab(val){
             this.tab = val;
         },
-        initParams(elearningType = ELEARNING_TYPES.LECTURE) {
-            this.params = {
-                elearning_type: ELEARNING_TYPES.COURSE,
-                school_id: this.$route.params.id,
-                teacher: null,
-                fee: null,
-                level: null,
-                page: 1,
-                size: 12,
-            }
-        },
         updateFilter(data) {
-            this.params = { ...data }
+            this.params = { ...this.params, ...data }
         },
         updatePagination() {
             let paginationData;
@@ -278,7 +287,7 @@ export default {
         },
     },
     async created(){
-        this.initParams()
+        this.checkSearchByName();
         await Promise.all([
             this.fetchLevels(),
             this.fetchLectures(),
