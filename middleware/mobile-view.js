@@ -11,7 +11,7 @@ export default function({ req, store, redirect, isMobile }) {
       !desktopView && store.commit("setDesktopView", true);
     } else {
       store.commit("setDesktopView", false);
-      // redirect("/mobile");
+      redirect("/mobile");
     }
   }
 }
