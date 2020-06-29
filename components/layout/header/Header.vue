@@ -223,7 +223,7 @@ export default {
     if(this.checkRouteClearKeyword == PARAM_CHECK.ELEARNING_SEARCH){
       this.valueInput = this.keywordSearchHeader;
     }
-    this.$fireMess.onMessage(payload => {
+    this.$fireMess && this.$fireMess.onMessage(payload => {
       console.log("Message received. ", payload);
       const data = {
         ...payload.data,

@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import TheHeader from "~/components/layout/header/Header"
 
 export default {
@@ -15,6 +16,26 @@ export default {
   
   components: {
     TheHeader
+  },
+
+  head() {
+    if (this.$device.isMobile && this.desktopView) {
+      return {
+        meta: [
+          {
+            hid: "viewport",
+            name: "viewport",
+            content: "width=1200, user-scalable=yes"
+          }
+        ]
+      };
+    } else {
+      return {}
+    }
+  },
+
+  computed: {
+    ...mapState(["desktopView"])
   }
 }
 </script>

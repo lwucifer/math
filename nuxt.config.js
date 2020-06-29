@@ -11,7 +11,7 @@ module.exports = {
       },
       {
         name: "viewport",
-        content: "user-scalable=no",
+        content: "width=device-width, user-scalable=no, initial-scale=1",
       },
       {
         hid: "description",
@@ -89,7 +89,7 @@ module.exports = {
      * Global middleware
      */
     router: {
-        middleware: ["check-auth", "watch-route"]
+        middleware: ["check-auth", "mobile-view", "watch-route"]
     },
 
   /*

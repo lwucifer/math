@@ -1,63 +1,57 @@
 <template>
   <div class="homepage py-0">
-    <div v-if="$device.isMobile">
-      <HomeMobile />
-    </div>
-    <div v-else>
-      <HomeBanner :isLogin="isAuthenticated"/>
-      <SubBanner/>
+    <HomeBanner :isLogin="isAuthenticated" />
+    <SubBanner />
 
-      <div v-if="pageLoading" class="container mt-6">
-        <div class="row">
-          <div v-for="i in 16" :key="i" class="col-md-3 mb-6">
-            <div class="bg-white py-6 px-3">
-              <VclList />
-            </div>
+    <div v-if="pageLoading" class="container mt-6">
+      <div class="row">
+        <div v-for="i in 16" :key="i" class="col-md-3 mb-6">
+          <div class="bg-white py-6 px-3">
+            <VclList />
           </div>
         </div>
       </div>
-
-      <div v-else class="container mt-6">
-        <ElearningHomeBox class="elearning-home-box" title="Học gì tiếp theo">
-          <ul slot="title-right" class="elearning-home-box__tab">
-            <li v-for="tab in whatNextsTabs" :key="tab.value">
-              <a
-                href="javscript:;"
-                :class="{ 'active': whatNextsTab === tab.value }"
-                @click.prevent="changeWhatNextsTab(tab.value)"
-              >{{ tab.text }}</a>
-            </li>
-          </ul>
-
-          <app-carousel
-            :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
-            ref="whatNextsCarousel"
-          >
-            <template slot="default" slot-scope="{ classes }">
-              <div
-                v-for="item in whatNexts && whatNexts.content || []"
-                :key="item.elearning_id"
-                :class="classes"
-              >
-                <div v-if="whatNextsLoading" class="bg-white py-6 px-4">
-                  <vcl-list />
-                </div>
-
-                <CourseItem2 v-else class="my-0" :item="item" :size="'sm'" />
-              </div>
-            </template>
-          </app-carousel>
-        </ElearningHomeBox>
-
-      </div>
-
-      <HowToLearn/>
-      <LearnCoursera/>
-      <LearnEverywhere/>
-      <NumberHighlight/>
-      <Feedback/>
-      <EveryDevices/>
     </div>
+
+    <div v-else class="container mt-6">
+      <ElearningHomeBox class="elearning-home-box" title="Học gì tiếp theo">
+        <ul slot="title-right" class="elearning-home-box__tab">
+          <li v-for="tab in whatNextsTabs" :key="tab.value">
+            <a
+              href="javscript:;"
+              :class="{ 'active': whatNextsTab === tab.value }"
+              @click.prevent="changeWhatNextsTab(tab.value)"
+            >{{ tab.text }}</a>
+          </li>
+        </ul>
+
+        <app-carousel
+          :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
+          ref="whatNextsCarousel"
+        >
+          <template slot="default" slot-scope="{ classes }">
+            <div
+              v-for="item in whatNexts && whatNexts.content || []"
+              :key="item.elearning_id"
+              :class="classes"
+            >
+              <div v-if="whatNextsLoading" class="bg-white py-6 px-4">
+                <vcl-list />
+              </div>
+
+              <CourseItem2 v-else class="my-0" :item="item" :size="'sm'" />
+            </div>
+          </template>
+        </app-carousel>
+      </ElearningHomeBox>
+    </div>
+
+    <HowToLearn />
+    <LearnCoursera />
+    <LearnEverywhere />
+    <NumberHighlight />
+    <Feedback />
+    <EveryDevices />
   </div>
 </template>
 
@@ -110,10 +104,8 @@ import NumberHighlight from "~/components/page/home/NumberHighlight";
 import Feedback from "~/components/page/home/Feedback";
 import EveryDevices from "~/components/page/home/EveryDevices";
 import CourseItem2 from "~/components/page/course/CourseItem2";
-import HomeMobile from "~/components/page/home/HomeMobile";
 
 export default {
-  layout: (ctx) => ctx.isMobile ? "empty" : "default",
   components: {
     VclList,
     HomeBanner,
@@ -127,7 +119,6 @@ export default {
     IconArrowForwardIos,
     Feedback,
     EveryDevices,
-    HomeMobile
   },
 
   async fetch({ params, query, store }) {
@@ -214,8 +205,7 @@ export default {
     ...mapState("elearning/public/public-highlight-teachers", [
       "highlightTeachers"
     ]),
-
-    ...mapGetters("auth", ["isAuthenticated"]),
+    ...mapGetters("auth", ["isAuthenticated"])
   },
 
   mounted() {

@@ -1,7 +1,9 @@
 import { forEach, get } from "lodash";
 import Fingerprint2 from "fingerprintjs2";
+import Cookie from "js-cookie";
 import * as constants from "~/utils/constants";
 import { setDeviceId, setDeviceOs } from "./auth";
+import { DESKTOP_VIEW } from "./config";
 
 export function getBase64(img, callback) {
   const reader = new FileReader();
@@ -256,3 +258,22 @@ export const removeTagHtml = (_text) => {
   const content = _text.replace(/(<([^>]+)>)/gi, "");
   return content;
 };
+
+export const getDesktopView = () => {
+  if (process.server) return;
+  return window.sessionStorage.getItem(DESKTOP_VIEW)
+}
+
+export const getDesktopViewFromCookie = (req) => {
+  // return Cookie.get(DESKTOP_VIEW);
+  if (!req || !req.headers || !req.headers.cookie) return
+  const view = req.headers.cookie.split(';').find(c => c.trim().startsWith(DESKTOP_VIEW))
+  if (!view) return null;
+  return (view.split('=')[1])
+}
+
+export const setDesktopView = (view) => {
+  Cookie.set(DESKTOP_VIEW, view);
+  if (process.server) return;
+  window.sessionStorage.setItem(DESKTOP_VIEW, view)
+}
