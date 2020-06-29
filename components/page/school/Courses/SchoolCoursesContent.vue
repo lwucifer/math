@@ -5,52 +5,57 @@
           <ElearningHomeBox>
             <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
 
-            <AppCarouseSchool
-              class="pb-2"
-              :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn: 2 }"
-            >
-              <template slot="default" slot-scope="{ classes }">
-                <div
-                  v-for="item in newestLecture && newestLecture.content || []"
-                  :key="item.id"
-                  :class="classes"
-                >
-                  <CourseItem2 class="my-0" :item="item" :size="'sm'" />
-                </div>
-              </template>
-            </AppCarouseSchool>
-            <div class="text-center mt-5">
-                <app-button class="btn-show-all" @click="searchElearning">Xem tất cả</app-button>
+            <div v-if="get(this,'newestCourse.content.length',0)">
+              <AppCarouseSchool
+                class="pb-2"
+                :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn: 2 }"
+              >
+                <template slot="default" slot-scope="{ classes }">
+                  <div
+                    v-for="item in newestLecture && newestLecture.content || []"
+                    :key="item.id"
+                    :class="classes"
+                  >
+                    <CourseItem2 class="my-0" :item="item" :size="'sm'" />
+                  </div>
+                </template>
+              </AppCarouseSchool>
+              <div class="text-center mt-5">
+                  <app-button class="btn-show-all" @click="searchElearning">Xem tất cả</app-button>
+              </div>
             </div>
+            <div v-else>Chưa có thông tin</div>
           </ElearningHomeBox>
         </div>
         <div class="highlight pt-0 mt-4">
           <ElearningHomeBox>
             <h2 slot="title" class="heading-3 font-weight-medium mb-4">Khóa học nổi bật</h2>
 
-            <AppCarouseSchool
-              class="pb-2"
-              :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn: 2 }"
-            >
-              <template slot="default" slot-scope="{ classes }">
-                <div
-                  v-for="item in newestCourse && newestCourse.content || []"
-                  :key="item.id"
-                  :class="classes"
-                >
-                  <CourseItem2 class="my-0" :item="item" :size="'sm'" />
-                </div>
-              </template>
-            </AppCarouseSchool>
-            <div class="text-center mt-5">
-                <app-button class="btn-show-all">Xem tất cả</app-button>
+            <div v-if="get(this,'newestCourse.content.length',0)">
+              <AppCarouseSchool
+                class="pb-2"
+                :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn: 2 }"
+              >
+                <template slot="default" slot-scope="{ classes }">
+                  <div
+                    v-for="item in newestCourse && newestCourse.content || []"
+                    :key="item.id"
+                    :class="classes"
+                  >
+                    <CourseItem2 class="my-0" :item="item" :size="'sm'" />
+                  </div>
+                </template>
+              </AppCarouseSchool>
+              <div class="text-center mt-5">
+                  <app-button class="btn-show-all">Xem tất cả</app-button>
+              </div>
             </div>
+            <div v-else>Chưa có thông tin</div>
           </ElearningHomeBox>
         </div>
     </div>
     <SchoolCoursesSearch 
       v-else
-      :typeSearch="typeSearch"
       :paramsSearch="paramsSearch"
     />
 </template>
@@ -76,21 +81,19 @@ export default {
     data(){
         return{
             isSearch:false,
-            typeSearch:'',
             paramsSearch:{
               elearning_type:null,
-              subject:null
+              subject:null,
             }
         }
     },
     watch:{
       '$route.query'(news,old){
-          if(news.tab == 'courses' && news.searchBy){
-            this.isSearch = true
-          }
+         this.checkQueryParams()
         }
     },
     methods:{
+      /*
         fetchNewestLecture(){
             const rs = this.$store.dispatch(
                 `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_LECTURE}`,
@@ -111,14 +114,28 @@ export default {
                 }
             );
         },
+        */
         searchElearning(val){
-            this.typeSearch = val.name;
-            this.$router.push({query: { tab: 'courses', searchBy: 'subject', id: val.subject_id}})
-        }
+            this.$router.push({query: { tab: 'courses', searchBy: 'subject', name: val.name}})
+        },
+        checkQueryParams(){
+          const searchParams = this.$route.query.searchBy
+          const tabParams = this.$route.query.tab
+          if(tabParams == 'courses' && searchParams){
+            this.isSearch = true
+          }
+          else{
+            this.isSearch = false
+          }
+        },
+        get
     },
     created(){
+      this.checkQueryParams()
+      /*
         this.fetchNewestLecture();
         this.fetchtNewestCourse();
+      */
     },
     computed:{
         ...mapState("elearning/public/public-newest", [

@@ -122,9 +122,9 @@ export default {
     price() {
       if (this.item.elearning_price) return this.item.elearning_price;
       return {
-        discount: get(this.item.price.price ? this.item.price : this.item, "discount", 0),
-        original_price: get(this.item.price.price ? this.item.price : this.item, "original_price", 0),
-        price: get(this.item.price.price ? this.item.price : this.item, "price", 0),
+        discount: get(this.item.price && this.item.price.price ? this.item.price : this.item, "discount", 0),
+        original_price: get(this.item.price && this.item.price.price ? this.item.price : this.item, "original_price", 0),
+        price: get(this.item.price && this.item.price.price ? this.item.price : this.item, "price", 0),
       };
     },
 

@@ -8,6 +8,7 @@
       </div>
       <AppCarouseSchool
         :options="{ slidesPerView: 6, spaceBetween: 22, preventClicksPropagation: false,pagination:true }"
+          v-if="get(this,'schoolSubjects.length',0)"
         > 
          <template slot="default" slot-scope="{ classes }">
              <div v-for="(item,index) in schoolSubjects" :key="index" :class="classes">
@@ -19,6 +20,7 @@
             </div>
          </template>
       </AppCarouseSchool>
+      <div v-else>Chưa có thông tin</div>
   </div>
 </template>
 
