@@ -23,9 +23,8 @@
               :options="classList"
               label="text"
               placeholder="Chọn lớp"
-              searchable
-              clearable
               @input="handleChangedClass"
+              has-border
             ></app-vue-select>
           </div>
         </div>
@@ -39,8 +38,8 @@
           <div class="item" v-for="(item, index) in studentList ? studentList : []" :key="index">
             <app-checkbox
               class="ml-auto"
-              @click="handleCheckbox(item.id)"
-              :checked="arrMember.includes(item.id)"
+              @click="handleCheckbox(item.student_id)"
+              :checked="arrMember.includes(item.student_id)"
             >{{item.name}}</app-checkbox>
           </div>
         </div>
@@ -99,6 +98,10 @@ export default {
   },
 
   methods: {
+    closeNotify() {
+      this.notify.showNotify = false;
+    },
+
     close(invite) {
       this.$emit("close", invite);
     },
@@ -155,6 +158,7 @@ export default {
 
     async handleChangedClass() {
       this.checkAll = false;
+      this.arrMember = [];
       if (this.classSelected) {
         let params = {
           class_id: this.classSelected.value,
@@ -180,7 +184,9 @@ export default {
       this.checkAll = !this.checkAll;
       this.$nextTick(() => {
         if (this.checkAll) {
-          this.arrMember = this.studentList.map(item => item.id);
+          this.studentList.forEach(item => {
+            if (item.student_id) this.arrMember.push(item.student_id);
+          });
         } else {
           this.arrMember = [];
         }
