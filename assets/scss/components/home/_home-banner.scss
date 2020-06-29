@@ -23,12 +23,6 @@
         font-weight: 500;
         color: $color-text-white;
         margin-bottom: 2.6rem;
-
-        span {
-            @media (min-width: 768px) {
-                display: block;
-            }
-        }
     }
 
     &__btn {
