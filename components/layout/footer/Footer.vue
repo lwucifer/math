@@ -7,8 +7,8 @@
             <img src="/images/bo-cong-thuong.png" width="147" alt="Đã đăng ký bộ công thương" />
           </n-link>
           <div class="footer__brand-desc">
-            <p>Công ty cổ phần giáo dục Schoolly</p>
-            <p>MST: 022556685 do Sở kế hoạch và Đầu tư TP Hà Nội cấp ngày 27 tháng 08 năm 2013</p>
+            <p>Công ty cổ phần giáo dục Schoolly Việt Nam</p>
+            <p>MST: 0109235899 do Sở kế hoạch và Đầu tư TP Hà Nội cấp ngày 22 tháng 06 năm 2020</p>
             <p>Tầng 4, 62 Nguyễn Huy Tưởng, Thanh Xuân, Hà Nội</p>
           </div>
         </div>
@@ -20,13 +20,13 @@
               <a href>Giới thiệu Schoolly</a>
             </li>
             <li>
-              <a href>Điều khoản sử dụng</a>
+              <n-link to="/policy-security">Điều khoản sử dụng</n-link> 
             </li>
             <li>
-              <a href>Chính sách bảo mật thông tin</a>
+              <n-link to="/policy-security/term-of-use">Chính sách bảo mật thông tin</n-link>
             </li>
             <li>
-              <a href>Chính sách hoàn tiền</a>
+              <n-link to="/policy-security/refund-policy">Chính sách hoàn tiền</n-link>
             </li>
           </ul>
         </div>

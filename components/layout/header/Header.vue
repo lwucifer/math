@@ -25,7 +25,7 @@
 
         <n-link class="item" to="/coming-soon">
           <IconCommentAltMessage />
-          <span class="number">9</span>
+          <!-- <span class="number">9</span> -->
         </n-link>
         <n-link class="item" to="/payment/cart">
           <IconShoppingCart24px class="fill-gray" />
