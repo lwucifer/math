@@ -38,11 +38,14 @@
 </template>
 
 <script>
+import { get } from "lodash";
+import * as actionTypes from "~/utils/action-types";
 import IconFilter from "~/assets/svg/icons/filter.svg?inline";
 import { ELEARNING_TYPES, ELEARNING_STATUSES } from "~/utils/constants";
 import { mapState } from "vuex";
-const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
-const STORE_PUBLIC_CLASSES = "elearning/teaching/public-classes";
+
+const STORE_SCHOOL_CLASSES = "elearning/teaching/classes";
+
 export default {
   components: {
     IconFilter
@@ -54,7 +57,8 @@ export default {
         class: null,
         keyword: "",
       },
-      initStatus: true
+      initStatus: true,
+      classList: []
     };
   },
   props:{
@@ -64,10 +68,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(STORE_SCHOOL_CLASSES, ["schoolClasses"]),
-    ...mapState(STORE_PUBLIC_CLASSES, ["publicClassesList"]),
+    ...mapState(STORE_SCHOOL_CLASSES, {
+      stateSchoolClasses: "teachingClasses"
+    }),
     filterSelectClass() {
-      const dataFilter = this.publicClassesList ? this.publicClassesList : [];
+      const dataFilter = this.classList ? this.classList : [];
       const data = dataFilter.map(item => {
         return {
           value: item.id,
@@ -95,6 +100,21 @@ export default {
     }
   },
   methods: {
+    get, 
+    async getClass() {
+      try {
+        let params = {
+          size: 9999
+        };
+        await this.$store.dispatch(
+          `${STORE_SCHOOL_CLASSES}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`, {params}
+        );
+        this.classList = this.get(this.stateSchoolClasses, "content", []);
+      } catch (e) {
+      } finally {
+      }
+    },
+
     submit() {
       if (this.filters.keyword != "") {
         this.$emit("submitFilter", this.filters);
@@ -129,7 +149,10 @@ export default {
         this.$emit("submitFilter", this.filters);
       }
     }
-  }
+  },
+  created () {
+    this.getClass();
+  },
 };
 </script>
 

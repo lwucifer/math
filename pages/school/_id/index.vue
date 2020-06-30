@@ -17,11 +17,11 @@
 
             <AppCarouseSchool
               :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
-              v-if="get(this,'newestLecture.content.length',0)"
+              v-if="get(this,'highlightLecture.content.length',0)"
             >
               <template slot="default" slot-scope="{ classes }">
                 <div
-                  v-for="item in newestLecture && newestLecture.content || []"
+                  v-for="item in highlightLecture && highlightLecture.content || []"
                   :key="item.id"
                   :class="classes"
                 >
@@ -39,11 +39,11 @@
 
             <AppCarouseSchool
               :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false }"
-              v-if="get(this,'newestCourse.content.length',0)"
+              v-if="get(this,'highlightCourse.content.length',0)"
             >
               <template slot="default" slot-scope="{ classes }">
                 <div
-                  v-for="item in newestCourse && newestCourse.content || []"
+                  v-for="item in highlightCourse && highlightCourse.content || []"
                   :key="item.id"
                   :class="classes"
                 >
@@ -51,7 +51,7 @@
                 </div>
               </template>
             </AppCarouseSchool>
-            <div>Chưa có thông tin</div>
+            <div v-else>Chưa có thông tin</div>
           </ElearningHomeBox>
         </div>
 
@@ -137,32 +137,33 @@ export default {
       `elearning/school/school-info/${actionTypes.SCHOOL_INFO.INFO}`,
       data
     );
-    /*
-    const getNewestLecture = () =>
+    
+    const getHighlightLecture = () =>
       store.dispatch(
-        `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_LECTURE}`,
+        `elearning/school/school-highlight-elearning/${actionTypes.SCHOOL_HIGHTLIGHT_ELEARNING.LIST}`,
         {
           params: {
-            type: ELEARNING_TYPES.LECTURE
+            type: ELEARNING_TYPES.LECTURE,
+            school_id: data.school_id
           }
         }
       );
 
-    const getNewestCourse = () =>
+    const getHighlightCourse = () =>
       store.dispatch(
-        `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_COURSE}`,
+        `elearning/school/school-highlight-elearning/${actionTypes.SCHOOL_HIGHTLIGHT_ELEARNING.LIST}`,
         {
           params: {
-            type: ELEARNING_TYPES.COURSE
+            type: ELEARNING_TYPES.COURSE,
+            school_id: data.school_id
           }
         }
       );
     
     return await Promise.all([
-      getNewestLecture(),
-      getNewestCourse()
+      getHighlightLecture(),
+      getHighlightCourse()
     ]);
-    */
   },
 
   data() {
@@ -175,9 +176,9 @@ export default {
   computed: {
     ...mapState("elearning/school/school-info", { school: "schoolInfo" }),
     ...mapState("elearning/school/school-organization", { organization: "schoolOrganization" }),
-    ...mapState("elearning/public/public-newest", [
-      "newestLecture",
-      "newestCourse"
+    ...mapState("elearning/school/school-highlight-elearning", [
+      "highlightLecture",
+      "highlightCourse"
     ]),
   },
 

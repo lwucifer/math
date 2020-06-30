@@ -5,14 +5,14 @@
           <ElearningHomeBox>
             <h2 slot="title" class="heading-3 font-weight-medium mb-4">Bài giảng nổi bật</h2>
 
-            <div v-if="get(this,'newestCourse.content.length',0)">
+            <div v-if="get(this,'highlightLecture.content.length',0)">
               <AppCarouseSchool
                 class="pb-2"
-                :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn: 2 }"
+                :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn: get(this,'highlightLecture.content.length',0) > 4 ? 2 : 1  }"
               >
                 <template slot="default" slot-scope="{ classes }">
                   <div
-                    v-for="item in newestLecture && newestLecture.content || []"
+                    v-for="item in highlightLecture && highlightLecture.content || []"
                     :key="item.id"
                     :class="classes"
                   >
@@ -21,7 +21,7 @@
                 </template>
               </AppCarouseSchool>
               <div class="text-center mt-5">
-                  <app-button class="btn-show-all" @click="searchElearning">Xem tất cả</app-button>
+                  <app-button class="btn-show-all" @click="getAllElearning('lecture')">Xem tất cả</app-button>
               </div>
             </div>
             <div v-else>Chưa có thông tin</div>
@@ -31,14 +31,14 @@
           <ElearningHomeBox>
             <h2 slot="title" class="heading-3 font-weight-medium mb-4">Khóa học nổi bật</h2>
 
-            <div v-if="get(this,'newestCourse.content.length',0)">
+            <div v-if="get(this,'highlightCourse.content.length',0)">
               <AppCarouseSchool
                 class="pb-2"
-                :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn: 2 }"
+                :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn: get(this,'highlightCourse.content.length',0) > 4 ? 2 : 1 }"
               >
                 <template slot="default" slot-scope="{ classes }">
                   <div
-                    v-for="item in newestCourse && newestCourse.content || []"
+                    v-for="item in highlightCourse && highlightCourse.content || []"
                     :key="item.id"
                     :class="classes"
                   >
@@ -47,7 +47,7 @@
                 </template>
               </AppCarouseSchool>
               <div class="text-center mt-5">
-                  <app-button class="btn-show-all">Xem tất cả</app-button>
+                  <app-button class="btn-show-all" @click="getAllElearning('course')">Xem tất cả</app-button>
               </div>
             </div>
             <div v-else>Chưa có thông tin</div>
@@ -90,33 +90,38 @@ export default {
     watch:{
       '$route.query'(news,old){
          this.checkQueryParams()
-        }
+        },
     },
     methods:{
-      /*
-        fetchNewestLecture(){
+      
+        fetchHighlightLecture(){
             const rs = this.$store.dispatch(
-                `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_LECTURE}`,
+                `elearning/school/school-highlight-elearning/${actionTypes.SCHOOL_HIGHTLIGHT_ELEARNING.LIST}`,
                 {
-                params: {
-                    type: ELEARNING_TYPES.LECTURE
-                }
+                  params: {
+                    type: ELEARNING_TYPES.LECTURE,
+                    school_id: this.$route.params.id
+                  }
                 }
             );
         },
-        fetchtNewestCourse(){
+        fetchtHighlightCourse(){
             const res = this.$store.dispatch(
-                `elearning/public/public-newest/${actionTypes.ELEARNING_PUBLIC_NEWEST.LIST_COURSE}`,
+                `elearning/school/school-highlight-elearning/${actionTypes.SCHOOL_HIGHTLIGHT_ELEARNING.LIST}`,
                 {
-                params: {
-                    type: ELEARNING_TYPES.COURSE
-                }
+                  params: {
+                    type: ELEARNING_TYPES.COURSE,
+                    school_id: this.$route.params.id
+                  }
                 }
             );
         },
-        */
+      
         searchElearning(val){
             this.$router.push({query: { tab: 'courses', searchBy: 'subject', name: val.name}})
+        },
+        getAllElearning(str){
+            this.$router.push({query: { tab: 'courses', searchBy: str,}})
         },
         checkQueryParams(){
           const searchParams = this.$route.query.searchBy
@@ -132,15 +137,13 @@ export default {
     },
     created(){
       this.checkQueryParams()
-      /*
-        this.fetchNewestLecture();
-        this.fetchtNewestCourse();
-      */
+      this.fetchHighlightLecture();
+      this.fetchtHighlightCourse();
     },
     computed:{
-        ...mapState("elearning/public/public-newest", [
-            "newestLecture",
-            "newestCourse"
+        ...mapState("elearning/school/school-highlight-elearning", [
+            "highlightCourse",
+            "highlightLecture"
         ]),
     }
 }
