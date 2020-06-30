@@ -167,7 +167,7 @@ export default {
         try {
           await this.$store.dispatch(
             `${STORE_SCHOOL_STUDENT}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
-            params
+            {params}
           );
           this.studentList = this.get(
             this.stateSchoolStudents,
