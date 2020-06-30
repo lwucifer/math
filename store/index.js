@@ -3,6 +3,7 @@ import { getTokenFromCookie } from '~/utils/auth.js';
 
 const state = () => ({
   authUser: null,
+  desktopView: false
 });
 
 const actions = {
@@ -29,6 +30,9 @@ const mutations = {
   // setUser(state, user) {
   //   state.authUser = user;
   // },
+  setDesktopView(state, desktopView) {
+    state.desktopView = desktopView
+  }
 };
 
 export default {

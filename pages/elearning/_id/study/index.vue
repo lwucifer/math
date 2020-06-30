@@ -97,8 +97,18 @@
                   ></iframe>
 
                   <!-- SCORM TEST -->
-                  <!-- <ScormLecture v-if="studyMode === articleMode" /> -->
                   <ScormLecture v-if="studyMode == scormMode" />
+
+                  <!-- AUDIO MODE -->
+                  <Streaming
+                    v-if="studyMode == audioMode"
+                    :url="get(payload, 'link', '')"
+                    :thumbnail="
+                      get(info, 'cover_url.high', '') ||
+                        '/images/adefltu - course - image.png'
+                    "
+                  />
+
                 </div>
 
                 <!-- DO EXERCISE -->
@@ -247,7 +257,8 @@ export default {
       docMode: STUDY_MODE.DOCS,
       articleMode: STUDY_MODE.ARTICLE,
       imageMode: STUDY_MODE.IMAGE,
-      scormMode: STUDY_MODE.SCORM
+      scormMode: STUDY_MODE.SCORM,
+      audioMode: STUDY_MODE.AUDIO_PLAYING,
     };
   },
 

@@ -4,19 +4,79 @@ const webpack = require("webpack");
 module.exports = {
   dev: true,
   head: {
-    title: "Schoolly",
+    title: "Schoolly - Hệ thống giáo dục và đào tạo trực tuyến toàn diện",
     meta: [
       {
         charset: "utf-8",
       },
       {
         name: "viewport",
-        content: "width=device-width, initial-scale=1",
+        content: "width=device-width, user-scalable=no, initial-scale=1",
       },
       {
         hid: "description",
         name: "description",
-        content: "Nuxt full stack template for creating web app easily.",
+        content: "Schoolly là hệ thống E-learning duy nhất hiện nay đáp ứng đầy đủ và hiệu quả các nhu cầu của việc học trực tuyến tại trường Phổ thông cho nhiều đối tượng tham gia: học sinh, giáo viên, nhà trường.",
+      },
+      {
+        hid: 'keywords',
+        name: 'keywords',
+        content: 'schoolly, elearning, học trực tuyến, 4.0, E-learning'
+      },
+      {
+        hid: 'og:type',
+        property: 'og:type',
+        content: 'website'
+      },
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: 'Schoolly - Hệ thống giáo dục và đào tạo trực tuyến toàn diện'
+      },
+      {
+        hid: 'og:site_name',
+        property: 'og:site_name',
+        content: 'bcnex.net'
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: 'https://www.schoolly.vn/favicon/favicon.svg'
+      },
+      {
+        hid: 'description',
+        property: 'description',
+        content: 'Schoolly là hệ thống E-learning duy nhất hiện nay đáp ứng đầy đủ và hiệu quả các nhu cầu của việc học trực tuyến tại trường Phổ thông cho nhiều đối tượng tham gia: học sinh, giáo viên, nhà trường.'
+      },
+      {
+        hid: 'twitter:title',
+        property: 'twitter:title',
+        content: 'Schoolly - Hệ thống giáo dục và đào tạo trực tuyến toàn diện'
+      },
+      {
+        hid: 'twitter:card',
+        name: 'twitter:card',
+        content: 'summary_large_image'
+      },
+      {
+        hid: 'twitter:site',
+        name: 'twitter:site',
+        content: '@bcnex.net'
+      },
+      {
+        hid: 'twitter:image',
+        name: 'twitter:image',
+        content: 'https://www.schoolly.vn/favicon/favicon.svg'
+      },
+      {
+        hid: 'twitter:image:src',
+        name: 'twitter:image:src',
+        content: 'https://www.schoolly.vn/favicon/favicon.svg'
+      },
+      {
+        hid: 'twitter:description',
+        property: 'twitter:description',
+        content: 'Schoolly là hệ thống E-learning duy nhất hiện nay đáp ứng đầy đủ và hiệu quả các nhu cầu của việc học trực tuyến tại trường Phổ thông cho nhiều đối tượng tham gia: học sinh, giáo viên, nhà trường.'
       },
     ],
     link: [
@@ -89,7 +149,7 @@ module.exports = {
      * Global middleware
      */
     router: {
-        middleware: ["check-auth", "watch-route"]
+        middleware: ["check-auth", "mobile-view", "watch-route"]
     },
 
   /*

@@ -16,20 +16,30 @@
           </div>
 
           <div class="home-mobile__link">
-            <a href="/" target="_blank">Xem Schoolly phiên bản desktop</a>
+            <a href="/" @click.prevent="switchToDesktopView">Xem Schoolly phiên bản desktop</a>
           </div>
         </div>
     </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import IconLogo from "~/assets/svg/logo/schoolly.svg?inline";
+import { setDesktopView } from "~/utils/common";
 
 export default {
-  name: "HomeMonbile",
+  name: "HomeMobile",
 
   components: {
     IconLogo
+  },
+
+  methods: {
+    switchToDesktopView() {
+      setDesktopView(1);
+      this.$store.commit('setDesktopView', true);
+      this.$router.push('/')
+    }
   }
 }
 </script>

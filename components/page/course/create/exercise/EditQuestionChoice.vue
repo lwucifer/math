@@ -67,7 +67,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
-      description="Bạn có chắc chắn là muốn lưu thay đổi này?"
+      description="Bạn có chắc chắn muốn lưu thay đổi này?"
     />
   </div>
 </template>

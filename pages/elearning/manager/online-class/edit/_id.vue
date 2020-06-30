@@ -2,7 +2,6 @@
   <div>
     <div class="container">
       <breadcrumb />
-      {{stateOnlineClassInfo}}
       <div class="row">
         <div class="col-md-3 sub-side">
           <sub-side>
@@ -124,36 +123,43 @@
                             @change="check($event, 'MON', index)"
                             :checked="checkIncules(selectedItems[index],('MON'))"
                             label="Thứ 2"
+                            :isChangeLabelColor="true"
                           ></app-checkbox>
                           <app-checkbox
                             @change="check($event, 'TUE', index)"
                             :checked="checkIncules(selectedItems[index],('TUE'))"
                             label="Thứ 3"
+                            :isChangeLabelColor="true"
                           />
                           <app-checkbox
                             @change="check($event, 'WED', index)"
                             :checked="checkIncules(selectedItems[index],('WED'))"
                             label="Thứ 4"
+                            :isChangeLabelColor="true"
                           />
                           <app-checkbox
                             @change="check($event, 'THU', index)"
                             :checked="checkIncules(selectedItems[index],('THU'))"
                             label="Thứ 5"
+                            :isChangeLabelColor="true"
                           />
                           <app-checkbox
                             @change="check($event, 'FRI', index)"
                             :checked="checkIncules(selectedItems[index],('FRI'))"
                             label="Thứ 6"
+                            :isChangeLabelColor="true"
                           />
                           <app-checkbox
                             @change="check($event, 'SAT', index)"
                             :checked="checkIncules(selectedItems[index],('SAT'))"
                             label="Thứ 7"
+                            :isChangeLabelColor="true"
                           />
                           <app-checkbox
                             @change="check($event, 'SUN', index)"
                             :checked="checkIncules(selectedItems[index],('SUN'))"
                             label="Chủ nhật"
+                            :isChangeLabelColor="true"
                           />
                         </div>
                       </div>
@@ -665,20 +671,19 @@ export default {
       }
     },
 
-    arrayToString(data) {
-      return data.reduce((result, item) => {
-        const com = result ? "," : "";
-        return (result = result + com + item);
-      }, "");
-    },
-
     get
   },
 
   created() {
+    const that = this;
     this.params = this.get(this.stateOnlineClassInfo, 'data', {});
     this.schedules = this.get(this.stateOnlineClassInfo, 'data.schedules', []);
     let schedules = this.get(this.stateOnlineClassInfo, 'data.schedules', []);
+    schedules.forEach(function(item, index) {
+      that.selectedItems[index] = (item.days_of_week).split(',');
+      that.schedules[index] = {...that.schedules, start_time: '10:00 AM'}
+      //that.schedules[index] = {...that.schedules, duration: '2:30'}
+    });
   }
 };
 </script>

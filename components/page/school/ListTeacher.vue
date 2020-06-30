@@ -8,6 +8,8 @@
             <app-button
                 class="text-white"
                 color="primary"
+                nuxt
+                :to="'?tab=intro&type=organization'"
                 size="md">Xem tất cả</app-button>
         </div>
           

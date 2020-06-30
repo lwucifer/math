@@ -369,6 +369,12 @@ export const SCHOOL_ELEARNING = {
     SET_SCHOOL_ELEARNING_LECTURE: "setSchoolElearningLecture",
 };
 
+
+export const SCHOOL_HIGHTLIGHT_ELEARNING = {
+    SET_SCHOOL_HIGHTLIGHT_ELEARNING_COURSE: "setSchoolHightlightElearningCourse",
+    SET_SCHOOL_HIGHTLIGHT_ELEARNING_LECTURE: "setSchoolHightlightElearningLecture",
+};
+
 export const SCHOOL_PROFESSIONAL = {
     SET_SCHOOL_PROFESSIONAL_LIST: "setSchoolProfessionalList",
     SET_SCHOOL_PROFESSIONAL_ADD: "setSchoolProfessionalAdd",
@@ -394,12 +400,25 @@ export const SCHOOL_ORGANIZATION = {
     SET_SCHOOL_ORGANIZATION: "setSchoolOrganization",
 };
 
+export const SCHOOL_STAFFS = {
+    SET_SCHOOL_STAFFS: "setSchoolStaffs"
+};
+
+export const SCHOOL_LINK_WEBSITE = {
+    SET_SCHOOL_LINK_WEBSITE: "setSchoolLinkWebsiteList",
+};
+
+export const SCHOOL_SUBJECTS = {
+    SET_SCHOOL_SUBJECTS: "setSchoolSubjectList"
+};
+
 export const ELEARNING_STUDY = {
     SET_ELEARNING_STUDY: "setElearningStudy",
     SET_ELEARNING_STUDY_TIMETABLE: "setElearningStudyTimetable",
     SET_EXPAND: "setElearningStudyExpand",
     SET_FULLSCREEN: "setElearningStudyFullScreen",
     SET_SCORM_ITEMS: "setElearningStudyScormItems",
+    SET_SCORM_ITEM_ACTIVE: "setElearningStudyScormItemActive",
 };
 
 export const ELEARNING_STUDY_OVERVIEW = {

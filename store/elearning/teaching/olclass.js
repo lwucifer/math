@@ -37,9 +37,7 @@ const getters = {};
 const actions = {
   async [actionTypes.TEACHING_OLCLASSES.LIST]({ commit }, options) {
     try {
-      const result = await new OlClass(this.$axios)[actionTypes.BASE.LIST](
-        options
-      );
+      const result = await new OlClass(this.$axios)[actionTypes.BASE.LIST](options);
       commit(
         mutationTypes.TEACHING_OLCLASSES.SET_TEACHING_OLCLASS_LIST,
         result

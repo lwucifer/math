@@ -21,15 +21,16 @@
 
       <template v-slot:cell(confirm)="{row}">
         <td style="width:40%;">
-          <app-button square size="sm" color="transparent" @click="acceptStudent(row.student_id)">
-            <IconCheckGreen class="icon mr-2" />Xác nhận
+          <app-button square size="sm" normal color="transparent" @click="accept(row.user_id)">
+            <IconCheckGreen class="icon mr-2" />Đồng ý
           </app-button>
           <app-button
+            normal
             square
             size="sm"
             color="transparent"
             class="text-secondary"
-            @click="rejectStudent(row.student_id)"
+            @click="reject(row.user_id)"
           >
             <IconClear24px class="icon mr-2" />Từ chối
           </app-button>
@@ -71,6 +72,25 @@
       </template>
     </app-table>
     <!--End table-->
+
+    <app-modal-confirm
+      v-if="showModalAccept"
+      :confirmLoading="confirmLoadingAccept"
+      @ok="acceptStudent"
+      :width="550"
+      @cancel="showModalAccept = false"
+      title="Bạn chấp nhận học sinh này?"
+      description="Học sinh này sẽ được tham gia học và làm bài"
+    />
+    <app-modal-confirm
+      v-if="showModalReject"
+      :confirmLoading="confirmLoadingReject"
+      @ok="rejectStudent"
+      :width="550"
+      @cancel="showModalReject = false"
+      title="Bạn từ chối học sinh này?"
+      description="Học sinh này sẽ không được tham gia học và làm bài"
+    />
   </div>
 </template>
 
@@ -136,7 +156,13 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      confirmLoadingAccept: false,
+      confirmLoadingReject: false,
+      showModalAccept: false,
+      showModalReject: false,
+      id: ''
+    };
   },
 
   computed: {
@@ -153,14 +179,25 @@ export default {
     onPageChange(e) {
       this.$emit("changedPagination", e);
     },
-    acceptStudent(_id) {
+    accept(_id) {
+      this.id = _id;
+      this.showModalAccept = true;
+    },
+    reject(_id) {
+      this.id = _id;
+      this.showModalReject = true;
+    },
+    acceptStudent() {
       const data = {
         elearning_id: this.filterElearningId,
-        student_id: _id,
+        user_id: this.id,
         accept: true
       };
+      this.confirmLoadingAccept = true;
       this.teachingElearningAccept(data).then(result => {
         if (result && result.success == true) {
+          this.showModalAccept = false;
+          this.confirmLoadingAccept = false;
           this.teachingElearningRequestsList({
             params: {
               elearning_id: this.filterElearningId
@@ -169,14 +206,17 @@ export default {
         }
       });
     },
-    rejectStudent(_id) {
+    rejectStudent() {
       const data = {
         elearning_id: this.filterElearningId,
-        student_id: _id,
+        user_id: this.id,
         accept: false
       };
+      this.confirmLoadingReject = true;
       this.teachingElearningAccept(data).then(result => {
         if (result && result.success == true) {
+          this.showModalReject = false;
+          this.confirmLoadingReject = false;
           this.teachingElearningRequestsList({
             params: {
               elearning_id: this.filterElearningId
@@ -196,6 +236,13 @@ export default {
   .fill-red {
     position: absolute;
     left: calc(100% + 5px);
+  }
+}
+.elearning-manager-content__main {
+  .btn:hover,
+  .btn:active,
+  .btn:focus {
+    box-shadow: none;
   }
 }
 </style>

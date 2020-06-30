@@ -8,21 +8,29 @@
                     <VclList/>
                 </div>
                 <div v-else>
-                    <div class="notify-item-school" v-for="(item,index) in get(this,'announcementsList.content',[])" :key="index" @click="showDetailNotify(item.id)">
-                        <div class="circle-background">
-                            <IconEmail24px class="fill-primary"/>
+                    <div v-if="get(this,'announcementsList.content.length',0)">
+                        <div 
+                            class="notify-item-school" 
+                            v-for="(item,index) in get(this,'announcementsList.content',[])" 
+                            :key="index" 
+                            @click="showDetailNotify(item.id)"
+                        >
+                            <div class="circle-background">
+                                <IconEmail24px class="fill-primary"/>
+                            </div>
+                            <div>
+                                <p class="title-notify">{{ get(item,'title','') }}</p>
+                                <p class="short-desc-notify-school" v-html="get(item,'short_desc','')"></p>
+                                <p class="text-sub">{{ get(item,'updated','') | moment('DD/MM/YYYY')}}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="title-notify">{{ get(item,'title','') }}</p>
-                            <p v-html="get(item,'short_desc','')"></p>
-                            <p class="text-sub">{{ get(item,'updated','') | moment('DD/MM/YYYY')}}</p>
-                        </div>
+                        <app-pagination
+                            :pagination="filterPagination"
+                            @pagechange="pagechange"
+                            class="mt-5"
+                        />
                     </div>
-                    <app-pagination
-                        :pagination="filterPagination"
-                        @pagechange="pagechange"
-                        class="mt-5"
-                    />
+                    <div v-else>Chưa có thông tin</div>
                 </div>
             </div>
             <SchoolNotifyDetail v-else/>
@@ -117,6 +125,7 @@ export default {
             this.titleAnnouncement = val.name;
             this.params.size = 10;
             this.params.page = 1;
+            this.pageLoading = true;
             this.fetchNotifyList();
         },
         pagechange(val){

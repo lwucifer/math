@@ -8,20 +8,23 @@
                     </div>
                     <div v-else>
                         <div class="intro-text-school-menu-side">Thời khóa biểu mới mới</div>
-                        <div class="row news-item-school" v-for="(item,index) in get(this,'timetablesList.content','')" :key="index" @click="showDetailSchedule(item.id)">
-                            <div class="col-md-4">
-                                <img :height="131" class="w-100" src="~assets/images/tmp/timetable.png">
+                        <div v-if="get(this,'timetablesList.content.length',0)">
+                            <div class="row news-item-school" v-for="(item,index) in get(this,'timetablesList.content',[])" :key="index" @click="showDetailSchedule(item.id)">
+                                <div class="col-md-4">
+                                    <img :height="131" class="w-100" src="~assets/images/tmp/timetable.png">
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="title-notify">{{ get(item,'title','') }}</p>
+                                    <p class="text-sub my-2">{{ get(item,'updated','') | moment('DD/MM/YYYY') }}</p>
+                                </div>
                             </div>
-                            <div class="col-md-8">
-                                <p class="title-notify">{{ get(item,'title','') }}</p>
-                                <p class="text-sub my-2">{{ get(item,'updated','') | moment('DD/MM/YYYY') }}</p>
-                            </div>
+                            <app-pagination
+                                :pagination="filterPagination"
+                                @pagechange="pagechange"
+                                class="mt-5"
+                            />
                         </div>
-                        <app-pagination
-                            :pagination="filterPagination"
-                            @pagechange="pagechange"
-                            class="mt-5"
-                        />
+                        <div v-else>Chưa có thông tin</div>
                     </div>
                 </div>
                 <SchoolScheduleDetail v-else/>
