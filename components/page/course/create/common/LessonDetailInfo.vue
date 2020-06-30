@@ -19,7 +19,7 @@
 
         <div class="clc-video__actions">
           <a href class="clc-video__btn-edit text-primary mr-2" @click="handleEditLesson($event)">
-            <IconEdit class="icon" />
+            <IconEdit class="icon" style="width: 18px; height: 18px"/>
           </a>
           <a href class="clc-video__btn-delete text-secondary" @click="handleDeleteLesson($event)">
             <IconTrashAlt class="icon" />
@@ -83,11 +83,26 @@ export default {
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
     },
+
     thumnail() {
-      return get(this, "lesson.type", "") === "VIDEO"
-        ? "/images/thumnail-video.png"
-        : "/images/thumnail-doc.png";
+      switch(get(this, "lesson.type", "")) {
+        case "DOCS":
+          return "/images/thumnail-doc.png"
+          break;
+        case "AUDIO":
+          return "/images/thumnail-audio.jpg"
+          break;
+        case "VIDEO":
+          return "/images/thumnail-video.jpg"
+          break;
+        case "SCORM":
+          return "/images/thumnail-scorm.jpg"
+          break;
+        default:
+          return "/images/thumnail-doc.png"
+      }
     },
+
     showFileName() {
       return (
         get(this, "lesson.type", "") === "VIDEO" ||
