@@ -133,5 +133,8 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+.app-search.app-search--bordered.app-input--size-sm .app-search__submit {
+  height: calc(3.2rem - 1px);
+}
 </style>
