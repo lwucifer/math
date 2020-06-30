@@ -18,6 +18,7 @@
 </template>
 
 <script>
+
 import BannerImage from "~/assets/svg/images/elearing-home-banner.svg?inline";
 
 export default {

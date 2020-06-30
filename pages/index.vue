@@ -47,7 +47,7 @@
     </div>
 
     <HowToLearn />
-    <LearnCoursera />
+    <LearnCoursera :isLogin="isAuthenticated"/>
     <LearnEverywhere />
     <NumberHighlight />
     <Feedback />
