@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import Header from "~/components/layout/header/Header"
 import Footer from "~/components/layout/footer/Footer"
 
@@ -20,6 +21,26 @@ export default {
   components: {
     Header,
     Footer
+  },
+
+  head() {
+    if (this.$device.isMobile && this.desktopView) {
+      return {
+        meta: [
+          {
+            hid: "viewport",
+            name: "viewport",
+            content: "width=1200, user-scalable=yes"
+          }
+        ]
+      };
+    } else {
+      return {}
+    }
+  },
+
+  computed: {
+    ...mapState(["desktopView"])
   }
 };
 </script>

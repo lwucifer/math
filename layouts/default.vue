@@ -2,7 +2,7 @@
   <div class="page-wrap layout-default">
     <TheHeader />
 
-    <nuxt class="page-content"/>
+    <nuxt class="page-content" />
 
     <Footer />
 
@@ -11,16 +11,36 @@
 </template>
 
 <script>
-import TheHeader from "~/components/layout/header/Header"
-import Footer from "~/components/layout/footer/Footer"
+import { mapState } from "vuex";
+import TheHeader from "~/components/layout/header/Header";
+import Footer from "~/components/layout/footer/Footer";
 
 export default {
   components: {
     TheHeader,
     Footer
-  }
-}
+  },
 
+  head() {
+    if (this.$device.isMobile && this.desktopView) {
+      return {
+        meta: [
+          {
+            hid: "viewport",
+            name: "viewport",
+            content: "width=1200, user-scalable=yes"
+          }
+        ]
+      };
+    } else {
+      return {}
+    }
+  },
+
+  computed: {
+    ...mapState(["desktopView"])
+  }
+};
 </script>
 
 <style lang="scss">

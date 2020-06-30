@@ -4,14 +4,14 @@ const webpack = require("webpack");
 module.exports = {
   dev: true,
   head: {
-    title: "Schoolly",
+    title: "Schoolly - Hệ thống giáo dục và đào tạo trực tuyến toàn diện",
     meta: [
       {
         charset: "utf-8",
       },
       {
         name: "viewport",
-        content: "user-scalable=no",
+        content: "width=device-width, user-scalable=no, initial-scale=1",
       },
       {
         hid: "description",
@@ -89,7 +89,7 @@ module.exports = {
      * Global middleware
      */
     router: {
-        middleware: ["check-auth", "watch-route"]
+        middleware: ["check-auth", "mobile-view", "watch-route"]
     },
 
   /*
