@@ -119,10 +119,13 @@ export default {
     async handleChangedClass() {
       this.checkAll = false;
       this.arrMember = [];
+
       let params = {
-        class_id: this.classSelected.value,
-        size: 9999
+        size: 999
       };
+
+      if (this.classSelected) params.class_id = this.classSelected.value;
+
       try {
         await this.$store.dispatch(
           `${STORE_STUDENT}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
@@ -171,6 +174,10 @@ export default {
         );
         let lessonList = this.get(this.stateClasses, "content", []);
         let list = [];
+        list.push({
+          value: null,
+          text: "Tất cả"
+        });
         lessonList.forEach(element => {
           list.push({
             value: element.id,
@@ -197,6 +204,7 @@ export default {
 
   created() {
     this.getSchoolClasses();
+    this.handleChangedClass();
   }
 };
 </script>
