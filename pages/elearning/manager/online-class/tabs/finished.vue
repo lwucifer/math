@@ -80,16 +80,16 @@
       :actions="[0,0,1]"
       :data="classList"/>
     <!--End table-->
-
+    
     <app-modal-confirm
-        v-if="showModalConfirm"
-        @ok="deleteRows"
+        v-if="showModalConfirmSchedules"
+        @ok="deleteSchedules"
         :width="550"
-        @cancel="showModalConfirm = false"
+        @cancel="showModalConfirmSchedules = false"
         :footer="false"
         :header="false"
-        title="Bạn có chắc chắn muốn hủy phòng học?"
-        description="Bạn sẽ không thể khôi phục phòng học bị xóa."
+        title="Xác nhận hủy phòng học?"
+        description="Bạn có chắc chắn muốn hủy tất cả các lịch học của phòng học này"
       />
   </div>
 </template>
