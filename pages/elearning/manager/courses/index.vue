@@ -43,6 +43,7 @@ import IconPlusCircle from "~/assets/svg/design-icons/plus-circle.svg?inline";
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
+import { initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
 
 export default {
   name: "ManageCourse",
@@ -66,6 +67,20 @@ export default {
   },
 
   methods: {},
+  mounted() {
+    const breadcrumb = [
+      {
+        title: 'Quản lý E-learning',
+        to: '/elearning'
+      },
+      {
+        title: 'Bài giảng và khóa học',
+        to: '/elearning/manager/course'
+      },
+    ]
+    initBreadcrumb(this, breadcrumb);
+    initPageTitle(this, createPageTitle('Quản lý Elearning'));
+  }
 };
 </script>
 

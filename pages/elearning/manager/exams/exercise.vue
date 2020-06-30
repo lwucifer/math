@@ -43,7 +43,7 @@
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
-  import { useEffect, getParamQuery } from "~/utils/common"
+  import { useEffect, getParamQuery, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common"
   import FilterForm from "~/components/page/elearning/manager/exam/forms/ExerciseFilter"
   import ListTable from "~/components/page/elearning/manager/exam/tables/Exercise"
   import { EXERCISE_CATEGORIES } from '~/utils/constants'
@@ -165,11 +165,31 @@
         this.params.page = 1
         this.getList()
       },
+      getParamQuery,
       get
     },
     
     created() {
       this.getList()
+    },
+    mounted() {
+      const elearningName = this.getParamQuery('elearning_name')
+      const breadcrumb = [
+        {
+          title: 'Quản lý E-learning',
+          to: '/elearning'
+        },
+        {
+          title: 'Bài tập và bài kiểm tra',
+          to: '/elearning/manager/exams'
+        },
+        {
+          title: elearningName,
+          to: ''
+        },
+      ]
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý bài tập & bài kiểm tra'));
     }
   };
 </script>

@@ -19,7 +19,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/manager/exams/test?elearning_id=${row.id}`">
+            :to="`/elearning/manager/exams/test?elearning_id=${row.id}&elearning_name=${row.name}`">
             <IconArrow height="13"/>
           </n-link>
         </td>

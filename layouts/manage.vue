@@ -11,9 +11,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Header from "~/components/layout/header/Header"
 import Footer from "~/components/layout/footer/Footer"
+import { TITLE_PAGE_DEFAULT } from "~/utils/constants"
 
 export default {
   middleware: ["teacher-role"],
@@ -26,6 +27,7 @@ export default {
   head() {
     if (this.$device.isMobile && this.desktopView) {
       return {
+        titleTemplate: this.titlePg ? this.titlePg : TITLE_PAGE_DEFAULT,
         meta: [
           {
             hid: "viewport",
@@ -35,12 +37,21 @@ export default {
         ]
       };
     } else {
-      return {}
+      return {
+        titleTemplate: this.titlePg,
+      }
     }
   },
 
   computed: {
-    ...mapState(["desktopView"])
+    ...mapState(["desktopView"]),
+    ...mapGetters("common", ["titlePg"])
+  },
+
+  data() {
+    return {
+      TITLE_PAGE_DEFAULT
+    }
   }
 };
 </script>

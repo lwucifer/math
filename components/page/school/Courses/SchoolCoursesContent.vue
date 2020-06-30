@@ -8,7 +8,7 @@
             <div v-if="get(this,'newestCourse.content.length',0)">
               <AppCarouseSchool
                 class="pb-2"
-                :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn: 2 }"
+                :options="{ slidesPerView: 4, spaceBetween: 24, preventClicksPropagation: false,slidesPerColumn:  1}"
               >
                 <template slot="default" slot-scope="{ classes }">
                   <div

@@ -46,8 +46,9 @@
   import {mapState} from "vuex"
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
-  import { useEffect, getParamQuery } from "~/utils/common"
+  import { useEffect, getParamQuery, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common"
   import { exCate2Txt } from "~/plugins/filters"
+import elearning from '../../../../../../store/elearning/teaching/elearning'
 
   const STORE_NAMESPACE = "elearning/teaching/participant"
   const EXERCISE_STORE_NAMESPACE = "elearning/teaching/exercise"
@@ -175,6 +176,30 @@
     created() {
       this.getList()
       this.getExerciseDetail()
+    },
+    mounted() {
+      const elearningName = getParamQuery('elearning_name')
+      const exerciseName = getParamQuery('item_name')
+      const breadcrumb = [
+        {
+          title: 'Quản lý E-learning',
+          to: '/elearning'
+        },
+        {
+          title: 'Bài tập và bài kiểm tra',
+          to: '/elearning/manager/exams'
+        },
+        {
+          title: elearningName,
+          to: `/elearning/manager/exams/exercise?elearning_id=${getParamQuery('elearning_id')}&elearning_name=${elearningName}`
+        },
+        {
+          title: exerciseName,
+          to: ''
+        },
+      ]
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý bài tập & bài kiểm tra'));
     }
   }
 </script>

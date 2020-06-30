@@ -4,7 +4,7 @@
       <slot name="itemRender" v-bind="{ crumbs, crumb: item, index }">
         <app-breadcrumb-item
           nuxt
-          :key="item.to"
+          :key="index"
           :to="item.to"
           :is-current="index === crumbs.length - 1"
           :disabled="item.disabled"
