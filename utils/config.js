@@ -102,3 +102,4 @@ export const PARAM_CHECK = {
   ELEARNING_SEARCH: "/elearning/search",
 }
 
+export const DESKTOP_VIEW = "schoolly_desktop_view";

@@ -92,8 +92,8 @@
         @ok="deleteRows"
         :width="550"
         @cancel="showModalConfirm = false"
-        title="Bạn có chắc chắn muốn hủy phòng học?"
-        description="Bạn sẽ không thể khôi phục phòng học bị xóa."
+        title="Xác nhận hủy lịch học"
+        :description="'Bạn chắc chắn muốn hủy lịch học'"
       />
     
     <app-modal-confirm
@@ -103,8 +103,8 @@
         @cancel="showModalConfirmSchedules = false"
         :footer="false"
         :header="false"
-        title="Bạn có chắc chắn muốn hủy lịch học?"
-        description="Bạn sẽ không thể khôi phục lịch học bị xóa."
+        title="Xác nhận hủy phòng học?"
+        description="Bạn có chắc chắn muốn hủy tất cả các lịch học của phòng học này"
       />
   </div>
 </template>
