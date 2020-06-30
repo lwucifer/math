@@ -15,13 +15,13 @@
             <div class="intro-text-school-menu-side" style="font-size: 16px;">Thời khóa biểu khác</div>
             <div 
                 class="d-flex align-items-center mb-4 school-news-detail" 
-                v-for="(item,index) in get(this,'timetablesOther.content')" 
+                v-for="(item,index) in filterOtherTabletime ? filterOtherTabletime : []" 
                 :key="index"
                 @click="getDetailTimeTable(item.id)"
             >
                 <IconEllipse2 class="mr-3"/>
                 <span class="">{{ get(item,'title') }}</span>
-                <span class="ml-auto text-sub">{{ get(item,'title') | moment('DD.MM.YYYY') }}</span>
+                <span class="ml-auto text-sub">{{ get(item,'updated') | moment('DD.MM.YYYY') }}</span>
             </div>
         </div>
     </div>
@@ -33,7 +33,7 @@ import IconEllipse2 from '~/assets/svg/icons/ellipse2.svg?inline';
 
 import { mapState, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
+import { get, cloneDeep, filter } from "lodash";
 import {moment} from "moment";
 import { VclList} from "vue-content-loading";
 export default {
@@ -60,7 +60,12 @@ export default {
         }
     },
     computed:{
-        ...mapState("elearning/school/school-schedule", { timetableDetail: "timetableDetail",timetablesOther:"timetablesOther"})
+        ...mapState("elearning/school/school-schedule", { timetableDetail: "timetableDetail",timetablesOther:"timetablesOther"}),
+        filterOtherTabletime(){
+            const arr = cloneDeep(this.timetablesOther.content)
+            const rs = filter(arr,(el)=>{ return el.id != this.$route.query.timetable_id })
+            return rs
+        },
     },
     methods:{
         ...mapActions("elearning/school/school-schedule", ["timeTableOtherList"]),
