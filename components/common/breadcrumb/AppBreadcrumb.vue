@@ -8,7 +8,7 @@
           :to="item.to"
           :is-current="index === crumbs.length - 1"
           :disabled="item.disabled"
-        >{{ item.name }}</app-breadcrumb-item>
+        >{{ item.title }}</app-breadcrumb-item>
       </slot>
       <span class="app-breadcrumb-separator" v-if="index < crumbs.length - 1">
         <slot name="separator">{{ separator }}</slot>
@@ -35,20 +35,21 @@ export default {
 
   computed: {
     crumbs() {
-      const pathArray = this.$route.path.split("/").slice(1);
-      // console.log("[pathArray]", pathArray, this.routes)
-      const matchedPathArray = this.$route.matched[0].path.split("/").slice(1);
-      const breadcrumbs = pathArray.slice(0, 3).reduce((breadcrumbArray, path, idx) => {
-        breadcrumbArray.push({
-          path: path,
-          to: breadcrumbArray[idx - 1]
-            ? "/" + breadcrumbArray[idx - 1].path + "/" + path
-            : "/" + path,
-          name: this.getName(matchedPathArray, idx) || path
-        });
-        return breadcrumbArray;
-      }, []);
-      return breadcrumbs;
+      return this.routes;
+      // const pathArray = this.$route.path.split("/").slice(1);
+      // // console.log("[pathArray]", pathArray, this.routes)
+      // const matchedPathArray = this.$route.matched[0].path.split("/").slice(1);
+      // const breadcrumbs = pathArray.slice(0, 3).reduce((breadcrumbArray, path, idx) => {
+      //   breadcrumbArray.push({
+      //     path: path,
+      //     to: breadcrumbArray[idx - 1]
+      //       ? "/" + breadcrumbArray[idx - 1].path + "/" + path
+      //       : "/" + path,
+      //     name: this.getName(matchedPathArray, idx) || path
+      //   });
+      //   return breadcrumbArray;
+      // }, []);
+      // return breadcrumbs;
     }
   },
 

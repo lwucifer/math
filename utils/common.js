@@ -3,7 +3,8 @@ import Fingerprint2 from "fingerprintjs2";
 import Cookie from "js-cookie";
 import * as constants from "~/utils/constants";
 import { setDeviceId, setDeviceOs } from "./auth";
-import { DESKTOP_VIEW } from "./config";
+import { DESKTOP_VIEW, TITLE_PAGE_PREFIX, TITLE_PAGE_SEPARATOR } from "./config";
+import * as mutationTypes from "~/utils/mutation-types";
 
 export function getBase64(img, callback) {
   const reader = new FileReader();
@@ -276,4 +277,19 @@ export const setDesktopView = (view) => {
   Cookie.set(DESKTOP_VIEW, view);
   if (process.server) return;
   window.sessionStorage.setItem(DESKTOP_VIEW, view)
+}
+
+export const initBreadcrumb = (that, data) => {
+  that.$store.commit(`common/${mutationTypes.COMMON.SET_BREADCRUMB}`, data)
+}
+
+export const initPageTitle = (that, data) => {
+  that.$store.commit(`common/${mutationTypes.COMMON.SET_TITLE_PAGE}`, data)
+}
+
+export const createPageTitle = (content, needPrefix = true) => {
+  if (needPrefix) {
+    return `${TITLE_PAGE_PREFIX} ${TITLE_PAGE_SEPARATOR} ${content}`;
+  }
+  return `${content}`;
 }

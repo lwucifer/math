@@ -103,3 +103,10 @@ export const PARAM_CHECK = {
 }
 
 export const DESKTOP_VIEW = "schoolly_desktop_view";
+
+/**
+ * Page title
+ */
+export const TITLE_PAGE_PREFIX = "Schoolly"
+export const TITLE_PAGE_SEPARATOR = "-"
+export const TITLE_PAGE_DEFAULT = "Schoolly - Hệ thống giáo dục và đào tạo trực tuyến toàn diện"
