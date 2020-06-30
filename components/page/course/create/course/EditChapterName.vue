@@ -34,8 +34,8 @@
     <template v-else>
       <a href class="ce-item__action edit mr-3" @click.prevent="editChaperName">
         <IconBorderColor24px
-          width="16px"
-          height="16px"
+          width="18px"
+          height="18px"
           class="d-block subheading fill-primary"
         />
       </a>
@@ -58,6 +58,7 @@
       :confirmLoading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancelModal"
+      description="Bạn có chắc chắn muốn xóa chương này?"
     />
   </div>
 </template>

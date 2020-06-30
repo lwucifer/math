@@ -123,6 +123,7 @@ export default {
             this.titleNews = item.name;
             this.params.size = 10;
             this.params.page = 1;
+            this.pageLoading = true;
             this.fetchNewsList();
         },
         pagechange(val){
