@@ -16,20 +16,18 @@ export default class InteractiveAnswer extends BaseService {
     return data.data;
   }
 
-  async addAnswerOfQuestion(params, image = "") {
-    let formData = new FormData();
-    formData.append("image", image);
+  async addAnswerOfQuestion(payload) {
 
     let options = {
       url: APIs.STUDY_QUESTION_ADD_ANSWER,
       method: "POST",
-      params,
+      data: payload,
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
 
-    if (image) options.data = formData;
+    // if (image) options.data = formData;
 
     const { data } = await this.$axios.request(options);
 
