@@ -53,6 +53,8 @@ const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 const STORE_TEACHING_PUBLIC_LIST = "elearning/teaching/teaching-public";
 const STORE_NAMESPACE = "elearning/teaching/elearning";
 
+import { initBreadcrumb, createPageTitle, initPageTitle, getParamQuery } from "~/utils/common";
+
 export default {
   layout: "manage",
 
@@ -109,6 +111,7 @@ export default {
       this.tab = 2;
       console.log('hello')
     }
+    this.setBreadcrumb()
   },
   methods: {
     onPageChange(e) {
@@ -129,6 +132,20 @@ export default {
         payload
       )
       this.loading = false
+    },
+    setBreadcrumb() {
+      const breadcrumb = [
+        {
+          title: 'Quản lý E-learning',
+          to: '/elearning/manager'
+        },
+        {
+          title: 'Tương tác với học sinh',
+          to: ''
+        },
+      ]
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý tương tác với học sinh'));
     }
   },
   created(){
