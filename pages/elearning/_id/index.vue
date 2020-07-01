@@ -44,7 +44,8 @@ import { get } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { ELEARNING_TYPES } from "~/utils/constants";
-import { getDeviceID } from "~/utils/common";
+import { getElearningTypeText } from "~/plugins/filters";
+import { getDeviceID, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
 
 import InfoService from "~/services/elearning/public/Info";
 import LevelService from "~/services/elearning/public/Level";
@@ -145,6 +146,7 @@ export default {
       },
     };
     await this.$store.dispatch("elearning/detail/getInfo", options);
+    this.setBreadcrumb();
     this.pageLoading = false;
   },
 
@@ -170,7 +172,27 @@ export default {
         setTimeout(getDeviceID, 500);
       }
     },
+    setBreadcrumb() {
+      const elearningType = get(this, 'info.type', '');
+      const breadcrumb = [
+        {
+          title: 'E-learning',
+          to: '/elearning'
+        },
+        {
+          title: `${getElearningTypeText(elearningType)}`,
+          to: '/elearning/'
+        },
+        {
+          title: `${get(this, 'info.name', '')}`,
+          to: ''
+        }
+      ]
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý đánh giá và bình luận'));
+    }
   },
+
 };
 </script>
 

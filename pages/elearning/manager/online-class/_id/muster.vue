@@ -201,7 +201,7 @@ import { getDateBirthDay, getLocalTimeHH_MM_A } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_CLASSES = "elearning/teaching/classes";
@@ -337,6 +337,9 @@ export default {
     }),
     ...mapState(STORE_CLASSES, {
       stateClasses: "teachingClasses"
+    }),
+    ...mapState(STORE_NAMESPACE, {
+      stateClassInfo: "OnlineClassInfo"
     }),
     ...mapState(STORE_PUBLIC_CLASSES, {
       statePublicClasses: "publicClassesList"
@@ -544,14 +547,44 @@ export default {
       } finally {
       }
     },
-
+    setBreadcrumb() {
+      const roomName = this.get(this, 'stateClassInfo.data.name', '');
+      const lessonName = this.get(this, 'lessonInfo.name', '');
+      const breadcrumb = [
+        {
+          title: 'Quản lý E-learning',
+          to: '/elearning/manager'
+        },
+        {
+          title: 'Phòng học online',
+          to: '/elearning/manager/online-class'
+        },
+        {
+          title: `Danh sách học sinh - ${roomName}`,
+          to: `/elearning/manager/online-class/${this.get(this, 'stateClassInfo.data.id', '')}/invites`
+        },
+        {
+          title: `Danh sách điểm danh - ${lessonName}`,
+          to: ''
+        },
+      ];
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý phòng học online'));
+    },
     get
   },
 
-  created() {
-    this.getList();
-    this.getLessonInfo();
-    this.getSchoolClasses();
+  async created() {
+    await Promise.all([
+      this.getList(),
+      this.getLessonInfo(),
+      this.getSchoolClasses(),
+    ])
+    this.setBreadcrumb()
+
+  },
+  mounted() {
+    
   }
 };
 </script>

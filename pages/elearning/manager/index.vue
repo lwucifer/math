@@ -134,10 +134,10 @@ import IconData from "~/assets/svg/icons/data.svg?inline";
 
 import { GChart } from 'vue-google-charts'
 
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
 import { DATE_SHORTCUT } from "~/utils/config";
 import { numeralFormat } from "~/plugins/filters";
 
@@ -377,6 +377,20 @@ export default {
 
   created() {
     this.getSummary();
+  },
+  mounted() {
+    const breadcrumb = [
+      {
+        title: 'Quản lý E-learning',
+        to: '/elearning'
+      },
+      {
+        title: 'Tổng quan',
+        to: '/elearning/manager'
+      },
+    ]
+    initBreadcrumb(this, breadcrumb);
+    initPageTitle(this, createPageTitle('Quản lý Elearning'));
   }
 };
 </script>

@@ -65,7 +65,7 @@
             class
             v-if="isPending(row) || isMarked(row)"
             title="Chi tiết"
-            :to="`/elearning/manager/exams/${$route.params.id}/results?user_id=${row.id}&student_id=${row.student_id ? row.student_id: ''}`">
+            :to="`/elearning/manager/exams/${$route.params.id}/results?user_id=${row.id}&elearning_name=${getParamQuery('elearning_name')}&item_name=${getParamQuery('item_name')}&student_name=${get(row, 'name', '')}&student_id=${row.student_id ? row.student_id: ''}`">
             <IconArrow height="13" style="height: 1.5rem;"/>
           </n-link>
         </td>
@@ -78,6 +78,7 @@
   import { SUBMISSION_RESULTS, SCALE_MARK } from "~/utils/constants"
   import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
   import { get } from "lodash"
+  import { getParamQuery } from "~/utils/common"
 
   export default {
     components: {
@@ -170,6 +171,7 @@
           this.get(item, 'result') != SUBMISSION_RESULTS.NONE &&
           this.get(item, 'result') != SUBMISSION_RESULTS.PENDING
       },
+      getParamQuery,
       get
     },
   }

@@ -424,18 +424,22 @@ export default {
             "Thời gian mở đề phải nhỏ hơn thời gian kết thúc bài giảng/khoá học ít nhất 24 giờ";
           return false;
         }
-
         // Thời gian đóng đề > thời gian bắt đầu bài giảng/khóa học (ít nhất 24 giờ)
         if(!this.check2TimeDuration(start_time_timestamp, close_time_timestamp, EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION)) {
           this.error.close_time =
             "Thời gian đóng đề tra phải lớn hơn thời gian bắt đầu bài giảng/khoá học ít nhất 24 giờ";
           return false;
         }
-
         // Thời giao đóng đề - thời gian mở đề >= thời gian làm bài
         if(!this.check2TimeDuration(open_time_timestamp, close_time_timestamp, duration * 60 * 1000)) {
           this.error.open_time =
             "Cài đặt lượng thời gian làm bài cho phép không đúng";
+          return false;
+        }
+        // Thời gian đóng đề <= thời gian kết thúc bài giảng/khóa học
+        if(!this.check2TimeDuration(close_time_timestamp, end_time_timestamp, 0)) {
+          this.error.close_time =
+            "Thời gian đóng đề tra phải nhỏ hơn thời gian kết thúc bài giảng/khoá học";
           return false;
         }
       }
@@ -503,6 +507,12 @@ export default {
         if(!this.check2TimeDuration(open_time_timestamp, close_time_timestamp, duration * 60 * 1000)) {
           this.error.close_time =
             "Cài đặt lượng thời gian làm bài cho phép không đúng";
+          return false;
+        }
+        // Thời gian đóng đề <= thời gian kết thúc bài giảng/khóa học
+        if(!this.check2TimeDuration(close_time_timestamp, end_time_timestamp, 0)) {
+          this.error.close_time =
+            "Thời gian đóng đề tra phải nhỏ hơn thời gian kết thúc bài giảng/khoá học";
           return false;
         }
       }
