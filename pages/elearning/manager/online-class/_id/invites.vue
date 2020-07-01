@@ -36,6 +36,7 @@
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash";
+  import { initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
 
   const InvitedTab = () => import("./tabs/invited")
   const MusterTab = () => import("./tabs/muster")
@@ -73,14 +74,56 @@
 
     methods: {
       get,
-      getClassInfo() {
-        this.$store.dispatch(`${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.INFO}`, this.$route.params.id)
+      async getClassInfo() {
+        await this.$store.dispatch(`${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.INFO}`, this.$route.params.id)
+      },
+      setBreadcrumb() {
+        const roomName = this.stateClassInfo && this.stateClassInfo.data ? this.stateClassInfo.data.name : '';
+        const breadcrumb = [
+          {
+            title: 'Quản lý E-learning',
+            to: '/elearning/manager'
+          },
+          {
+            title: 'Phòng học online',
+            to: '/elearning/manager/online-class'
+          },
+          {
+            title: `Danh sách học sinh - ${roomName}`,
+            to: ''
+          },
+      
+        ];
+        initBreadcrumb(this, breadcrumb);
+        initPageTitle(this, createPageTitle('Quản lý phòng học online'));
       }
     },
 
-    created () {
-      this.getClassInfo();
+    async created () {
+      await this.getClassInfo();
+      this.setBreadcrumb();
     },
+    mounted() {
+      // console.log('after get class ', this.stateClassInfo.data.name)
+      // const roomName = this.stateClassInfo && this.stateClassInfo.data ? this.stateClassInfo.data.name : '';
+      // const breadcrumb = [
+      //   {
+      //     title: 'Quản lý E-learning',
+      //     to: '/elearning/manager'
+      //   },
+      //   {
+      //     title: 'Phòng học online',
+      //     to: '/elearning/manager/online-class'
+      //   },
+      //   {
+      //     title: `Danh sách học sinh - ${roomName}`,
+      //     to: ''
+      //   },
+    
+      // ];
+      // initBreadcrumb(this, breadcrumb);
+      // initPageTitle(this, createPageTitle('Quản lý phòng học online'));
+    }
   };
 </script>
 
