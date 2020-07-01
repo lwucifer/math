@@ -170,7 +170,7 @@
                 :to="`/public/profile/teacher?user_id=${get(item, 'teacher_id', '')}`"
                 :image="get(item, 'avatar.medium', '')"
                 :name="item.name"
-                school-name="Trường trung học cơ sở Nguyễn Trãi"
+                :school-name="item.school_name || 'Chưa có thông tin trường'"
                 :num-of-lecture="item.lectures"
                 :num-of-course="item.courses"
                 :averageRate="item.voting_rate ? Math.floor(item.voting_rate) : 0"

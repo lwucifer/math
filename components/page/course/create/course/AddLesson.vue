@@ -348,6 +348,7 @@ export default {
         this.tabType = "audio";
       }
     },
+
     handleReset() {
       this.payload.article_content = "";
       this.payload.lesson = "";
@@ -357,6 +358,7 @@ export default {
     handleChangeName() {
       this.handleCheckName();
     },
+
     changeTabType(type) {
       this.handleReset();
       this.tabType = type;
