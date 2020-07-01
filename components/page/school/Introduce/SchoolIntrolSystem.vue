@@ -23,7 +23,8 @@
             <div class="mb-4" v-for="(el,index) in get(this,'schoolStaffs.content',[])" :key="index">
                 <n-link class="row" :to="'/public/profile/teacher?user_id='+ get(el,'staff_id','')">
                     <div class="col-md-2">
-                        <img height="128" v-lazy="get(el,'avatar','') ? get(el,'avatar','') : 'https://picsum.photos/96/128'"/>
+                        <img height="128" v-if="!!get(el,'avatar','')" v-lazy="get(el,'avatar','')"/>
+                        <DefaultAvatar v-else width="100%" height="100%" />
                     </div>
                     <div class="col-md-10 d-flex flex-column justify-content-center">
                         <div class="d-flex mb-3">
@@ -53,6 +54,8 @@
 
 <script>
 import IconArrowRight24px from '~/assets/svg/v2-icons/arrow_right_24px.svg?inline';
+import DefaultAvatar from "~/assets/svg/images/default-avatar.svg?inline";
+
 
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
@@ -60,7 +63,8 @@ import { get } from "lodash";
 import {moment} from "moment";
 export default {
     components:{
-        IconArrowRight24px
+        IconArrowRight24px,
+        DefaultAvatar
     },
     data(){
         return{
