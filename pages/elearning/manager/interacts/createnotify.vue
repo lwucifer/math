@@ -89,6 +89,8 @@ const STORE_TEACHING_INTERACTIVE_ANNOUCONCEMENT = "elearning/teaching/interactiv
 import { createInteract } from "~/models/elearning/Interacts";
 import { get } from "lodash";
 import AppSelectIneractiveElearning from "~/components/page/elearning/manager/interacts/AppSelectIneractiveElearning"
+import { initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
+
 export default {
   layout: "manage",
   components: {
@@ -169,7 +171,28 @@ export default {
     handleOk(){
       this.showModal = false;
       this.$router.push('/elearning/manager/interacts#notify')
+    },
+    setBreadcrumb() {
+      const breadcrumb = [
+        {
+          title: 'Quản lý E-learning',
+          to: '/elearning/manager'
+        },
+        {
+          title: 'Tương tác với học sinh',
+          to: '/elearning/manager/interacts'
+        },
+        {
+          title: `Tạo thông báo`,
+          to: ''
+        },
+      ]
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý tương tác với học sinh'));
     }
+  },
+  mounted() {
+    this.setBreadcrumb()
   }
 };
 </script>

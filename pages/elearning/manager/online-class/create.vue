@@ -327,7 +327,7 @@ import {
 import { get, reject } from "lodash";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { useEffect, getParamQuery } from "~/utils/common";
+import { useEffect, getParamQuery, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
@@ -734,6 +734,24 @@ export default {
 
   created() {
     this.getElearnings();
+  },
+  mounted() {
+    const breadcrumb = [
+      {
+        title: 'Quản lý E-learning',
+        to: '/elearning/manager'
+      },
+      {
+        title: 'Phòng học online',
+        to: '/elearning/manager/online-class'
+      },
+      {
+        title: 'Tạo mới',
+        to: ``
+      },
+    ]
+    initBreadcrumb(this, breadcrumb);
+    initPageTitle(this, createPageTitle('Quản lý phòng học online'));
   }
 };
 </script>

@@ -39,7 +39,7 @@ import CreateExam from "~/components/page/course/create/CreateExam";
 import ContentLecture from "~/components/page/course/create/ContentLecture";
 import ContentCourse from "~/components/page/course/create/ContentCourse";
 import * as actionTypes from "~/utils/action-types";
-import { getParamQuery, useEffect } from "~/utils/common";
+import { getParamQuery, useEffect, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
 import { mapState } from "vuex";
 import { VclFacebook } from "vue-content-loading";
 import { get } from "lodash";
@@ -119,6 +119,9 @@ export default {
     disabled_all() {
       return this.$store.getters["elearning/create/disabled_all"];
     },
+    isCreating() {
+      return !this.general;
+    }
   },
 
   methods: {
@@ -151,6 +154,7 @@ export default {
         this.$store.dispatch("elearning/create/getExams"),
       ]);
       await this.$store.dispatch("elearning/create/getProgress");
+      this.setBreadcrumb();
       this.loading = false;
     },
 
@@ -166,6 +170,24 @@ export default {
 
     setFormActive(key) {
       this.formActive = key;
+    },
+    setBreadcrumb() {
+      const breadcrumb = [
+        {
+          title: 'E-learning',
+          to: '/elearning'
+        },
+        {
+          title: 'Bài giảng và khóa học',
+          to: '/elearning/manager/courses'
+        },
+        {
+          title: this.isCreating ? 'Tạo mới' : 'Chỉnh sửa',
+          to: ''
+        }
+      ]
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Tạo mới bài giảng và khóa học'));
     },
   },
 };

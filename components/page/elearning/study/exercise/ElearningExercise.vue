@@ -2,7 +2,7 @@
   <div class="e-exercise">
     <div class="e-exercise-components" v-if="!loadingExercise">
       <ElearningExerciseList v-if="studyMode == studyModeDoExercise" />
-      <ElearningExerciseBeforeBegin v-else-if="studyMode == beforeBeginMode" />
+<!--      <ElearningExerciseBeforeBegin v-else-if="studyMode == beforeBeginMode" />-->
       <ElearningExerciseDoExercise v-else-if="studyMode == doingMode" />
       <ElearningExerciseResults v-else-if="studyMode == reviewMode" />
     </div>
@@ -27,7 +27,7 @@ import IconCropLandscape from "~/assets/svg/v2-icons/crop_landscape_24px.svg?inl
 import IconCropFree from "~/assets/svg/v2-icons/crop_free_24px.svg?inline";
 
 import ElearningExerciseList from "~/components/page/elearning/study/exercise/ElearningExerciseList";
-import ElearningExerciseBeforeBegin from "~/components/page/elearning/study/exercise/ElearningExerciseBeforeBegin";
+// import ElearningExerciseBeforeBegin from "~/components/page/elearning/study/exercise/ElearningExerciseBeforeBegin";
 import ElearningExerciseDoExercise from "~/components/page/elearning/study/exercise/ElearningExerciseDoExercise.vue";
 import ElearningExerciseResults from "~/components/page/elearning/study/exercise/ElearningExerciseResults";
 
@@ -52,7 +52,7 @@ export default {
     IconCropFree,
     // components
     ElearningExerciseList,
-    ElearningExerciseBeforeBegin,
+    // ElearningExerciseBeforeBegin,
     ElearningExerciseDoExercise,
     ElearningExerciseResults
   },

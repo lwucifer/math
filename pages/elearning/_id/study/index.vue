@@ -81,6 +81,7 @@
                   <ElearningDownload
                     v-if="studyMode == docMode"
                     :link="get(payload, 'link', '')"
+                    :name="get(payload, 'name', '')"
                   />
 
                   <!-- IMAGE MODE -->
