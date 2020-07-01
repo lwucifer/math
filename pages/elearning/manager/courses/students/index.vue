@@ -81,7 +81,7 @@ export default {
     const breadcrumb = [
       {
         title: 'Quản lý E-learning',
-        to: '/elearning'
+        to: '/elearning/manager'
       },
       {
         title: 'Bài giảng và khóa học',
