@@ -205,6 +205,7 @@ import { useEffect } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_CLASSES = "elearning/teaching/classes";
+const STORE_PUBLIC_CLASSES = "elearning/teaching/public-classes";
 
 export default {
   components: {
@@ -220,6 +221,36 @@ export default {
     IconLock2,
     IconLockOpenAlt,
     ElearningManagerSide
+  },
+
+  async fetch({ params, query, store, route }) {
+    const elearningId = query.elearning_id;
+    const dataProfile = await store.dispatch(
+      `${STORE_PUBLIC_CLASSES}/${actionTypes.ACCOUNT_PROFILE.LIST}`
+    );
+    console.log("dataProfile", dataProfile);
+    const dataOrgan =
+      dataProfile && dataProfile.organization ? dataProfile.organization : {};
+    const schoolId = dataOrgan && dataOrgan.id ? dataOrgan.id : "";
+    const listQuery = {
+      params: {
+        elearning_id: elearningId
+      }
+    };
+
+    await Promise.all([
+      store.dispatch(`elearning/detail/getInfo`,
+      listQuery
+    ),
+      store.dispatch(
+        `${STORE_PUBLIC_CLASSES}/${actionTypes.PUBLIC_CLASSES.LIST}`,
+        {
+          params: {
+            school_id: schoolId
+          }
+        }
+      )
+    ]);
   },
 
   data() {
@@ -307,8 +338,19 @@ export default {
     ...mapState(STORE_CLASSES, {
       stateClasses: "teachingClasses"
     }),
+    ...mapState(STORE_PUBLIC_CLASSES, {
+      statePublicClasses: "publicClassesList"
+    }),
     courseOpts() {
-      return [this.allOpt, ...this.courses];
+      const dataFilter = this.courses ? this.courses : [];
+      //const dataFilter = this.statePublicClasses ? this.statePublicClasses : [];
+      const data = dataFilter.map(item => {
+        return {
+          value: item.id,
+          text: item.name
+        };
+      });
+      return [this.allOpt, ...data];
     },
     statusOpts() {
       return [this.allOpt, ...this.statuses];
@@ -497,15 +539,7 @@ export default {
         await this.$store.dispatch(
           `${STORE_CLASSES}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`, {params}
         );
-        let lessonList = this.get(this.stateClasses, "content", []);
-        let list = [];
-        lessonList.forEach(element => {
-          list.push({
-            value: element.id,
-            text: element.name
-          });
-        });
-        this.classList = list;
+        this.courses = this.get(this.stateClasses, "content", []);
       } catch (e) {
       } finally {
       }
