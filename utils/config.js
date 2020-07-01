@@ -103,3 +103,8 @@ export const PARAM_CHECK = {
 }
 
 export const DESKTOP_VIEW = "schoolly_desktop_view";
+
+export const EXAM_CONFIG = {
+  TIME_TO_START_OPEN_QUESTION: 1 * 24 * 3600 * 1000,
+  TIME_TO_START_CLOSE_QUESTION: 1 * 24 * 3600 * 1000,
+}
