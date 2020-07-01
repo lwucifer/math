@@ -46,7 +46,7 @@
   import ListTable from "~/components/page/elearning/manager/ratecomment/tables/Vote"
   
   import {mapState} from "vuex"
-  import { useEffect, getParamQuery } from "~/utils/common"
+  import { useEffect, getParamQuery, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common"
   import * as actionTypes from "~/utils/action-types"
   import { get } from "lodash"
 
@@ -150,11 +150,29 @@
         this.params.page = 1
         this.getList()
       },
+      setBreadcrumb() {
+        const breadcrumb = [
+          {
+            title: 'Quản lý E-learning',
+            to: '/elearning/manager'
+          },
+          {
+            title: 'Đánh giá và bình luận',
+            to: ''
+          }
+        ]
+        initBreadcrumb(this, breadcrumb);
+        initPageTitle(this, createPageTitle('Quản lý đánh giá và bình luận'));
+      },
       get
     },
     created() {
       this.getList()
+    },
+    mounted() {
+      this.setBreadcrumb()
     }
+
   }
 </script>
 
