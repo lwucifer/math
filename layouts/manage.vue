@@ -14,7 +14,7 @@
 import { mapState, mapGetters } from "vuex";
 import Header from "~/components/layout/header/Header"
 import Footer from "~/components/layout/footer/Footer"
-import { TITLE_PAGE_DEFAULT } from "~/utils/constants"
+import { TITLE_PAGE_DEFAULT } from "~/utils/config"
 
 export default {
   middleware: ["teacher-role"],
