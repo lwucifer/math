@@ -152,9 +152,14 @@ export default {
 
     async submit() {
       this.payload.content = this.editor.getHTML().replace("<p></p>", "");
+      let body = new FormData();
+      body.append("content", this.payload.content);
+      body.append("question_id", this.payload.question_id);
+      if(this.image){
+        body.append("image", this.image);
+      }
       const res = await new InteractiveAnswer(this.$axios)["addAnswerOfQuestion"](
-        this.payload,
-        this.image
+        body
       );
       if (res.success == true) {
         this.hideFrom();
