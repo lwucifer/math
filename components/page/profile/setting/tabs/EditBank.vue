@@ -95,7 +95,7 @@ export default {
       this.payload.account_number = get(this, "bank.account_number", "");
       this.payload.bank_code = get(this, "bank.bank_code", null);
       this.payload.branch = get(this, "bank.branch", "");
-      this.payload.id = get(this, "bank.bank_id", "");
+      this.payload.id = get(this, "bank.user_bank_id", "");
     },
 
     async handleAddBank() {
