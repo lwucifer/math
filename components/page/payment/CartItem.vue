@@ -11,7 +11,7 @@
     </div>
     <div class="ml-auto">
       <h5 class="text-right text-primary">{{ numeral(get(item, "price", "")).format() }} đ</h5>
-      <div class="d-flex mt-3">
+      <div class="d-flex mt-3" v-if="item.price != item.original_price">
         <h6 class="ml-2">-{{ numeral(get(item, "discount", "")).format('0,0.00') }}%</h6>
         <span class="price-cart_payment"
           >{{ numeral(get(item, "original_price", "")).format() }}đ</span
