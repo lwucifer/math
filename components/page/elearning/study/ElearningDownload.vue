@@ -1,6 +1,6 @@
 <template>
   <div class="wrap-elearning-download">
-      <h3>Bài giảng đại số lớp 10</h3>
+      <h3>{{ name }}</h3>
       <IconEditFileDownload class="img-download"/>
       <p>Bài học bằng văn bản, vui lòng tải về máy của bạn</p>
       <app-button 
@@ -24,6 +24,10 @@ export default {
     },
     props:{
         link:{
+            type: String,
+            default: null
+        },
+        name:{
             type: String,
             default: null
         }
