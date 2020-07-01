@@ -312,7 +312,7 @@ export default {
       this.error.free = "";
       if (
         this.free == 1 &&
-        numeral(get(this, "payload.fee", 0)).value() < 10000
+        numeral(get(this, "payload.price", 0)).value() < 10000
       ) {
         this.error.price = "Học phí tối thiểu là 10,000đ";
         return false;
