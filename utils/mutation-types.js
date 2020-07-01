@@ -656,3 +656,12 @@ export const TIMETABLE = {
     SET_TIMETABLE_LIST: "setTimeTableList",
     SET_STATE_TIMETABLE: "setStateTimeTable"
 }
+
+/**
+ * Common
+ */
+
+ export const COMMON = {
+     SET_BREADCRUMB: "setBreadcrumb",
+     SET_TITLE_PAGE: "setPageTitle"
+ }

@@ -104,6 +104,13 @@ export const PARAM_CHECK = {
 
 export const DESKTOP_VIEW = "schoolly_desktop_view";
 
+/**
+ * Page title
+ */
+export const TITLE_PAGE_PREFIX = "Schoolly"
+export const TITLE_PAGE_SEPARATOR = "-"
+export const TITLE_PAGE_DEFAULT = "Schoolly - Hệ thống giáo dục và đào tạo trực tuyến toàn diện"
+
 export const EXAM_CONFIG = {
   TIME_TO_START_OPEN_QUESTION: 1 * 24 * 3600 * 1000,
   TIME_TO_START_CLOSE_QUESTION: 1 * 24 * 3600 * 1000,

@@ -39,6 +39,7 @@
   import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide"
   import { mapState } from "vuex"
   import * as actionTypes from "~/utils/action-types";
+  import { initBreadcrumb, createPageTitle, initPageTitle, getParamQuery } from "~/utils/common";
 
   const STORE_PUBLIC_SEARCH = "elearning/public/public-search";
 
@@ -83,7 +84,21 @@
       ]);
     },
 
-    methods: {}
+    methods: {},
+    mounted() {
+      const breadcrumb = [
+        {
+          title: 'Quản lý E-learning',
+          to: '/elearning/manager'
+        },
+        {
+          title: 'Phòng học online',
+          to: ''
+        },
+      ]
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý phòng học online'));
+    }
   };
 </script>
 

@@ -44,7 +44,7 @@
   import * as actionTypes from "~/utils/action-types"
   import { get, isEmpty } from "lodash"
   import { EXERCISE_TYPES } from "~/utils/constants"
-  import { getParamQuery } from "~/utils/common"
+  import { getParamQuery, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common"
   import { exCate2Txt } from "~/plugins/filters"
 
   const ChoiceSubmission = () => import('~/components/page/elearning/manager/exam/ChoiceResult')
@@ -107,6 +107,34 @@
       }
     },
     mounted() {
+      const elearningName = getParamQuery('elearning_name')
+      const exerciseName = getParamQuery('item_name')
+      const studentName = getParamQuery('student_name')
+      const breadcrumb = [
+        {
+          title: 'Quản lý E-learning',
+          to: '/elearning'
+        },
+        {
+          title: 'Bài tập và bài kiểm tra',
+          to: '/elearning/manager/exams'
+        },
+        {
+          title: elearningName,
+          to: `/elearning/manager/exams/exercise?elearning_id=${getParamQuery('elearning_id')}&elearning_name=${elearningName}`
+        },
+        {
+          title: exerciseName,
+          to: '.'
+          // to: '/elearning/manager/exams/exercise?elearning_id=${getParamQuery('elearning_id')}&elearning_name=${elearningName}'
+        },
+        {
+          title: studentName,
+          to: ''
+        }
+      ]
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý bài tập & bài kiểm tra'));
       this.pageLoading = false;
     },
     methods: {
