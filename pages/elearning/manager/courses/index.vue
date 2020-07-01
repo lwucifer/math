@@ -75,11 +75,11 @@ export default {
       },
       {
         title: 'Bài giảng và khóa học',
-        to: '/elearning/manager/course'
-      },
+        to: '/elearning/manager/courses'
+      }
     ]
     initBreadcrumb(this, breadcrumb);
-    initPageTitle(this, createPageTitle('Quản lý Elearning'));
+    initPageTitle(this, createPageTitle('Quản lý bài giảng và khóa học'));
   }
 };
 </script>

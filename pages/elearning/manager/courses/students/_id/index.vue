@@ -79,6 +79,8 @@ import { createBannedStudent } from "~/models/elearning/BannedStudent";
 const STORE_TEACHING_EXERCISES = "elearning/study/exercises";
 const STORE_TEACHING_PROGRESS = "elearning/teaching/progress";
 const STORE_TEACHING_BANNED = "elearning/teaching/banned";
+import { initBreadcrumb, createPageTitle, initPageTitle, getParamQuery } from "~/utils/common";
+
 export default {
   layout: "manage",
 
@@ -153,6 +155,9 @@ export default {
     ...mapState(STORE_TEACHING_PROGRESS, ["progress"]),
     ...mapState(STORE_TEACHING_EXERCISES, {
       stateExercises: "exercises"
+    }),
+    ...mapState("elearning/detail", {
+      elearningInfo: "info"
     }),
   },
 
@@ -240,6 +245,31 @@ export default {
   },
   created() {
     this.getList()
+  },
+  mounted() {
+    const elearningId = getParamQuery('elearning_id')
+    const elearningName = get(this, 'elearningInfo.name', '')
+    const studentName = get(this, 'progress.name', '')
+    const breadcrumb = [
+      {
+        title: 'Quản lý E-learning',
+        to: '/elearning'
+      },
+      {
+        title: 'Bài giảng và khóa học',
+        to: '/elearning/manager/courses'
+      },
+      {
+        title: `Danh sách học sinh - ${elearningName}`,
+        to: `/elearning/manager/courses/students?elearning_id=${elearningId}`
+      },
+      {
+        title: `${studentName}`,
+        to: ``
+      },
+    ]
+    initBreadcrumb(this, breadcrumb);
+    initPageTitle(this, createPageTitle('Quản lý bài tập và bài kiểm tra'));
   }
 };
 </script>
