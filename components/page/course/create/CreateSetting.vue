@@ -317,6 +317,15 @@ export default {
         this.error.price = "Học phí tối thiểu là 10,000đ";
         return false;
       }
+
+      if (
+        this.free == 1 &&
+        numeral(get(this, "payload.fee", 0)).value() < 10000
+      ) {
+        this.error.price = "Học phí tối thiểu là 10,000đ";
+        return false;
+      }
+
       this.error.price = "";
       return true;
     },
