@@ -159,24 +159,25 @@ export default {
     async handleChangedClass() {
       this.checkAll = false;
       this.arrMember = [];
-      if (this.classSelected) {
-        let params = {
-          class_id: this.classSelected.value,
-          size: 999
-        };
-        try {
-          await this.$store.dispatch(
-            `${STORE_SCHOOL_STUDENT}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
-            params
-          );
-          this.studentList = this.get(
-            this.stateSchoolStudents,
-            "content",
-            []
-          );
-        } catch (e) {
-        } finally {
-        }
+
+      let params = {
+        size: 999
+      };
+
+      if (this.classSelected) params.class_id = this.classSelected.value;
+
+      try {
+        await this.$store.dispatch(
+          `${STORE_SCHOOL_STUDENT}/${actionTypes.TEACHING_STUDENTS_PRIVATE.LIST}`,
+          {params}
+        );
+        this.studentList = this.get(
+          this.stateSchoolStudents,
+          "content",
+          []
+        );
+      } catch (e) {
+      } finally {
       }
     },
 
@@ -217,6 +218,10 @@ export default {
         );
         let lessonList = this.get(this.stateSchoolClasses, "content", []);
         let list = [];
+        list.push({
+          value: null,
+          text: "Tất cả"
+        });
         lessonList.forEach(element => {
           list.push({
             value: element.id,
@@ -243,6 +248,7 @@ export default {
 
   created() {
     this.getSchoolClasses();
+    this.handleChangedClass();
   }
 };
 </script>

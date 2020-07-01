@@ -1,8 +1,8 @@
 <template>
   <div class="wrap-courses-school">
       <div class="d-flex align-items-center">
-          <h3>{{ get(this,'titleSearch','') }}</h3>
-          <p class="ml-3">(<strong>{{get(this,'lectures.content.length',0)}}</strong> Bài giảng - <strong>{{get(this,'courses.content.length',0)}}</strong> khóa học)</p>
+          <h3 class="mr-3">{{ get(this,'titleSearch','') }}</h3>
+          <p>(<strong>{{get(this,'lectures.total_elements',0)}}</strong> Bài giảng - <strong>{{get(this,'courses.total_elements',0)}}</strong> khóa học)</p>
       </div>
       <div class="d-flex mb-5 mt-3">
           <div class="filter-form-school">
@@ -22,7 +22,7 @@
                 />
                 <app-select
                     bordered
-                    v-model="params.time"
+                    v-model="params.duration"
                     @change="handleChangeTimes"
                     :options="timeOpts"
                     placeholder="Thời lượng"
@@ -87,6 +87,7 @@
         </div>
         <app-pagination
             :pagination="pagination"
+            @pagechange="handleChangePage"
             class="mt-5 w-100"
         />
       </div>
@@ -101,6 +102,7 @@
         </div>
         <app-pagination
             :pagination="pagination"
+            @pagechange="handleChangePage"
             class="mt-5 w-100"
         />
       </div>
@@ -139,7 +141,6 @@ export default {
                 teacher: null,
                 fee: null,
                 level: null,
-                school_id: null,
                 page: 1,
                 size: 12,
             },
@@ -164,7 +165,7 @@ export default {
                 { value: SORT_ELEARNING.PRICE_ASC, text: "Giá thấp nhất" },
                 { value: SORT_ELEARNING.PRICE_DESC, text: "Giá cao nhất" }
             ],
-            titleSearch:''
+            titleSearch:null
 
         }
     },
@@ -176,6 +177,7 @@ export default {
     methods:{
         handleShowFilter(){
             this.filterSelect =!this.filterSelect;
+            this.resetData()
         },
         async fetchLectures(){
             this.params.school_id = this.$route.params.id
@@ -220,9 +222,26 @@ export default {
                 this.params.subject = subjectName;
                 this.titleSearch = subjectName
             }
+            if(searchParams == 'lecture'){
+                this.tab = '1',
+                this.titleSearch = 'Bài giảng và khóa học'
+            }
+            if(searchParams == 'course'){
+                this.tab = '2'
+                this.titleSearch = 'Bài giảng và khóa học'
+            }
         },
         changeTab(val){
             this.tab = val;
+            this.refreshData()
+        },
+        checktab(){
+            if(this.tab == '1'){
+                this.fetchLectures()
+            }
+            else{
+                this.fetchCourses()
+            }
         },
         updateFilter(data) {
             this.params = { ...this.params, ...data }
@@ -230,11 +249,11 @@ export default {
         updatePagination() {
             let paginationData;
             if (this.tab == 1) {
-                paginationData = this.courses || {}
+                paginationData = this.lectures || {}
             } else if (this.tab == 2) {
-                this.paginationData = this.lectures || {}
+                paginationData = this.courses || {}
             } else {
-                this.paginationData = {}
+                paginationData = {}
             }
             this.pagination = {
                 total_pages: get(paginationData, "total_pages", 0),
@@ -247,7 +266,16 @@ export default {
         },
         async refreshData() {
             this.params.page = 1
-            await this.fetchCourses()
+            this.checktab()
+        },
+        async resetData(){
+            this.params.school_id= null;
+            this.params.subject= null;
+            this.params.teacher= null;
+            this.params.fee= null;
+            this.params.level= null;
+            this.params.page = 1;
+            this.checktab()
         },
         handleChangeFee(_newVal, _selectedVal) {
             console.log("[handleChangeFee]", _newVal, _selectedVal);
@@ -257,7 +285,7 @@ export default {
 
         handleChangeTimes(_newVal, _selectedVal) {
             console.log("[handleChangeTimes]", _newVal, _selectedVal);
-            this.updateFilter({ time: _newVal });
+            this.updateFilter({ duration: _newVal });
             this.refreshData();
         },
 
@@ -265,6 +293,11 @@ export default {
             console.log("[handleChangeLevel]", _newVal, _selectedVal);
             this.updateFilter({ level: _newVal });
             this.refreshData();
+        },
+        handleChangePage(val){
+            console.log('dsad',val)
+            this.updateFilter({ page: val.number + 1 });
+            this.checktab()
         },
         get
     },

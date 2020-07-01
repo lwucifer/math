@@ -3,7 +3,7 @@
     <div class="container">
       <div class="home-banner__title">Học tập mọi lúc, mọi nơi <span>với Schoolly.</span></div>
 
-      <div class="home-banner__text">Nền tảng học tập trực tuyến toàn diện dành <br> cho học sinh, giáo viên, nhà trường và các đơn vị giáo dục.</div>
+      <div class="home-banner__text">Nền tảng học tập trực tuyến toàn diện <br>dành cho học sinh, giáo viên, nhà trường và các đơn vị giáo dục.</div>
 
       <app-button
         size="md"
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+
 import BannerImage from "~/assets/svg/images/elearing-home-banner.svg?inline";
 
 export default {

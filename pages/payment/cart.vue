@@ -8,7 +8,7 @@
           <template v-slot:title>
             <div class="d-flex align-items-center">
               <h4>Giỏ hàng</h4>
-              <span class="text-gray">  ({{get(cartCheckout, 'orders.length', 0)}} sản phẩm)</span>
+              <span class="text-gray ml-3">  ({{get(cartCheckout, 'orders.length', 0)}} sản phẩm)</span>
             </div>
           </template>
           <template v-slot:content>
@@ -34,7 +34,7 @@
         <template v-slot:title>
           <div class="d-flex align-items-center">
             <h4>Giỏ hàng</h4>
-            <span class="text-gray">  (0 sản phẩm)</span>
+            <span class="text-gray ml-3">  (0 sản phẩm)</span>
           </div>
         </template>
          <template v-slot:content>

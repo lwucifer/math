@@ -239,7 +239,7 @@ export default {
     },
 
     title() {
-      if (this.edit) {
+      if (this.edit || this.confirmLoading) {
         return "Xác nhận";
       }
 
@@ -247,35 +247,10 @@ export default {
         if (this.payload.repository_file_id) {
           return "Thêm video bài học";
         }
-
-        if (this.payload.lesson) {
-          return "Upload video bài học";
-        }
       }
 
-      if (
-        this.payload.type == "PDF" ||
-        this.payload.type == "DOC" ||
-        this.payload.type == "TXT"
-      ) {
-        if (
-          this.payload.repository_file_id ||
-          this.payload.article_content.length > 0
-        ) {
-          return "Thêm bài học";
-        }
-
-        if (this.payload.lesson) {
-          return "Upload bài học";
-        }
-      }
-
-      if (this.payload.type === "SCORM") {
-        return "Upload scorm bài học";
-      }
-
-      if (this.tabType === "audio") {
-        return "Upload audio bài học";
+      if (this.payload.lesson) {
+        return "Upload bài học";
       }
 
       return "Thêm bài học";
@@ -283,54 +258,38 @@ export default {
 
     description() {
       if (this.confirmLoading) {
-        if (this.payload.type == "VIDEO") {
-          return "Video đang được tải lên, xin vui lòng không đóng cửa sổ này.";
-        }
-
-        if (
-          this.payload.type == "PDF" ||
-          this.payload.type == "DOC" ||
-          this.payload.type == "TXT"
-        ) {
-          if (this.payload.lesson) {
-            return "File đang được tải lên, xin vui lòng không đóng cửa sổ này.";
-          }
-        }
+        return "File đang được tải lên, vui lòng không đóng cửa sổ này"
       }
 
       if (this.edit) {
-        if (this.payload.repository_file_id) {
-          return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
-        }
-        
         return "Bạn có chắc chắn là muốn lưu thay đổi này?"
       }
 
-      if (this.payload.type == "VIDEO") {
-        if (this.payload.lesson && this.tabType === "video") {
-          return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
-        }
-        if (this.payload.lesson && this.tabType === "audio") {
-          return "Bạn có chắc chắn muốn tải audio này lên hệ thống?";
-        }
-        if (this.payload.repository_file_id) {
-          return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
-        }
+      if (this.payload.repository_file_id) {
+        return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
       }
+
+      if (this.payload.lesson) {
+        return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
+      }
+
+      // if (this.payload.type == "VIDEO") {
+      //   if (this.payload.lesson && this.tabType === "video") {
+      //     return "Bạn có chắc chắn muốn tải video này lên hệ thống?";
+      //   }
+      //   if (this.payload.lesson && this.tabType === "audio") {
+      //     return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
+      //   }
+      // }
 
       if (
         this.payload.type == "PDF" ||
         this.payload.type == "DOC" ||
-        this.payload.type == "TXT"
+        this.payload.type == "TXT" ||
+        this.payload.type == "ARTICLE"
       ) {
         if (this.payload.article_content) {
           return "Bạn có chắc chắn muốn thêm bài học này?";
-        }
-        if (this.payload.lesson) {
-          return "Bạn có chắc chắn muốn tải file này lên hệ thống?";
-        }
-        if (this.payload.repository_file_id) {
-          return "Bạn có chắc chắn muốn thêm file này từ kho học liệu?";
         }
       }
     },
@@ -389,6 +348,7 @@ export default {
         this.tabType = "audio";
       }
     },
+
     handleReset() {
       this.payload.article_content = "";
       this.payload.lesson = "";
@@ -398,6 +358,7 @@ export default {
     handleChangeName() {
       this.handleCheckName();
     },
+
     changeTabType(type) {
       this.handleReset();
       this.tabType = type;

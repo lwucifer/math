@@ -422,7 +422,7 @@ export default {
             text: element.name
           });
         });
-        this.classList = list;
+        this.courses = list;
       } catch (e) {
       } finally {
       }
