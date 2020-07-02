@@ -18,10 +18,10 @@
           <div class="text-dark">
             <p>Đăng nhập nhanh với</p>
             <div class="mt-3 mb-15">
-              <app-button class="btn-social btn-facebook">
+              <app-button class="btn-social btn-facebook" nuxt to="/coming-soon">
                 <IconFacebook class="mr-2" />Facebook
               </app-button>
-              <app-button class="btn-social btn-google">
+              <app-button class="btn-social btn-google" nuxt to="/coming-soon">
                 <IconGoogle class="mr-2" />Google
               </app-button>
             </div>
