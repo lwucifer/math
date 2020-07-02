@@ -133,7 +133,7 @@
           class="d-flex-center text-info "
           network="facebook"
           :url="
-            `https://schoolly.famtechvn.com/elearning/${get(
+            `${process.env.BASE_ORIGIN_LOCATION}/${get(
               info,
               'elearning_id',
               ''
