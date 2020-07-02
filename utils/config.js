@@ -21,6 +21,7 @@ export const DATE_FORMAT = "YYYY-MM-DD";
 export const DATETIME_DISPLAY = "HH:mm DD/MM/YYYY";
 export const DATETIME_HH_MM = "HH:mm";
 export const DATETIME_HH_MM_A = "h:mm A";
+export const DATETIME_HH_MM_a = "h:mm a";
 export const DATETIME_RECEIVE = "YYYY-MM-DD HH:mm:ss";
 export const DATETIME_FULL_TEXT = "LLLL";
 export const DATETIME_FULL_DATE_TEXT = "HH:mm dddd, DD [tháng] MM [năm] YYYY";
