@@ -241,10 +241,10 @@ export default {
       // this.checkPayload = true;
     });
     console.log("detectBrowser", detectBrowser());
-    // this.isAuthenticated && this.cartList();
+    this.isAuthenticated && this.cartList();
   },
   created() {
-    this.isAuthenticated && this.getNotiUnread();
+    // this.isAuthenticated && this.getNotiUnread();
     this.isAuthenticated && this.getNotifications({
         fetch_size: FETCH_SIZE,
         service_type: ELEARNING
