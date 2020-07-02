@@ -21,6 +21,7 @@ export const DATE_FORMAT = "YYYY-MM-DD";
 export const DATETIME_DISPLAY = "HH:mm DD/MM/YYYY";
 export const DATETIME_HH_MM = "HH:mm";
 export const DATETIME_HH_MM_A = "h:mm A";
+export const DATETIME_HH_MM_a = "h:mm a";
 export const DATETIME_RECEIVE = "YYYY-MM-DD HH:mm:ss";
 export const DATETIME_FULL_TEXT = "LLLL";
 export const DATETIME_FULL_DATE_TEXT = "HH:mm dddd, DD [tháng] MM [năm] YYYY";
@@ -103,3 +104,15 @@ export const PARAM_CHECK = {
 }
 
 export const DESKTOP_VIEW = "schoolly_desktop_view";
+
+/**
+ * Page title
+ */
+export const TITLE_PAGE_PREFIX = "Schoolly"
+export const TITLE_PAGE_SEPARATOR = "-"
+export const TITLE_PAGE_DEFAULT = "Schoolly - Hệ thống giáo dục và đào tạo trực tuyến toàn diện"
+
+export const EXAM_CONFIG = {
+  TIME_TO_START_OPEN_QUESTION: 1 * 24 * 3600 * 1000,
+  TIME_TO_START_CLOSE_QUESTION: 1 * 24 * 3600 * 1000,
+}

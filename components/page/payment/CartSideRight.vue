@@ -11,9 +11,9 @@
           :key="index"
           :item="item"
         >
-          <div class="name-elearning__payment">
-            <span>{{ get(item, "elearning_name", "") }}</span>
-            <span class=" text-primary ml-auto">{{ numeral(get(item, "price", "")).format() }} đ</span>
+          <div class="name-elearning__payment row">
+            <span class="col-md-9">{{ get(item, "elearning_name", "") }}</span>
+            <span class=" text-primary text-right col-md-3">{{ numeral(get(item, "price", "")).format() }} đ</span>
           </div>
           <span class="name-teacher__payment">{{ get(item, "teacher_name", "") }}</span>
         </div>

@@ -165,7 +165,7 @@ export default {
                 { value: SORT_ELEARNING.PRICE_ASC, text: "Giá thấp nhất" },
                 { value: SORT_ELEARNING.PRICE_DESC, text: "Giá cao nhất" }
             ],
-            titleSearch:''
+            titleSearch:null
 
         }
     },
@@ -223,10 +223,12 @@ export default {
                 this.titleSearch = subjectName
             }
             if(searchParams == 'lecture'){
-                this.tab = '1'
+                this.tab = '1',
+                this.titleSearch = 'Bài giảng và khóa học'
             }
             if(searchParams == 'course'){
                 this.tab = '2'
+                this.titleSearch = 'Bài giảng và khóa học'
             }
         },
         changeTab(val){

@@ -55,7 +55,7 @@
           <n-link
             class
             title="Chi tiết"
-            :to="`/elearning/manager/exams/${row.id}/participants`"
+            :to="`/elearning/manager/exams/${row.id}/participants?elearning_id=${getParamQuery('elearning_id')}&elearning_name=${getParamQuery('elearning_name')}&item_name=${get(row, 'title', '')}`"
           >
             <IconArrow height="13"/>
           </n-link>
@@ -82,6 +82,7 @@
   import IconArrow from "~/assets/svg/v2-icons/arrow_forward_ios_24px.svg?inline"
   import RateStatus from "~/components/page/elearning/manager/exam/RateStatus"
   import { numeralFormat } from "~/plugins/filters";
+  import { getParamQuery } from "~/utils/common"
 
   export default {
     components: {
@@ -155,6 +156,7 @@
       sortTable(info) {
         this.$emit('changedSort', info)
       },
+      getParamQuery,
       numeralFormat,
       get
     },

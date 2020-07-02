@@ -7,32 +7,49 @@
     <div class="clc-video__right w-100">
       <div class="d-flex justify-content-between clc-video__name">
         <p class="mb-3">
-          <span class="heading-6 mb-3 font-weight-bold">Bài {{ index + 1 + ": " }}</span>
+          <span class="heading-6 mb-3 font-weight-bold"
+            >Bài {{ index + 1 + ": " }}</span
+          >
           <span>
             {{
-            get(lesson, "name", "").length > 60
-            ? get(lesson, "name", "").slice(0, 40) + "..."
-            : get(lesson, "name", "")
+              get(lesson, "name", "").length > 60
+                ? get(lesson, "name", "").slice(0, 40) + "..."
+                : get(lesson, "name", "")
             }}
           </span>
         </p>
 
         <div class="clc-video__actions">
-          <a href class="clc-video__btn-edit text-primary mr-2" @click="handleEditLesson($event)">
-            <IconEdit class="icon" style="width: 18px; height: 18px"/>
+          <a
+            href
+            class="clc-video__btn-edit text-primary mr-2"
+            @click="handleEditLesson($event)"
+          >
+            <IconEdit class="icon" style="width: 18px; height: 18px" />
           </a>
-          <a href class="clc-video__btn-delete text-secondary" @click="handleDeleteLesson($event)">
+          <a
+            href
+            class="clc-video__btn-delete text-secondary"
+            @click="handleDeleteLesson($event)"
+          >
             <IconTrashAlt class="icon" />
           </a>
         </div>
       </div>
 
-      <div
-        class="clc-video__type text-dark mt-2"
-        v-if="showFileName"
-      >{{ get(lesson, "file_name", "").length > 60 ? (get(lesson, "file_name", "").slice(0, 60) + '...' + get(lesson, "format", "").toLowerCase()) : get(lesson, "file_name", "")}}</div>
+      <div class="clc-video__type text-dark mt-2" v-if="showFileName">
+        {{
+          get(lesson, "file_name", "").length > 60
+            ? get(lesson, "file_name", "").slice(0, 60) +
+              "..." +
+              get(lesson, "format", "").toLowerCase()
+            : get(lesson, "file_name", "")
+        }}
+      </div>
 
-      <div class="clc-video__type text-dark mt-2" v-else>{{ get(lesson, "type", "") }}</div>
+      <div class="clc-video__type text-dark mt-2" v-else>
+        {{ get(lesson, "type", "") }}
+      </div>
 
       <div class="clc-video__time text-gray mb-3 mt-3">
         <IconClock width="15px" height="15px" class="mr-2" />
@@ -65,18 +82,18 @@ export default {
   components: {
     IconEdit,
     IconTrashAlt,
-    IconClock
+    IconClock,
   },
 
   props: {
     lesson: {
       type: Object,
-      default: null
+      default: null,
     },
     index: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
 
   computed: {
@@ -85,36 +102,38 @@ export default {
     },
 
     thumnail() {
-      switch(get(this, "lesson.type", "")) {
+      switch (get(this, "lesson.type", "")) {
         case "DOCS":
-          return "/images/thumnail-doc.png"
+          return "/images/thumnail-doc.png";
           break;
         case "AUDIO":
-          return "/images/thumnail-audio.jpg"
+          return "/images/thumnail-audio.jpg";
           break;
         case "VIDEO":
-          return "/images/thumnail-video.jpg"
+          return "/images/thumnail-video.jpg";
           break;
         case "SCORM":
-          return "/images/thumnail-scorm.jpg"
+          return "/images/thumnail-scorm.jpg";
           break;
         default:
-          return "/images/thumnail-doc.png"
+          return "/images/thumnail-doc.png";
       }
     },
 
     showFileName() {
       return (
         get(this, "lesson.type", "") === "VIDEO" ||
-        get(this, "lesson.type", "") === "DOCS"
+        get(this, "lesson.type", "") === "DOCS" ||
+        get(this, "lesson.type", "") === "AUDIO" ||
+        get(this, "lesson.type", "") === "SCORM"
       );
-    }
+    },
   },
 
   data() {
     return {
       showModalConfirm: false,
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
 
@@ -136,8 +155,8 @@ export default {
       this.confirmLoading = true;
       const options = {
         data: {
-          id: get(this, "lesson.id", "")
-        }
+          id: get(this, "lesson.id", ""),
+        },
       };
       const res = await this.$store.dispatch(
         `elearning/creating/creating-lesson/${actionTypes.ELEARNING_CREATING_LESSONS.DELETE}`,
@@ -161,7 +180,7 @@ export default {
       this.confirmLoading = false;
     },
 
-    get
-  }
+    get,
+  },
 };
 </script>

@@ -23,7 +23,7 @@
             <div class="intro-text-school-menu-side" style="font-size: 16px;">Tin tức khác</div>
             <div 
                 class="d-flex align-items-center mb-4 school-news-detail" 
-                v-for="(item,index) in get(this,'newsOtherList.content')" 
+                v-for="(item,index) in filterOtherNews ? filterOtherNews : []" 
                 :key="index"
                 @click="getDetailNews(item.id)"
             >
@@ -44,7 +44,7 @@ import { VclList} from "vue-content-loading";
 
 import { mapState, mapActions } from "vuex";
 import * as actionTypes from "~/utils/action-types";
-import { get } from "lodash";
+import { get, cloneDeep, filter } from "lodash";
 import {moment} from "moment";
 import { getParamQuery } from "~/utils/common"
 export default {
@@ -57,8 +57,8 @@ export default {
             params:{
                 organization_id : this.$route.params.id,
                 category_id:1,
-                size:5,
-                page:2
+                size:6,
+                page:1
             },
             pageLoading:true
         }
@@ -72,7 +72,13 @@ export default {
         }
     },
     computed:{
-        ...mapState("elearning/school/school-news", { newsListDetail: "schoolNewsDetail",newsOtherList: "schoolNewsOther" })
+        ...mapState("elearning/school/school-news", { newsListDetail: "schoolNewsDetail",
+            newsOtherList: "schoolNewsOther" }),
+        filterOtherNews(){
+            const arr = cloneDeep(this.newsOtherList.content)
+            const rs = filter(arr,(el)=>{ return el.id != this.$route.query.news_id })
+            return rs
+        },
     },
     methods:{
         ...mapActions("elearning/school/school-news", ["schoolNewsOtherList"]),

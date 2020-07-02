@@ -57,7 +57,7 @@
   import * as actionTypes from "~/utils/action-types"
   import { mapState } from "vuex"
   import { get } from "lodash";
-  import { useEffect } from "~/utils/common"
+  import { useEffect, initBreadcrumb, createPageTitle, initPageTitle} from "~/utils/common"
 
   const STORE_NAMESPACE = 'elearning/teaching/repository-files'
   const REPOSITORY_STORE_NAMESPACE = 'elearning/teaching/repository'
@@ -208,6 +208,20 @@
       //   "params.used",
       //   "params.query",
       // ])
+    },
+    mounted() {
+      const breadcrumb = [
+        {
+          title: 'Quản lý E-learning',
+          to: '/elearning/manager'
+        },
+        {
+          title: 'Kho học liệu',
+          to: ''
+        },
+      ]
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý kho học liệu'));
     }
   }
 </script>

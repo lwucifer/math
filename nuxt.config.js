@@ -36,7 +36,7 @@ module.exports = {
       {
         hid: 'og:site_name',
         property: 'og:site_name',
-        content: 'bcnex.net'
+        content: 'schoolly.vn'
       },
       {
         hid: 'og:image',
@@ -61,7 +61,7 @@ module.exports = {
       {
         hid: 'twitter:site',
         name: 'twitter:site',
-        content: '@bcnex.net'
+        content: '@schoolly.vn'
       },
       {
         hid: 'twitter:image',

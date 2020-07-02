@@ -1,7 +1,7 @@
 import numeral from "numeral";
 import Vue from "vue";
 import { DATETIME_FULL_TEXT, DATE_BIRTHDAY, DATETIME_HH_MM_DD_MM_YY_DASH, DATETIME_FULL_DATE_TEXT } from "~/utils/config";
-import { EXERCISE_CATEGORIES, EXERCISE_STATUS, EXERCISE_TYPES, SUBMISSION_RESULTS, TRANSACTION_STATUSES, WITHDRAWAL_STATUSES } from "~/utils/constants";
+import { EXERCISE_CATEGORIES, EXERCISE_STATUS, EXERCISE_TYPES, SUBMISSION_RESULTS, TRANSACTION_STATUSES, WITHDRAWAL_STATUSES, ELEARNING_TYPES } from "~/utils/constants";
 // const moment = require("moment");
 import { getLocalDateTime } from '~/utils/moment';
 
@@ -262,6 +262,14 @@ export function getTestTypeText(type = "") {
   }
 }
 
+export function getElearningTypeText(type = "") {
+  if (type === ELEARNING_TYPES.COURSE) {
+    return "Khóa học";
+  } else if (type === ELEARNING_TYPES.LECTURE) {
+    return "Bài giảng";
+  }
+}
+
 export function getQuestionNoText(_index = "") {
   let noText = '';
   switch (_index) {
@@ -393,6 +401,7 @@ const filters = {
   convertBreadcrumText,
   getExerciseTypeText,
   getTestTypeText,
+  getElearningTypeText,
   getQuestionNoText,
   getDateTimeFullText,
   getDateBirthday,

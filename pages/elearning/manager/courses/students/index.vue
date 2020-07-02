@@ -6,10 +6,10 @@
 import StudentList from "./student";
 import { mapState } from "vuex";
 import { get } from "lodash";
+import { initBreadcrumb, createPageTitle, initPageTitle, getParamQuery } from "~/utils/common";
 
 import * as actionTypes from "~/utils/action-types";
 const STORE_NAMESPACE = "elearning/teaching/elearning-participant";
-const STORE_SCHOOL_CLASSES = "elearning/school/school-classes";
 const STORE_TEACHING_REQUEST = "elearning/teaching/request";
 const STORE_PUBLIC_CLASSES = "elearning/teaching/public-classes";
 const STORE_STUDY_INFO = "elearning/study/study-info";
@@ -26,7 +26,6 @@ export default {
     const dataProfile = await store.dispatch(
       `${STORE_PUBLIC_CLASSES}/${actionTypes.ACCOUNT_PROFILE.LIST}`
     );
-    console.log("dataProfile", dataProfile);
     const dataOrgan =
       dataProfile && dataProfile.organization ? dataProfile.organization : {};
     const schoolId = dataOrgan && dataOrgan.id ? dataOrgan.id : "";
@@ -38,27 +37,23 @@ export default {
 
     await Promise.all([
       store.dispatch(`elearning/detail/getInfo`,
-      listQuery
-    ),
+        listQuery
+      ),
       store.dispatch(
         `${STORE_NAMESPACE}/${actionTypes.TEACHING_ELEARNING_PARTICIPANT.LIST}`,
         listQuery
       ),
-      store.dispatch(
-        `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
-      ),
       // store.dispatch(
-      //   `${STORE_TEACHING_REQUEST}/${actionTypes.TEACHING_ELEARNING_REQUESTS.LIST}`,
-      //   listQuery
+      //   `${STORE_SCHOOL_CLASSES}/${actionTypes.SCHOOL_CLASSES.LIST}`
       // ),
-      store.dispatch(
-        `${STORE_PUBLIC_CLASSES}/${actionTypes.PUBLIC_CLASSES.LIST}`,
-        {
-          params: {
-            school_id: schoolId
-          }
-        }
-      )
+      // store.dispatch(
+      //   `${STORE_PUBLIC_CLASSES}/${actionTypes.PUBLIC_CLASSES.LIST}`,
+      //   {
+      //     params: {
+      //       school_id: schoolId
+      //     }
+      //   }
+      // )
     ]);
   },
 
@@ -68,9 +63,32 @@ export default {
   },
   
   computed: {
+    ...mapState("elearning/detail", {
+      elearningInfo: "info"
+    }),
   },
 
-  methods: {get}
+  methods: {get},
+  mounted() {
+    const elearningId = getParamQuery('elearning_id')
+    const elearningName = get(this, 'elearningInfo.name', '')
+    const breadcrumb = [
+      {
+        title: 'Quản lý E-learning',
+        to: '/elearning/manager'
+      },
+      {
+        title: 'Bài giảng và khóa học',
+        to: '/elearning/manager/courses'
+      },
+      {
+        title: `Danh sách học sinh - ${elearningName}`,
+        to: `/elearning/manager/courses/students?elearning_id=${elearningId}`
+      },
+    ]
+    initBreadcrumb(this, breadcrumb);
+    initPageTitle(this, createPageTitle('Quản lý bài tập và bài kiểm tra'));
+  }
 };
 </script>
 

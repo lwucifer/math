@@ -76,6 +76,7 @@ export default class BaseService {
             formData.append(key, value);
         });
         const { data } = await this.$axios.post(this.$api, formData, {
+            timeout: 1000 * 60 * 10,
             headers: {
                 "Content-Type": "multipart/form-data",
             },

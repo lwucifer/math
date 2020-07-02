@@ -201,10 +201,11 @@ import { getDateBirthDay, getLocalTimeHH_MM_A } from "~/utils/moment";
 import { mapState } from "vuex";
 import * as actionTypes from "~/utils/action-types";
 import { get } from "lodash";
-import { useEffect } from "~/utils/common";
+import { useEffect, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
 
 const STORE_NAMESPACE = "elearning/teaching/olclass";
 const STORE_CLASSES = "elearning/teaching/classes";
+const STORE_PUBLIC_CLASSES = "elearning/teaching/public-classes";
 
 export default {
   components: {
@@ -220,6 +221,36 @@ export default {
     IconLock2,
     IconLockOpenAlt,
     ElearningManagerSide
+  },
+
+  async fetch({ params, query, store, route }) {
+    const elearningId = query.elearning_id;
+    const dataProfile = await store.dispatch(
+      `${STORE_PUBLIC_CLASSES}/${actionTypes.ACCOUNT_PROFILE.LIST}`
+    );
+    console.log("dataProfile", dataProfile);
+    const dataOrgan =
+      dataProfile && dataProfile.organization ? dataProfile.organization : {};
+    const schoolId = dataOrgan && dataOrgan.id ? dataOrgan.id : "";
+    const listQuery = {
+      params: {
+        elearning_id: elearningId
+      }
+    };
+
+    await Promise.all([
+      store.dispatch(`elearning/detail/getInfo`,
+      listQuery
+    ),
+      store.dispatch(
+        `${STORE_PUBLIC_CLASSES}/${actionTypes.PUBLIC_CLASSES.LIST}`,
+        {
+          params: {
+            school_id: schoolId
+          }
+        }
+      )
+    ]);
   },
 
   data() {
@@ -307,8 +338,22 @@ export default {
     ...mapState(STORE_CLASSES, {
       stateClasses: "teachingClasses"
     }),
+    ...mapState(STORE_NAMESPACE, {
+      stateClassInfo: "OnlineClassInfo"
+    }),
+    ...mapState(STORE_PUBLIC_CLASSES, {
+      statePublicClasses: "publicClassesList"
+    }),
     courseOpts() {
-      return [this.allOpt, ...this.courses];
+      const dataFilter = this.courses ? this.courses : [];
+      //const dataFilter = this.statePublicClasses ? this.statePublicClasses : [];
+      const data = dataFilter.map(item => {
+        return {
+          value: item.id,
+          text: item.name
+        };
+      });
+      return [this.allOpt, ...data];
     },
     statusOpts() {
       return [this.allOpt, ...this.statuses];
@@ -497,27 +542,49 @@ export default {
         await this.$store.dispatch(
           `${STORE_CLASSES}/${actionTypes.ELEARNING_TEACHING_CLASS.LIST}`, {params}
         );
-        let lessonList = this.get(this.stateClasses, "content", []);
-        let list = [];
-        lessonList.forEach(element => {
-          list.push({
-            value: element.id,
-            text: element.name
-          });
-        });
-        this.classList = list;
+        this.courses = this.get(this.stateClasses, "content", []);
       } catch (e) {
       } finally {
       }
     },
-
+    setBreadcrumb() {
+      const roomName = this.get(this, 'stateClassInfo.data.name', '');
+      const lessonName = this.get(this, 'lessonInfo.name', '');
+      const breadcrumb = [
+        {
+          title: 'Quản lý E-learning',
+          to: '/elearning/manager'
+        },
+        {
+          title: 'Phòng học online',
+          to: '/elearning/manager/online-class'
+        },
+        {
+          title: `Danh sách học sinh - ${roomName}`,
+          to: `/elearning/manager/online-class/${this.get(this, 'stateClassInfo.data.id', '')}/invites`
+        },
+        {
+          title: `Danh sách điểm danh - ${lessonName}`,
+          to: ''
+        },
+      ];
+      initBreadcrumb(this, breadcrumb);
+      initPageTitle(this, createPageTitle('Quản lý phòng học online'));
+    },
     get
   },
 
-  created() {
-    this.getList();
-    this.getLessonInfo();
-    this.getSchoolClasses();
+  async created() {
+    await Promise.all([
+      this.getList(),
+      this.getLessonInfo(),
+      this.getSchoolClasses(),
+    ])
+    this.setBreadcrumb()
+
+  },
+  mounted() {
+    
   }
 };
 </script>
