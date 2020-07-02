@@ -32,6 +32,23 @@
 
     <app-editor class="mb-4" id="question-editor" v-model="payload.content" />
 
+    <div class="row">
+      <div class="col-md-3">
+        <label class="d-inline-block mb-3 font-weight-bold" for="answer"
+          >Chọn đáp án đúng</label
+        >
+      </div>
+
+      <div class="col-md-8">
+        <label
+          class="d-inline-block mb-3"
+          style="margin-left: 1.5rem"
+          for="answer-editor"
+          >Nội dung đáp án</label
+        >
+      </div>
+    </div>
+
     <CreateAnswerOfQuestion
       v-for="(answer, index) in get(payload, 'answers', [])"
       :key="answer.id"
