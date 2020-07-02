@@ -18,7 +18,14 @@
                 size="sm"
                 @input="handleChangedBank"
                 has-border
-              />
+              >
+                <template v-slot:option-content="{ option }">
+                  <p class="d-inline-block">
+                    <span class="d-block text-uppercase font-weight-semi-bold mb-2">{{ get(option, 'bank_name') }} - {{ get(option, 'branch', '') }}</span>
+                    <span class="text-body-3">{{ get(option, 'account_number', '') }}</span>
+                  </p>
+                </template>
+              </app-vue-select>
             </div>
             <!--<app-select-->
               <!--class="mb-4"-->
@@ -41,7 +48,7 @@
           <div class="col-md-3"><label for="" class="form--normal__title">Tên chủ tài khoản</label></div>
           <div class="col-md-9">
             <app-input
-              placeholder="Nhập tên chủ tài khoản"
+              placeholder="Tên chủ tài khoản"
               disabled
               v-model="owner"
               @input="handleChangedOwner"
@@ -50,7 +57,7 @@
           <div class="col-md-3"><label for="" class="form--normal__title">Số tài khoản</label></div>
           <div class="col-md-9">
             <app-input
-              placeholder="Nhập số tài khoản"
+              placeholder="Số tài khoản"
               disabled
               v-model="cardId"
               @input="handleChangedCardId"
