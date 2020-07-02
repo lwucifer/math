@@ -20,9 +20,13 @@
             <slot name="selected-icon">
               <IconCheck />
             </slot>
-          </i>{{ getOptionLabel(option) }}
+          </i>
+          <slot name="option-content" :option="option">{{ getOptionLabel(option) }}</slot>
+          
         </span>
-        <span v-else :title="getOptionLabel(option)">{{ getOptionLabel(option) }}</span>
+        <span v-else :title="getOptionLabel(option)">
+          <slot name="option-content" :option="option">{{ getOptionLabel(option) }}</slot>
+        </span>
       </slot>
     </template>
     <template v-slot:list-footer>
