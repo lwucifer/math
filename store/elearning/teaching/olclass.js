@@ -59,9 +59,8 @@ const actions = {
 
   async [actionTypes.TEACHING_OLCLASSES.EDIT]({ commit }, payload) {
     try {
-      const result = await new OlClass(this.$axios)['putWithRawJson'](
-        payload
-      );
+      const result = await new OlClass(this.$axios)['putWithRawJson'](payload);
+      return result;
     } catch (error) {
       console.log("[TEACHING Olclass] edit.error", error);
     }
