@@ -39,7 +39,13 @@ import CreateExam from "~/components/page/course/create/CreateExam";
 import ContentLecture from "~/components/page/course/create/ContentLecture";
 import ContentCourse from "~/components/page/course/create/ContentCourse";
 import * as actionTypes from "~/utils/action-types";
-import { getParamQuery, useEffect, initBreadcrumb, createPageTitle, initPageTitle } from "~/utils/common";
+import {
+  getParamQuery,
+  useEffect,
+  initBreadcrumb,
+  createPageTitle,
+  initPageTitle,
+} from "~/utils/common";
 import { mapState } from "vuex";
 import { VclFacebook } from "vue-content-loading";
 import { get } from "lodash";
@@ -121,7 +127,7 @@ export default {
     },
     isCreating() {
       return !this.general;
-    }
+    },
   },
 
   methods: {
@@ -174,20 +180,20 @@ export default {
     setBreadcrumb() {
       const breadcrumb = [
         {
-          title: 'E-learning',
-          to: '/elearning'
+          title: "E-learning",
+          to: "/elearning",
         },
         {
-          title: 'Bài giảng và khóa học',
-          to: '/elearning/manager/courses'
+          title: "Bài giảng và khóa học",
+          to: "/elearning/manager/courses",
         },
         {
-          title: this.isCreating ? 'Tạo mới' : 'Chỉnh sửa',
-          to: ''
-        }
-      ]
+          title: this.isCreating ? "Tạo mới" : "Chỉnh sửa",
+          to: "",
+        },
+      ];
       initBreadcrumb(this, breadcrumb);
-      initPageTitle(this, createPageTitle('Tạo mới bài giảng và khóa học'));
+      initPageTitle(this, createPageTitle("Tạo mới bài giảng và khóa học"));
     },
   },
 };
