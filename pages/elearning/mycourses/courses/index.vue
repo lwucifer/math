@@ -306,6 +306,7 @@ export default {
       if (tab == 4) {
         this.params.completed = null;
         this.params.is_archive = false;
+        this.getData()
       }
       // Lưu trữ
       if (tab == 5) {
