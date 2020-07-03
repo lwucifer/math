@@ -31,7 +31,7 @@
             <td>{{ get(file, "name", "") }}</td>
             <td>{{ get(file, "type", "") }}</td>
             <td>{{ get(file, "created_at", "") | moment("DD/MM/YYYY") }}</td>
-            <td>
+            <td style="width: 100px">
               <a
                 @click="handleSelectUrl(file, $event)"
                 href="#"
