@@ -360,8 +360,6 @@ export default {
       const title = this.checkTitle();
       const type = this.checkType();
       const weight = this.checkWeight();
-      // const open_time = this.checkOpenTime();
-      // const close_time = this.checkClosetime();
       const openCloseTime = this.checkOpenCloseTime();
       return title && type && weight && openCloseTime;
     },
@@ -375,11 +373,11 @@ export default {
       if (!this.payload.opentime_enable && !this.payload.closetime_enable)
         return true;
       if (!this.payload.open_time && this.payload.opentime_enable) {
-        this.error.open_time = "Bạn chưa chọn thời gian bắt đầu";
+        this.error.open_time = "Bạn chưa chọn thời gian mở đề";
         return false;
       }
       if (!this.payload.close_time && this.payload.closetime_enable) {
-        this.error.close_time = "Bạn chưa chọn thời gian kết thúc";
+        this.error.close_time = "Bạn chưa chọn thời gian đóng đề";
         return false;
       }
 
@@ -405,112 +403,245 @@ export default {
         ? getLocalDateTime(this.setting.end_time).format("x")
         : null;
 
-      // if starttime_enable == true && endtime_enable == true
+      // 1. if starttime_enable == true && endtime_enable == true
       if (starttime_enable && endtime_enable) {
-        // for sure time not null
-        if (!open_time_timestamp) {
-          this.error.open_time = "Thời gian mở đề không hợp lệ";
-          return false;
-        }
         // Thời gian mở đề > thời gian bắt đầu bài giảng/khóa học (ít nhất 24 giờ)
-        if(!this.check2TimeDuration(start_time_timestamp, open_time_timestamp, EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          !this.check2TimeDuration(
+            start_time_timestamp,
+            open_time_timestamp,
+            EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION
+          )
+        ) {
           this.error.open_time =
             "Thời gian mở đề phải lớn hơn thời gian bắt đầu bài giảng/khoá học ít nhất 24 giờ";
           return false;
         }
         // Thời gian mở đề < thời gian kết thúc bài giảng (interval ít nhất là 24 giờ)
-        if(!this.check2TimeDuration(open_time_timestamp, end_time_timestamp, EXAM_CONFIG.TIME_TO_START_CLOSE_QUESTION)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          !this.check2TimeDuration(
+            open_time_timestamp,
+            end_time_timestamp,
+            EXAM_CONFIG.TIME_TO_START_CLOSE_QUESTION
+          )
+        ) {
           this.error.open_time =
             "Thời gian mở đề phải nhỏ hơn thời gian kết thúc bài giảng/khoá học ít nhất 24 giờ";
           return false;
         }
         // Thời gian đóng đề > thời gian bắt đầu bài giảng/khóa học (ít nhất 24 giờ)
-        if(!this.check2TimeDuration(start_time_timestamp, close_time_timestamp, EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION)) {
+        if (
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(
+            start_time_timestamp,
+            close_time_timestamp,
+            EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION
+          )
+        ) {
           this.error.close_time =
             "Thời gian đóng đề tra phải lớn hơn thời gian bắt đầu bài giảng/khoá học ít nhất 24 giờ";
           return false;
         }
         // Thời giao đóng đề - thời gian mở đề >= thời gian làm bài
-        if(!this.check2TimeDuration(open_time_timestamp, close_time_timestamp, duration * 60 * 1000)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(
+            open_time_timestamp,
+            close_time_timestamp,
+            duration * 60 * 1000
+          )
+        ) {
           this.error.open_time =
             "Cài đặt lượng thời gian làm bài cho phép không đúng";
           return false;
         }
         // Thời gian đóng đề <= thời gian kết thúc bài giảng/khóa học
-        if(!this.check2TimeDuration(close_time_timestamp, end_time_timestamp, 0)) {
+        if (
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(close_time_timestamp, end_time_timestamp, 0)
+        ) {
           this.error.close_time =
             "Thời gian đóng đề tra phải nhỏ hơn thời gian kết thúc bài giảng/khoá học";
           return false;
         }
       }
 
-      // if starttime_enable == false && endtime_enable == false
+      // 2. if starttime_enable == false && endtime_enable == false
       if (!starttime_enable && !endtime_enable) {
         // Thời gian mở đề > thời gian tạo bài giảng/khóa học (interval ít nhất là 24 giờ)
-        if(!this.check2TimeDuration(new Date().getTime(), open_time_timestamp, EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION)) {
-          this.error.open_time =
-            "Thời gian mở đề phải lớn hơn thời gian tạo giảng/khoá học ít nhất 24 giờ";
-          return false;
-        }
+        // if(open_time_timestamp && !this.check2TimeDuration(new Date().getTime(), open_time_timestamp, EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION)) {
+        //   this.error.open_time =
+        //     "Thời gian mở đề phải lớn hơn thời gian tạo giảng/khoá học ít nhất 24 giờ";
+        //   return false;
+        // }
         // Thời gian đóng đề > Thời gian bắt đầu (interval ít nhất là 24 giờ)
         // Thời gian đóng đề > thời gian mở đề
-        if(!this.check2TimeDuration(open_time_timestamp, close_time_timestamp, 0)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(open_time_timestamp, close_time_timestamp, 0)
+        ) {
           this.error.close_time =
             "Thời gian đóng đề phải lớn hơn thời gian mở đề";
           return false;
         }
         // Thời giao đóng đề - thời gian mở đề >= thời gian làm bài
-        if(!this.check2TimeDuration(open_time_timestamp, close_time_timestamp, duration * 60 * 1000)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(
+            open_time_timestamp,
+            close_time_timestamp,
+            duration * 60 * 1000
+          )
+        ) {
           this.error.open_time =
             "Cài đặt lượng thời gian làm bài cho phép không đúng";
           return false;
         }
       }
 
-      // if starttime_enable == true && endtime_enable == false
+      // 3. if starttime_enable == true && endtime_enable == false
       if (starttime_enable && !endtime_enable) {
         // Thời gian mở đề > thời gian bắt đầu bài giảng/khóa học (ít nhất 24 giờ)
-        if(!this.check2TimeDuration(start_time_timestamp, open_time_timestamp, EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          !this.check2TimeDuration(
+            start_time_timestamp,
+            open_time_timestamp,
+            EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION
+          )
+        ) {
           this.error.open_time =
             "Thời gian bắt đầu bài kiểm tra phải lớn hơn thời gian bắt đầu giảng/khoá học ít nhất 24 giờ";
           return false;
         }
         // Thời gian đóng đề > thời gian mở đề
-        if(!this.check2TimeDuration(open_time_timestamp, close_time_timestamp, 0)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(open_time_timestamp, close_time_timestamp, 0)
+        ) {
           this.error.close_time =
             "Thời gian kết thúc bài kiểm tra phải lớn hơn thời gian bắt đầu bài kiểm tra";
           return false;
         }
         // Thời giao đóng đề - thời gian mở đề >= thời gian làm bài
-        if(!this.check2TimeDuration(open_time_timestamp, close_time_timestamp, duration * 60 * 1000)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(
+            open_time_timestamp,
+            close_time_timestamp,
+            duration * 60 * 1000
+          )
+        ) {
           this.error.open_time =
             "Cài đặt lượng thời gian làm bài cho phép không đúng";
           return false;
         }
       }
 
-      // if starttime_enable == false && endtime_enable == true
+      // 4. if starttime_enable == false && endtime_enable == true
       if (!starttime_enable && endtime_enable) {
         // Thời gian mở đề > thời gian tạo bài giảng/khóa học (interval ít nhất là 24 giờ)
-        if(!this.check2TimeDuration(new Date().getTime(), open_time_timestamp, EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION)) {
-          this.error.open_time =
-            "Thời gian mở đề phải lớn hơn thời gian tạo giảng/khoá học ít nhất 24 giờ";
-          return false;
-        }
+        // if(open_time_timestamp && !this.check2TimeDuration(new Date().getTime(), open_time_timestamp, EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION)) {
+        //   this.error.open_time =
+        //     "Thời gian mở đề phải lớn hơn thời gian tạo giảng/khoá học ít nhất 24 giờ";
+        //   return false;
+        // }
         // Thời gian đóng đề > thời gian mở đề
-        if(!this.check2TimeDuration(open_time_timestamp, close_time_timestamp, 0)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(open_time_timestamp, close_time_timestamp, 0)
+        ) {
           this.error.close_time =
             "Thời gian kết thúc bài kiểm tra phải lớn hơn thời gian bắt đầu bài kiểm tra";
           return false;
         }
         // Thời giao đóng đề - thời gian mở đề >= thời gian làm bài
-        if(!this.check2TimeDuration(open_time_timestamp, close_time_timestamp, duration * 60 * 1000)) {
+        if (
+          this.isValidTimeEnable(
+            open_time_timestamp,
+            this.payload.opentime_enable
+          ) &&
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(
+            open_time_timestamp,
+            close_time_timestamp,
+            duration * 60 * 1000
+          )
+        ) {
           this.error.close_time =
             "Cài đặt lượng thời gian làm bài cho phép không đúng";
           return false;
         }
         // Thời gian đóng đề <= thời gian kết thúc bài giảng/khóa học
-        if(!this.check2TimeDuration(close_time_timestamp, end_time_timestamp, 0)) {
+        if (
+          this.isValidTimeEnable(
+            close_time_timestamp,
+            this.payload.closetime_enable
+          ) &&
+          !this.check2TimeDuration(close_time_timestamp, end_time_timestamp, 0)
+        ) {
           this.error.close_time =
             "Thời gian đóng đề tra phải nhỏ hơn thời gian kết thúc bài giảng/khoá học";
           return false;
@@ -525,101 +656,6 @@ export default {
       if(!start_time || !end_time || duration == null || duration == undefined) return false;
       const result = end_time - start_time >= duration;
       return result;
-    },
-
-    checkClosetime() {
-      this.error.close_time = "";
-
-      // if donot enable opentime
-      if (!this.payload.closetime_enable) return true;
-      if (!this.payload.close_time) {
-        this.error.open_time = "Bạn chưa chọn thời gian bắt đầu";
-        return false;
-      }
-
-      const starttime_enable = get(this, "setting.starttime_enable", true);
-      const start_time = get(this, "setting.start_time", "");
-      const endtime_enable = get(this, "setting.endtime_enable", true);
-      const end_time = get(this, "setting.end_time", "");
-
-      // start_time format
-      let open_time_timestamp = this.payload.open_time
-        ? moment(this.payload.open_time).format("x")
-        : null;
-      let start_time_timestamp = this.setting.start_time
-        ? getLocalDateTime(this.setting.start_time).format("x")
-        : null;
-
-      // end_time format
-      let close_time_timestamp = this.payload.close_time
-        ? moment(this.payload.close_time).format("x")
-        : null;
-      let end_time_timestamp = this.setting.end_time
-        ? getLocalDateTime(this.setting.end_time).format("x")
-        : null;
-
-      // if starttime_enable == true && endtime_enable == true
-      if (starttime_enable && endtime_enable) {
-        // for sure time not null
-        if (!open_time_timestamp) {
-          this.error.open_time = "Thời gian mở đề không hợp lệ";
-          return false;
-        }
-        if (!start_time_timestamp) {
-          this.error.open_time =
-            "Thời gian bắt đầu bài giảng/khoá học không hợp lệ";
-          return false;
-        }
-        // Thời gian mở đề > thời gian bắt đầu bài giảng/khóa học (ít nhất 24 giờ)
-        if (
-          open_time_timestamp - start_time_timestamp >
-          EXAM_CONFIG.TIME_TO_START_OPEN_QUESTION
-        ) {
-          this.error.open_time =
-            "Thời gian bắt đầu bài kiểm tra phải lớn hơn thời gian bắt đầu bài giảng/khoá học ít nhất 24 giờ";
-          return false;
-        }
-
-        // for sure time not null
-        if (!end_time_timestamp) {
-          this.error.open_time =
-            "Thời gian kết thúc bài giảng/khoá học không hợp lệ";
-          return false;
-        }
-        // Thời gian mở đề < thời gian kết thúc bài giảng (interval ít nhất là 24 giờ)
-        if (
-          open_time_timestamp - end_time_timestamp <
-          EXAM_CONFIG.TIME_TO_START_CLOSE_QUESTION
-        ) {
-          this.error.open_time =
-            "Thời gian bắt đầu bài kiểm tra phải nhỏ hơn thời gian kết thúc bài giảng/khoá học ít nhất 24 giờ";
-          return false;
-        }
-      }
-
-      // if starttime_enable == false && endtime_enable == false
-
-      // if starttime_enable == true && endtime_enable == false
-
-      // if starttime_enable == false && endtime_enable == true
-
-      // if (!this.payload.closetime_enable) return true;
-      // if (!get(this, "setting.endtime_enable", true)) return true;
-      // if (!get(this, "setting.end_time", true)) return true;
-      // if (!this.payload.close_time) return true;
-      // const close_time_timestamp = moment(this.payload.close_time).format("x");
-      // const end_time_timestamp = getLocalDateTime(this.setting.end_time).format(
-      //   "x"
-      // );
-      // if (
-      //   end_time_timestamp - close_time_timestamp <
-      //   EXAM_CONFIG.TIME_TO_START_CLOSE_QUESTION
-      // ) {
-      //   this.error.close_time =
-      //     "Thời gian kết thúc bài kiểm tra phải nhỏ hơn thời gian kết thúc khoá học ít nhất 24 giờ";
-      //   return false;
-      // }
-      return true;
     },
 
     checkWeight() {
@@ -783,8 +819,24 @@ export default {
       this.typeRadio = e.target.value;
     },
 
+    isValidTimeEnable(_time, _enable) {
+      return _enable && !!_time;
+    },
+
     get
+  },
+
+  watch: {
+    "payload.opentime_enable"(_newVal) {
+      console.log("[payload.opentime_enable]", _newVal);
+      this.checkOpenCloseTime();
+    },
+    "payload.closetime_enable"(_newVal) {
+      console.log("[payload.closetime_enable]", _newVal);
+      this.checkOpenCloseTime();
+    }
   }
+
 };
 </script>
 
