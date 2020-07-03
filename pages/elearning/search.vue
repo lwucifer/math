@@ -152,7 +152,7 @@ export default {
       timeOpts: [
         { value: null, text: "Tất cả" },
         { value: "0h-1h", text: "0 - 1 giờ" },
-        { value: "1h-2h", text: "1- 2 giờ" },
+        { value: "1h-2h", text: "1 - 2 giờ" },
         { value: "2h-4h", text: "2 - 4 giờ" },
         { value: "4h+", text: "Trên 4 giờ" }
       ],
@@ -305,6 +305,19 @@ export default {
       this.payload.page = 1;
       this.payload.keyword = _newVal ? _newVal : null;
       this.getLessons();
+    },
+    isFilter(_newVal){
+      if(!_newVal){
+        this.level = null;
+        this.fee = null;
+        this.time = null;
+        this.payload.page = 1;
+        this.payload.free = null;
+        this.payload.duration = null;
+        this.payload.level = null;
+        this.payload.keyword = _newVal ? _newVal : null;
+        this.getLessons();
+      }
     }
   },
 

@@ -34,7 +34,7 @@
           <a class @click="openModal(row)" v-if="actions[0]">
             <IconSwapHorizontalCircle class="fill-primary mr-2"/>Vào phòng học
           </a>
-          <n-link class="link" :to="'/elearning/manager/online-class/' + row.online_class_id + '/invites'"
+          <n-link class="link" :to="'/elearning/manager/online-class/edit/' + row.online_class_id"
             v-if="actions[1]">
             <IconEdit class="fill-primary mr-2" />Chỉnh sửa
           </n-link>

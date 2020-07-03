@@ -119,7 +119,8 @@ export default {
         value: null,
         text: 'Tất cả'
       },
-       showModalConfirm: false,
+      showModalConfirmSchedules: false,
+      showModalConfirm: false,
       rowClassId: null,
       showFilter: false,
       modalShow: false,

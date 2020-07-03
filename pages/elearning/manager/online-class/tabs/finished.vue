@@ -125,6 +125,7 @@ export default {
         value: null,
         text: 'Tất cả'
       },
+      showModalConfirmSchedules: false,
       showModalConfirm: false,
       loading: false,
       showFilter: false,

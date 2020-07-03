@@ -132,13 +132,7 @@
         <ShareNetwork
           class="d-flex-center text-info "
           network="facebook"
-          :url="
-            `https://schoolly.famtechvn.com/elearning/${get(
-              info,
-              'elearning_id',
-              ''
-            )}`
-          "
+          :url="`${baseUrl}/${get(info, 'elearning_id', '')}`"
           :title="get(info, 'name', '')"
           :description="description"
           :quote="description"
@@ -223,6 +217,7 @@ export default {
       showModalPayment: false,
       AddCartFail: false,
       showRequestCode: false,
+      baseUrl: process.env.BASE_ORIGIN_LOCATION,
     };
   },
 

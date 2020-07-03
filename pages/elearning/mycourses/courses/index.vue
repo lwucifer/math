@@ -76,7 +76,7 @@
                     :reduce="(item) => item.value"
                     @input="handleChangeType"
                     :options="[
-                      { text: 'Tất cả', value: 'ALL' },
+                      { text: 'Thể loại', value: 'ALL' },
                       { text: 'Bài giảng', value: 'LECTURE' },
                       { text: 'Khoá học', value: 'COURSE' },
                     ]"
@@ -224,11 +224,13 @@ export default {
     }),
 
     subjectsOpt() {
-      return this.subjects.map((item) => ({
+      let data = this.subjects.map((item) => ({
         ...item,
         value: item.id,
         text: item.name,
       }));
+      data.unshift({ value: "", text: "Tất cả" });
+      return data;
     },
 
     list() {
@@ -291,24 +293,26 @@ export default {
 
     changeTab(tab) {
       this.tab = tab;
+      let params = { ...this.params };
       if (tab == 2) {
-        this.params.completed = null;
-        this.params.is_archive = false;
+        params.completed = false;
+        params.is_archive = false;
       }
       if (tab == 3) {
-        this.params.completed = true;
-        this.params.is_archive = false;
+        params.completed = true;
+        params.is_archive = false;
       }
       if (tab == 4) {
-        this.params.completed = null;
-        this.params.is_archive = false;
+        params.completed = null;
+        params.is_archive = false;
       }
       if (tab == 5) {
-        this.params.completed = null;
-        this.params.is_archive = null;
+        params.completed = null;
+        params.is_archive = null;
       }
-      this.params.page = 1;
-      this.params.keyword = null;
+      params.page = 1;
+      params.keyword = null;
+      this.params = params;
     },
 
     handleFavourite(id) {
@@ -398,7 +402,6 @@ export default {
     },
 
     async handleShareSchoolly(_content) {
-      console.log("_content", _content);
       const link = window.origin + `/elearning/${this.dataModal.elearning_id}`;
       const doAdd = await this.$store.dispatch(
         `social/${actionTypes.SOCIAL.ADD_POST}`,
@@ -421,6 +424,11 @@ export default {
         this.selectType = null;
         this.selectSubject = null;
         this.selectFree = null;
+        let params = { ...this.params };
+        params.type = null;
+        params.subject = null;
+        params.free = null;
+        this.params = params;
       }
       this.showFilter = !this.showFilter;
     },

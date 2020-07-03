@@ -255,11 +255,7 @@ export default {
       return get(this, "elearning.medium_score.calculation", false) == true;
     },
     showArchive() {
-      return (
-        !get(this, "elearning.is_archive", true) &&
-        !get(this, "elearning.is_study", true) &&
-        get(this, "elearning.is_favourite", false)
-      );
+      return get(this, "elearning.is_study", false);
     },
   },
   methods: {
