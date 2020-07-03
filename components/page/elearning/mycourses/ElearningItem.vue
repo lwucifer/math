@@ -136,7 +136,7 @@
                 </li>
 
                 <li
-                  v-else-if="elearning.is_archive && tab === 5"
+                  v-else-if="+tab === 5"
                   @click.prevent="handleDeleteArchive(elearning.elearning_id)"
                 >
                   <n-link to> <IconUnArchive class="icon" />Bỏ lưu trữ </n-link>
@@ -381,11 +381,7 @@ export default {
       return get(this, "elearning.medium_score.calculation", false) == true;
     },
     showArchive() {
-      return (
-        !get(this, "elearning.is_archive", true) &&
-        !get(this, "elearning.is_study", true) &&
-        get(this, "elearning.is_favourite", false)
-      );
+      return get(this, "elearning.is_study", false) && +this.tab !== 5;
     },
   },
   methods: {

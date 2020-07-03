@@ -83,7 +83,7 @@
       @pagechange="onPageChange"
       @selectionChange="selectRow"
       @sort="handleSort"
-      :actions="[0,0,1]"
+      :actions="[0,1,1]"
       :data="classList"/>
     <!--End table-->
 

@@ -59,11 +59,9 @@ const actions = {
 
   async [actionTypes.TEACHING_OLCLASSES.EDIT]({ commit }, payload) {
     try {
-      const result = await new OlClass(this.$axios)[actionTypes.BASE.EDIT](
+      const result = await new OlClass(this.$axios)['putWithRawJson'](
         payload
       );
-      // set to mutation
-      // commit(mutationTypes.TEACHING_ANSWER.SET_TEACHING_ANSWER_EDIT, result);
     } catch (error) {
       console.log("[TEACHING Olclass] edit.error", error);
     }

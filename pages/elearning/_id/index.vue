@@ -181,7 +181,7 @@ export default {
         },
         {
           title: `${getElearningTypeText(elearningType)}`,
-          to: '/elearning/'
+          to: `/elearning/search?type=${elearningType == ELEARNING_TYPES.LECTURE ? 'lecture' : 'course'}`
         },
         {
           title: `${get(this, 'info.name', '')}`,

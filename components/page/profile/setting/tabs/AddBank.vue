@@ -20,6 +20,7 @@
               v-model="payload.bank_code"
               placeholder="Chọn ngân hàng"
               :options="banks"
+              bordered
             />
           </div>
           <div class="col-md-3"></div>

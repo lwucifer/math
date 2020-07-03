@@ -7,9 +7,9 @@
       :disabled="crumb.disabled"
     >
       <n-link v-if="index < crumbs.length - 1" :to="crumb.to">{{
-        crumb.title
+        crumb.title | limitLetter(30)
       }}</n-link>
-      <span v-else>{{ crumb.title }}</span>
+      <span v-else>{{ crumb.title | limitLetter(30) }}</span>
     </app-breadcrumb-item>
     <IconArrowForwardIos24pxOutlined slot="separator" class="icon" />
   </app-breadcrumb>
@@ -19,6 +19,7 @@
 import IconArrowForwardIos24pxOutlined from "~/assets/svg/icons/arrow-forward-ios-24px-outlined.svg?inline";
 
 import { mapState, mapGetters } from "vuex";
+import { limitLetter } from "~/utils/common";
 
 export default {
   components: {
@@ -28,6 +29,10 @@ export default {
   data() {
     return {
     };
+  },
+
+  filters: {
+    limitLetter
   },
 
   computed: {

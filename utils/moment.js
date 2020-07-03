@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIRTHDAY, DATE_FORMAT, DATE_YYYY_MM_DD, DATETIME_HH_MM, DATETIME_HH_MM_A, DATETIME_HH_MM_A_DD_MM_YY, DATETIME_HH_MM_DD_MM_YY_DASH, DATETIME_hh_mm, DATETIME_FULL_DATE_TEXT, DATETIME_FULL_WEEK_DAY } from "../utils/config";
+import { DATETIME_HH_MM_a, DATETIME_FULL_TEXT, DATETIME_HH_MM_DD_MM_YY, DATETIME_RECEIVE, DATE_BIRTHDAY, DATE_FORMAT, DATE_YYYY_MM_DD, DATETIME_HH_MM, DATETIME_HH_MM_A, DATETIME_HH_MM_A_DD_MM_YY, DATETIME_HH_MM_DD_MM_YY_DASH, DATETIME_hh_mm, DATETIME_FULL_DATE_TEXT, DATETIME_FULL_WEEK_DAY } from "../utils/config";
 const moment = require("moment");
 const momenttimezone = require('moment-timezone');
 
@@ -120,6 +120,17 @@ export const getTimeHH_MM_A = (_time) => {
     return ts.lang("en").format(DATETIME_HH_MM_A);
 };
 
+export const getTimeHH_MM_a = (_time) => {
+    if (!_time) return;
+    const splits = _time.split(" ");
+    const hour = splits[0].split(':')[0];
+    const minute = splits[0].split(':')[1];
+    const hh24 = splits[1] == 'pm' ? (parseInt(hour) + 12) : hour;
+    // let ts = new momenttimezone(new Date('2000-01-01 ' + _time));
+    let ts = new momenttimezone(`2000-01-01 ${hh24}:${minute}`, `YYYY-MM-DD hh:mm A`);
+    return ts.lang("en").format(DATETIME_HH_MM_a);
+};
+
 export const getLocalTimeHH_MM_A = (_utcDate) => {
     if (!_utcDate) return;
     let ts = getLocalDateTime(_utcDate);
@@ -160,6 +171,12 @@ export const hoursToMinutes = (_time) => {
     return momenttimezone.duration(_time).asMinutes();
 };
 
+export const minutesToHours = (_time) => {
+    if (!_time) return;
+    const hour = Math.floor(parseFloat(_time) / 60);
+    const minute = parseFloat(_time) % 60;
+    return hour + ':' + minute;
+};
 
 /**
  * 

@@ -7,7 +7,7 @@
             <div>Học tập mọi lúc, mọi nơi</div>với Schoolly.
           </h1>
 
-          <p class="elearning-home-banner__subtitle">Nền tảng học tập trực tuyến toàn diện dành <br> cho học sinh, giáo viên, nhà trường và các đơn vị giáo dục.</p>
+          <p class="elearning-home-banner__subtitle">Nền tảng học tập trực tuyến toàn diện <br>dành cho học sinh, giáo viên, nhà trường và các đơn vị giáo dục.</p>
         </div>
 
         <div class="col-md-5 align-self-end">

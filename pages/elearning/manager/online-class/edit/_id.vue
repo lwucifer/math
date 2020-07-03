@@ -75,8 +75,10 @@
                         <div class="d-flex-center">
                           <div class="d-flex-center mb-4 mr-6">
                             <label class="mr-3">Bắt đầu vào lúc</label>
+                            {{schedules[index].start_time}}
                             <app-date-picker
                                 class="ml-3"
+                                :value="schedules[index].start_time"
                                 v-model="schedules[index].start_time"
                                 @input="changeSchedules"
                                 square
@@ -303,12 +305,15 @@ import IconRight from '~/assets/svg/v2-icons/arrow-right.svg?inline';
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
 import {
+  getTimeHH_MM_a,
   getDateBirthDay,
   getUTCDateTime,
   getTimeHH_MM_A,
   getUTCDateTimeHH_MM_A,
   getEndTime,
-  hoursToMinutes
+  hoursToMinutes,
+  minutesToHours,
+  getLocalTimeHH_MM_A
 } from "~/utils/moment";
 import { get, reject } from "lodash";
 import { mapState } from "vuex";
@@ -357,6 +362,7 @@ function initialState() {
     selectedItems: [[]],
     params: {
       elearning_id: "",
+      id: "",
       name: "",
       enable: true,
       privacy: true,
@@ -571,17 +577,17 @@ export default {
       try {
         this.confirmLoading = true;
         const doCreate = await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.EDIT}`,
           JSON.stringify({...this.params, enable: true})
         );
-        if (doCreate.success) {
-          this.fnCancel();
-          this.message = "Tạo phòng học thành công!";
-          this.showNotify = true;
-        } else if (doCreate.message) {
-          this.message = doCreate.message;
-          this.showNotify = true;
-        }
+        // if (doCreate.success) {
+        //   this.fnCancel();
+        //   this.message = "Tạo phòng học thành công!";
+        //   this.showNotify = true;
+        // } else if (doCreate.message) {
+        //   this.message = doCreate.message;
+        //   this.showNotify = true;
+        // }
       } catch (e) {
         this.message = e;
         this.showNotify = true;
@@ -594,9 +600,10 @@ export default {
     async handleDrafOk() {
       try {
         this.confirmDrafLoading = true;
+        let id = this.$route.params ? this.$route.params.id : '';
         const doCreate = await this.$store.dispatch(
-          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.ADD}`,
-          JSON.stringify({...this.params, enable: false})
+          `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.EDIT}`,
+          JSON.stringify({...this.params, enable: false, id: id})
         );
         if (doCreate.success) {
           this.fnCancel();
@@ -671,19 +678,26 @@ export default {
       }
     },
 
-    get
+    get,
+    getTimeHH_MM_A,
+    getTimeHH_MM_a,
+    minutesToHours
   },
 
   created() {
     const that = this;
     this.params = this.get(this.stateOnlineClassInfo, 'data', {});
-    this.schedules = this.get(this.stateOnlineClassInfo, 'data.schedules', []);
     let schedules = this.get(this.stateOnlineClassInfo, 'data.schedules', []);
+    let data = [];
     schedules.forEach(function(item, index) {
       that.selectedItems[index] = (item.days_of_week).split(',');
-      that.schedules[index] = {...that.schedules, start_time: '10:00 AM'}
-      //that.schedules[index] = {...that.schedules, duration: '2:30'}
+      let i = {...item,
+        start_time: that.getTimeHH_MM_a(item.start_time),
+        duration: that.minutesToHours(item.duration),
+      };
+      data.push(i);
     });
+    this.schedules = data;
   }
 };
 </script>

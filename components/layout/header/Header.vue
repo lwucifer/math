@@ -223,28 +223,28 @@ export default {
     if(this.checkRouteClearKeyword == PARAM_CHECK.ELEARNING_SEARCH){
       this.valueInput = this.keywordSearchHeader;
     }
-    // this.$fireMess && this.$fireMess.onMessage(payload => {
-    //   console.log("Message received. ", payload);
-    //   const data = {
-    //     ...payload.data,
-    //     is_read: 0,
-    //     meta_data: payload.notification.body
-    //   };
-    //   this.reviceNoti(data);
-    //   payload.data.service_type && this.checkSumCountNoti(payload.data.service_type);
-    //   this.socialNotifications({
-    //     params: {
-    //       page: 1,
-    //       payloadCheck: "check"
-    //     }
-    //   });
-    //   this.checkPayload = true;
-    // });
-    // console.log("detectBrowser", detectBrowser());
+    this.$fireMess && this.$fireMess.onMessage(payload => {
+      console.log("Message received. ", payload);
+      // const data = {
+      //   ...payload.data,
+      //   is_read: 0,
+      //   meta_data: payload.notification.body
+      // };
+      // this.reviceNoti(data);
+      // payload.data.service_type && this.checkSumCountNoti(payload.data.service_type);
+      // this.socialNotifications({
+      //   params: {
+      //     page: 1,
+      //     payloadCheck: "check"
+      //   }
+      // });
+      // this.checkPayload = true;
+    });
+    console.log("detectBrowser", detectBrowser());
     this.isAuthenticated && this.cartList();
   },
   created() {
-    this.isAuthenticated && this.getNotiUnread();
+    // this.isAuthenticated && this.getNotiUnread();
     this.isAuthenticated && this.getNotifications({
         fetch_size: FETCH_SIZE,
         service_type: ELEARNING
