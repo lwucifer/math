@@ -24,34 +24,64 @@ const getters = {};
  * initial actions
  */
 const actions = {
-  async getStudying({ commit }, options = {}) {
+  async getFinished({ commit }, options = {}) {
     try {
-      if (options.params.completed) {
-        const result = await new StudyStudent(this.$axios)["list"](options);
-        if (get(result, "success", false)) {
-          const data = get(result, "data", null);
-          commit("finished_lecture", data);
-          return;
-        }
-        commit("finished_lecture", null);
+      const result = await new StudyStudent(this.$axios)["list"](options);
+      if (get(result, "success", false)) {
+        const data = get(result, "data", null);
+        commit("finished_lecture", data);
         return;
       }
-
-      if (!options.params.completed) {
-        const result = await new StudyStudent(this.$axios)["list"](options);
-        if (get(result, "success", false)) {
-          const data = get(result, "data", null);
-          commit("unfinished_lecture", data);
-          return;
-        }
-        commit("unfinished_lecture", null);
-        return;
-      }
+      commit("finished_lecture", null);
+      return;
     } catch (error) {
       commit("finished_lecture", null);
+    }
+  },
+
+  async getUnFinished({ commit }, options = {}) {
+    try {
+      const result = await new StudyStudent(this.$axios)["list"](options);
+      if (get(result, "success", false)) {
+        const data = get(result, "data", null);
+        commit("unfinished_lecture", data);
+        return;
+      }
+      commit("unfinished_lecture", null);
+      return;
+    } catch (error) {
       commit("unfinished_lecture", null);
     }
   },
+
+  // async getStudying({ commit }, options = {}) {
+  //   try {
+  //     if (options.params.completed) {
+  //       const result = await new StudyStudent(this.$axios)["list"](options);
+  //       if (get(result, "success", false)) {
+  //         const data = get(result, "data", null);
+  //         commit("finished_lecture", data);
+  //         return;
+  //       }
+  //       commit("finished_lecture", null);
+  //       return;
+  //     }
+
+  //     if (!options.params.completed) {
+  //       const result = await new StudyStudent(this.$axios)["list"](options);
+  //       if (get(result, "success", false)) {
+  //         const data = get(result, "data", null);
+  //         commit("unfinished_lecture", data);
+  //         return;
+  //       }
+  //       commit("unfinished_lecture", null);
+  //       return;
+  //     }
+  //   } catch (error) {
+  //     commit("finished_lecture", null);
+  //     commit("unfinished_lecture", null);
+  //   }
+  // },
 
   async getStatistic({ commit }, options = {}) {
     try {
@@ -68,15 +98,27 @@ const actions = {
 
   async getArchive({ commit }, options = {}) {
     try {
-      const result = await new Archive(this.$axios)["list"](options);
+      const result = await new StudyStudent(this.$axios)["list"](options);
       if (get(result, "success", false)) {
-        commit("archive", get(result, "data", null));
+        const data = get(result, "data", null);
+        commit("archive", data);
         return;
       }
       commit("archive", null);
+      return;
     } catch (error) {
       commit("archive", null);
     }
+    // try {
+    //   const result = await new Archive(this.$axios)["list"](options);
+    //   if (get(result, "success", false)) {
+    //     commit("archive", get(result, "data", null));
+    //     return;
+    //   }
+    //   commit("archive", null);
+    // } catch (error) {
+    //   commit("archive", null);
+    // }
   },
 
   async getFavourite({ commit }, options = {}) {
