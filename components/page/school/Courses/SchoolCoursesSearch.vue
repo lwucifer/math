@@ -266,7 +266,8 @@ export default {
         },
         async refreshData() {
             this.params.page = 1
-            this.checktab()
+            this.fetchLectures()
+            this.fetchCourses()
         },
         async resetData(){
             this.params.school_id= null;
@@ -280,7 +281,7 @@ export default {
         handleChangeFee(_newVal, _selectedVal) {
             console.log("[handleChangeFee]", _newVal, _selectedVal);
             this.updateFilter({ fee: _newVal });
-            this.refreshData();
+            this.refreshData()
         },
 
         handleChangeTimes(_newVal, _selectedVal) {

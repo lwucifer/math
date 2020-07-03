@@ -17,7 +17,7 @@
           <h2 class="footer__title">Về Schoolly</h2>
           <ul class="footer__menu">
             <li>
-              <a href>Giới thiệu Schoolly</a>
+              <n-link to="/about">Giới thiệu Schoolly</n-link> 
             </li>
             <li>
               <n-link to="/policy-security">Điều khoản sử dụng</n-link> 
