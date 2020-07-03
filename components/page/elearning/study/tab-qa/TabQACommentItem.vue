@@ -2,7 +2,7 @@
   <div class="tab-qa-comment-item" :class="classes">
     <app-avatar
       :size="level === 1 ? 40 : 30"
-        :src="$store.state.auth.token && $store.state.auth.token.avatar && $store.state.auth.token.avatar.low ? $store.state.auth.token.avatar.low : ''"
+      :src="get(question, 'creator.avatar.high', '')"
     />
 
     <div class="tab-qa-comment-item__right">
