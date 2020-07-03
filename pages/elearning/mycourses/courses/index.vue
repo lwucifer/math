@@ -191,6 +191,7 @@ export default {
         free: null,
         is_archive: false,
         is_hidden: true,
+        tab: 2,
       },
       tab: 2,
       checkModalShare: false,
@@ -263,7 +264,7 @@ export default {
     },
 
     getData() {
-      const payload = {
+      let payload = {
         params: this.params,
       };
       if (this.tab === 2) {
@@ -312,6 +313,7 @@ export default {
         this.params.completed = null;
         this.params.is_archive = true;
       }
+      this.params.tab = tab;
       this.params.page = 1;
       this.params.keyword = null;
     },
