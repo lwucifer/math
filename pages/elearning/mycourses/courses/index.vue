@@ -183,7 +183,6 @@ export default {
   data() {
     return {
       params: {
-        type: "ALL",
         size: 12,
         page: 1,
         keyword: null,
@@ -204,7 +203,7 @@ export default {
   },
 
   mounted() {
-    useEffect(this, this.getData.bind(this), ["params", "tab"]);
+    useEffect(this, this.getData.bind(this), ["params"]);
     this.$store.dispatch("elearning/study-space/getStatistic");
     this.$store.dispatch(
       `elearning/public/public-subject/${actionTypes.ELEARNING.SUBJECT}`
@@ -268,10 +267,10 @@ export default {
         params: this.params,
       };
       if (this.tab === 2) {
-        this.$store.dispatch("elearning/study-space/getStudying", payload);
+        this.$store.dispatch("elearning/study-space/getUnFinished", payload);
       }
       if (this.tab === 3) {
-        this.$store.dispatch("elearning/study-space/getStudying", payload);
+        this.$store.dispatch("elearning/study-space/getFinished", payload);
       }
       if (this.tab === 4) {
         this.$store.dispatch("elearning/study-space/getFavourite", payload);
@@ -293,26 +292,28 @@ export default {
 
     changeTab(tab) {
       this.tab = tab;
-      let params = { ...this.params };
+      // đang theo học
       if (tab == 2) {
-        params.completed = false;
-        params.is_archive = false;
+        this.params.completed = false;
+        this.params.is_archive = false;
       }
+      // đã hoàn thành
       if (tab == 3) {
-        params.completed = true;
-        params.is_archive = false;
+        this.params.completed = true;
+        this.params.is_archive = false;
       }
+      // yêu thích
       if (tab == 4) {
-        params.completed = null;
-        params.is_archive = false;
+        this.params.completed = null;
+        this.params.is_archive = false;
       }
+      // Lưu trữ
       if (tab == 5) {
-        params.completed = null;
-        params.is_archive = null;
+        this.params.completed = null;
+        this.params.is_archive = true;
       }
-      params.page = 1;
-      params.keyword = null;
-      this.params = params;
+      this.params.page = 1;
+      this.params.keyword = null;
     },
 
     handleFavourite(id) {
