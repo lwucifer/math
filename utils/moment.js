@@ -120,14 +120,14 @@ export const getTimeHH_MM_A = (_time) => {
     return ts.lang("en").format(DATETIME_HH_MM_A);
 };
 
-export const getTimeHH_MM_a = (_time) => {
+export const getLocalTimeHH_MM_a = (_time) => {
     if (!_time) return;
     const splits = _time.split(" ");
     const hour = splits[0].split(':')[0];
     const minute = splits[0].split(':')[1];
     const hh24 = splits[1] == 'pm' ? (parseInt(hour) + 12) : hour;
     // let ts = new momenttimezone(new Date('2000-01-01 ' + _time));
-    let ts = new momenttimezone(`2000-01-01 ${hh24}:${minute}`, `YYYY-MM-DD hh:mm A`);
+    let ts = getLocalDateTime(`2000-01-01 ${hh24}:${minute}`, `YYYY-MM-DD hh:mm a`);
     return ts.lang("en").format(DATETIME_HH_MM_a);
 };
 
@@ -173,8 +173,10 @@ export const hoursToMinutes = (_time) => {
 
 export const minutesToHours = (_time) => {
     if (!_time) return;
-    const hour = Math.floor(parseFloat(_time) / 60);
-    const minute = parseFloat(_time) % 60;
+    let hour = Math.floor(parseFloat(_time) / 60);
+    if (hour < 10) hour = '0' + hour;
+    let minute = parseFloat(_time) % 60;
+    if (minute < 10) minute = '0' + minute;
     return hour + ':' + minute;
 };
 

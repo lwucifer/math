@@ -315,7 +315,8 @@ export default {
 
   methods: {
     ...mapMutations("elearning/study/study", [
-      "setElearningStudyScormItems"
+      "setElearningStudyScormItems",
+      "setElearningStudyScormItemActive",
     ]),
     limitLetter,
 
@@ -370,6 +371,10 @@ export default {
     async handleStudy() {
       this.isShowConfirmExit2 = false;
       redirectWithParams({ lesson_id: get(this.lesson, "id", "") });
+
+      // reset SET_SCORM_ITEM_ACTIVE, SET_SCORM_ITEMS
+      this.setElearningStudyScormItems([]);
+      this.setElearningStudyScormItemActive("");
 
       if (get(this.lesson, "type", "") === LESSION_TYPE.DOCS) {
         this.setStudyMode(STUDY_MODE.DOCS);

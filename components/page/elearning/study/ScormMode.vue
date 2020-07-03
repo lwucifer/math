@@ -78,7 +78,8 @@ export default {
         this.setElearningStudyExpand(true);
       }
     }
-  }
+  },
+
 };
 </script>
 
