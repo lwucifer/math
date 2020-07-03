@@ -75,7 +75,6 @@
                         <div class="d-flex-center">
                           <div class="d-flex-center mb-4 mr-6">
                             <label class="mr-3">Bắt đầu vào lúc</label>
-                            {{schedules[index].start_time}}
                             <app-date-picker
                                 class="ml-3"
                                 :value="schedules[index].start_time"
@@ -305,7 +304,7 @@ import IconRight from '~/assets/svg/v2-icons/arrow-right.svg?inline';
 import ElearningManagerSide from "~/components/page/elearning/manager/ElearningManagerSide";
 
 import {
-  getTimeHH_MM_a,
+  getLocalTimeHH_MM_a,
   getDateBirthDay,
   getUTCDateTime,
   getTimeHH_MM_A,
@@ -580,14 +579,14 @@ export default {
           `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.EDIT}`,
           JSON.stringify({...this.params, enable: true})
         );
-        // if (doCreate.success) {
-        //   this.fnCancel();
-        //   this.message = "Tạo phòng học thành công!";
-        //   this.showNotify = true;
-        // } else if (doCreate.message) {
-        //   this.message = doCreate.message;
-        //   this.showNotify = true;
-        // }
+        if (doCreate.success) {
+          this.getDetail();
+          this.message = "Cập nhật phòng học thành công!";
+          this.showNotify = true;
+        } else if (doCreate.message) {
+          this.message = doCreate.message;
+          this.showNotify = true;
+        }
       } catch (e) {
         this.message = e;
         this.showNotify = true;
@@ -678,9 +677,21 @@ export default {
       }
     },
 
+    arrayToString(data) {
+      return data.reduce((result, item) => {
+        const com = result ? "," : "";
+        return (result = result + com + item);
+      }, "");
+    },
+    
+    async getDetail() {
+      // await this.$store.dispatch(`${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.INFO}`,
+      //     this.get(this.$route.params, 'id', ''));
+    },
+
     get,
     getTimeHH_MM_A,
-    getTimeHH_MM_a,
+    getLocalTimeHH_MM_a,
     minutesToHours
   },
 
@@ -691,8 +702,10 @@ export default {
     let data = [];
     schedules.forEach(function(item, index) {
       that.selectedItems[index] = (item.days_of_week).split(',');
+      let time = that.getLocalTimeHH_MM_a(item.start_time);
+      time = time.length <8 ? '0'+ time : time;
       let i = {...item,
-        start_time: that.getTimeHH_MM_a(item.start_time),
+        start_time: time,
         duration: that.minutesToHours(item.duration),
       };
       data.push(i);
