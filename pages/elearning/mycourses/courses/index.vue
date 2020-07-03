@@ -186,7 +186,7 @@ export default {
         size: 12,
         page: 1,
         keyword: null,
-        completed: null,
+        completed: false,
         subject: null,
         free: null,
         is_archive: false,
