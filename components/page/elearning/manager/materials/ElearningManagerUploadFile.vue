@@ -70,7 +70,7 @@
               <IconCloseOutline class='icon icon-uploading-cancel' title="Hủy" @click="cancelUpload"/>
             </div>
             <p class="process--upload__status">
-              <span>{{ uploadPercentage }}</span>% - <span>{{ uploadSpeed }}</span> (<span>{{ this.currentFile.size | fileSizeFilter }}</span>)
+              <span>Đang tải lên {{ uploadPercentage }}</span>% - <span>{{ uploadSpeed }}</span> (<span>{{ this.currentFile.size | fileSizeFilter }}</span>)
             </p>
           </div>
     
