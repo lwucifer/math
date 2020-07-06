@@ -1,7 +1,7 @@
 <template>
   <div class="elearning-wrapper">
     <!--Filter form-->
-    <div class="filter-form">
+    <div class="filter-form mb-3">
       <div class="d-flex">
         <div class="filter-form__item" style="max-width:36rem;min-width:30rem;">
           <div style="width: 100%">
@@ -44,24 +44,6 @@
       </div>
     </div>
     <!--End filter form-->
-
-    <!--Options group-->
-    <div class="filter-form">
-      <div class="filter-form__item">
-        <app-button class="filter-form__item__btn m-0 mr-4" color="pink" square :size="'sm'"
-        :disabled="ids.length == 0" @click="showModalConfirm = true">
-          <IconTrash class="fill-white"/>
-          <span class="ml-3">Hủy phòng học</span>
-        </app-button>
-        
-        <app-button class="filter-form__item__btn m-0 color-666" color="disabled" square :size="'sm'"
-        :disabled="ids.length == 0" @click="showModalConfirmSchedules = true">
-          <IconCalendarDelete/>
-          <span class="ml-3">Hủy lịch học</span>
-        </app-button>
-      </div>
-    </div>
-    <!--Options group-->
 
     <!--Table-->
     <OnlineClassTable 
@@ -147,7 +129,7 @@ export default {
       params: {
         page: 1,
         size: 10,
-        class_status: "WRITTING",
+        class_status: "DELETED",
         query: null,
         query_date: null,
         search_type: null,
@@ -268,38 +250,6 @@ export default {
       } catch (e) {
       } finally {
         this.loading = false;
-      }
-    },
-
-    async deleteRows() {
-      let ids = { online_class_ids: [...this.ids] };
-      const doDelete = await this.$store.dispatch(
-        `${STORE_NAMESPACE}/${actionTypes.TEACHING_OLCLASSES.DELETE}`,
-        JSON.stringify(ids)
-      );
-
-      if (doDelete.success) {
-        this.getList();
-      } else {
-        this.$toasted.error(doDelete.message);
-      }
-
-      this.showModalConfirm = false;
-    },
-
-    async deleteSchedules() {
-      let ids = { online_lesson_ids: [...this.ids] };
-
-      const doDelete = await this.$store.dispatch(
-        `${STORE_NAMESPACE}/${actionTypes.TEACHING_SCHEDULES.DELETE}`,
-        JSON.stringify(ids)
-      );
-
-      if (doDelete.success) {
-        this.showModalConfirmSchedules = false;
-        //this.getList();
-      } else {
-        this.$toasted.error(doDelete.message);
       }
     },
 
