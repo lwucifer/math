@@ -1,30 +1,41 @@
 <template>
-  <div class="py-0 about-page">
-      <AboutBanner/>
-      <AboutIntro/>
-      <AboutPurpose/>
-      <AboutFeature/>
-      <AboutBenefit/>
+  <div class="hello">
+    <textarea v-model="formula" cols="30" rows="10"></textarea>
+  <vue-mathjax :formula="formula"></vue-mathjax>
   </div>
 </template>
 
 <script>
-import AboutBanner from "~/components/page/about/AboutBanner"
-import AboutIntro from "~/components/page/about/AboutIntro"
-import AboutPurpose from "~/components/page/about/AboutPurpose"
-import AboutFeature from "~/components/page/about/AboutFeature"
-import AboutBenefit from "~/components/page/about/AboutBenefit"
+import { VueMathjax } from 'vue-mathjax'
 export default {
-    components:{
-        AboutBanner,
-        AboutIntro,
-        AboutPurpose,
-        AboutFeature,
-        AboutBenefit
+  components: {
+    'vue-mathjax': VueMathjax
+  },
+  name: 'HelloWorld',
+  data () {
+    return {
+      formula: '$$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}.$$',
+      msg: 'Welcome to Your Vue.js App'
     }
+  }
 }
 </script>
 
-<style lang="scss">
-@import "~/assets/scss/components/about/_about-page.scss";
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h1,
+h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
 </style>
